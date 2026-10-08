@@ -16,6 +16,125 @@ component and negative-construction ablations, termination diagnostics, and
 figure/table code. Model weights, training datasets and raw experiment outputs
 are downloaded or generated separately.
 
+## Experimental results
+
+The following values are copied from the paper. Accuracy and capping rates are
+percentages; response length is measured in generated tokens. Average accuracy
+is the arithmetic mean over AIME24, AIME25 and AMC23.
+
+### Main results
+
+Avg@12 on the three mathematical reasoning benchmarks:
+
+| Model | Method | AIME24 | AIME25 | AMC23 | Average |
+|---|---|---:|---:|---:|---:|
+| Qwen3-1.7B | Base | 13.61 | 8.61 | 46.04 | 22.75 |
+| | SFT | 8.89 | 8.89 | 41.04 | 19.61 |
+| | GRPO | 12.78 | 9.17 | 45.00 | 22.31 |
+| | OPSD | 13.89 | 9.44 | 45.62 | 22.99 |
+| | Stable-OPD | 9.72 | 11.11 | 47.71 | 22.85 |
+| | RLCSD | 15.83 | 9.44 | 47.29 | 24.19 |
+| | **TA-OPSD (Ours)** | **18.33** (+4.44) | **13.89** (+4.44) | **51.25** (+5.62) | **27.82** (+4.84) |
+| Qwen3-4B | Base | 23.89 | 21.39 | 66.04 | 37.11 |
+| | SFT | 16.67 | 14.17 | 56.46 | 29.10 |
+| | GRPO | 24.17 | 19.72 | 66.46 | 36.78 |
+| | OPSD | 19.44 | 17.78 | 70.42 | 35.88 |
+| | Stable-OPD | 23.06 | 20.00 | 65.83 | 36.30 |
+| | RLCSD | 21.67 | 19.17 | 68.54 | 36.46 |
+| | **TA-OPSD (Ours)** | **25.56** (+6.11) | **22.22** (+4.44) | **71.04** (+0.62) | **39.61** (+3.73) |
+| Qwen3-8B | Base | 29.72 | 19.17 | 68.12 | 39.00 |
+| | SFT | 14.17 | 11.39 | 52.29 | 25.95 |
+| | GRPO | 29.72 | 21.67 | 69.58 | 40.32 |
+| | OPSD | 44.44 | 31.11 | 82.08 | 52.55 |
+| | Stable-OPD | 25.83 | 19.44 | 66.67 | 37.31 |
+| | RLCSD | 28.61 | 21.39 | 69.58 | 39.86 |
+| | **TA-OPSD (Ours)** | **45.00** (+0.56) | **33.89** (+2.78) | **82.71** (+0.62) | **53.87** (+1.32) |
+
+Parentheses show the absolute improvement over OPSD in percentage points.
+
+### Component ablation
+
+Qwen3-1.7B average accuracy across the three benchmarks:
+
+| Method | Accuracy ↑ |
+|---|---:|
+| OPSD | 22.99 |
+| OPSD+SC | 26.34 |
+| OPSD+UL | 23.66 |
+| **TA-OPSD (Ours)** | **27.82** |
+
+### Negative construction
+
+Comparison of negative construction strategies on Qwen3-1.7B:
+
+| Method | Accuracy ↑ | Length ↓ | Capping rate ↓ |
+|---|---:|---:|---:|
+| OPSD | 22.99 | 5,218.87 | 7.55 |
+| TA-OPSD | 27.82 | 5,197.91 | 4.77 |
+| TA-OPSD (OPSD-trained negatives) | **28.38** | **4,731.88** | 3.50 |
+| TA-OPSD (LLM-assisted selection) | 27.82 | 4,771.68 | **3.26** |
+
+### Termination behavior
+
+Qwen3-1.7B generation behavior reported in the paper:
+
+| Metric | OPSD | TA-OPSD |
+|---|---:|---:|
+| Teacher-solvable short errors on AIME24 | 42/360 (11.7%) | 6/360 (1.7%) |
+| Mean response length | 5,539 | 5,249 |
+| Mean capping rate | 8.89 | 4.31 |
+
+### Teacher–student alignment
+
+Top-100 candidate-token overlap and the mean teacher-minus-student EOS log
+probability gap:
+
+| Model | OPSD overlap ↑ | TA-OPSD overlap ↑ | OPSD EOS gap ↓ | TA-OPSD EOS gap ↓ |
+|---|---:|---:|---:|---:|
+| Qwen3-1.7B | 44.0 | 63.9 | 9.59 | 5.97 |
+| Qwen3-4B | 45.5 | 54.1 | 11.78 | 9.95 |
+| Qwen3-8B | 45.1 | 61.1 | 21.08 | 18.46 |
+
+Overlap is a percentage; the EOS gap is measured in nats.
+
+### Termination diagnosis
+
+Standalone and same-prefix continuation diagnosis on 500 Qwen3-1.7B problems:
+
+| Observation | Count |
+|---|---:|
+| Student failures | 236 |
+| Teacher-correct / student-failed problems | 210 |
+| Student trajectories shorter than their teacher counterparts | 93 (44.3%) |
+| Teacher continues from the failed student prefix | 51 (54.8%) |
+| Continued responses recover the correct answer | 34 (66.7% of continuations) |
+
+Additional reasoning recovers 36.6% of the 93 originally incorrect responses.
+
+### Response examples
+
+Selected responses to the same AIME24 lottery problem:
+
+| Method | Tokens | Key output | Correct |
+|---|---:|---|---|
+| OPSD (incorrect) | 13 | Directly states 11 | No |
+| OPSD (correct) | 2,251 | Computes 1/115 and returns 116 | Yes |
+| TA-OPSD | 1,154 | Counts 115 prizes and returns 116 | Yes |
+
+Selected responses to the same AIME24 logarithm problem:
+
+| Method | Tokens | Termination | Final answer |
+|---|---:|---|---|
+| OPSD | 32,597 | Budget exhausted | No correct final answer |
+| TA-OPSD | 3,026 | Natural | 33; correct |
+
+### Training token budget
+
+TA-OPSD increases the effective backpropagated training-token budget by 6.66%
+for the 1.7B run. Replayed negative spans have a mean length of 33.46 tokens and
+an observed maximum of 120 tokens, compared with approximately 779 supervised
+tokens per OPSD training response.
+
 ## Installation
 
 The GPU recipes use Linux, Python 3.10 and CUDA GPUs. The recorded software
@@ -114,8 +233,8 @@ suffix contributes UL gradients.
 
 ```bash
 python src/evaluate.py --base-model models/Qwen3-1.7B \
-  --checkpoint-dir runs/1.7B/TA_OPSD/train/TA_OPSD/checkpoint-75 \
-  --dataset aime24 --output-dir runs/1.7B/TA_OPSD/eval/step75/aime24 \
+  --checkpoint-dir /path/to/trained-adapter \
+  --dataset aime24 --output-dir runs/1.7B/TA_OPSD/eval/aime24 \
   --tensor-parallel-size 4 --max-model-len 32768 --max-new-tokens 38912 \
   --temperature 1 --top-p 0.8 --top-k -1 --min-p 0 \
   --presence-penalty 0 --val-n 12
@@ -180,24 +299,9 @@ python analysis/reproduce.py --data-dir analysis/fresh-data \
 ```
 
 `configs/reproduction.json` lists all 111 evaluation cells and six monitored
-training traces needed for the tables and curves. Its paths follow the example
-layout above and can be edited to point to your outputs. See the
+training traces needed for the tables and curves. Update its paths to point to your
+training and evaluation outputs before collecting results. See the
 [paper-to-code map](docs/PAPER_ANALYSIS_MAP.md).
-
-## Results reported in the paper
-
-Mean accuracy across AIME24, AIME25 and AMC23:
-
-| Model | OPSD | TA-OPSD | Improvement |
-|---|---:|---:|---:|
-| Qwen3-1.7B | 22.99 | **27.82** | +4.84 |
-| Qwen3-4B | 35.88 | **39.61** | +3.73 |
-| Qwen3-8B | 52.55 | **53.87** | +1.32 |
-
-Values are percentages; improvements use unrounded averages. These are the
-reported results, not claims that fresh sampling reproduces identical numbers.
-Frozen historical banks are identified by hashes; fresh runs can rebuild banks
-from public inputs without them.
 
 ## Repository layout
 

@@ -7,15 +7,18 @@ import torch
 
 
 def exposure_ids(step, micro, rank, count, world=4):
+    """Partition 16 replay examples across two microbatches and all DP ranks."""
     if world not in (4, 8) or not (0 <= micro < 2 and 0 <= rank < world and count > 0):
         raise ValueError("DP4/DP8 GA2 replay layout invalid")
     per = 8 // world
+    # A cyclic schedule keeps the global replay count fixed for DP4 and DP8.
     start = (step * 2 + micro) * 8 + rank * per
     return [(start + i) % count for i in range(per)]
 
 
 @contextmanager
 def replay_context(model, device):
+    """Enable prefix caching temporarily and preserve the main rollout RNG stream."""
     flags = [
         (m, m.gradient_checkpointing)
         for m in model.modules()
@@ -61,11 +64,13 @@ def joint_backward_context(model):
 
 
 def detached_suffix_logits(model, prefix, suffix, device):
+    """Return one prediction per suffix token while detaching the earlier prefix."""
     if not prefix or not suffix:
         raise ValueError("nonempty causal prefix and target required")
     with replay_context(model, device):
         cache = None
         if len(prefix) > 1:
+            # Cache the unchanged history once; its activations need no backward graph.
             with torch.no_grad():
                 cached = model(
                     input_ids=torch.tensor([prefix[:-1]], device=device),

@@ -37,6 +37,7 @@ def main():
             raise ValueError("training parquet differs from paper source")
         for local_id, row in enumerate(pq.ParquetFile(path).read().to_pylist()):
             problem, solution = str(row["problem"]), str(row["solution"])
+            # Index question/solution pairs while retaining every duplicate source row.
             pair = hashlib.sha256(
                 json.dumps([problem, solution], ensure_ascii=False, separators=(",", ":")).encode()
             ).hexdigest()
@@ -70,6 +71,7 @@ def main():
             teacher_thinking=False,
         )
     cohort = []
+    # Rebuild declared rows rather than resampling a new candidate cohort.
     for item in manifest["rows"]:
         row = rows[item["source_row_id"]]
         if normalized_problem_hash(row["problem"]) != item["problem_hash"]:

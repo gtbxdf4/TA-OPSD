@@ -31,6 +31,7 @@ def write(path, value):
 
 
 def evaluation(folder, dataset, teacher=None):
+    """Join raw generations to Avg@12 verdicts and compute response-level behavior."""
     author = read(folder / "author_result.json")
     done = read(folder / "DONE.json")
     questions = 40 if dataset == "amc23" else 30
@@ -49,6 +50,7 @@ def evaluation(folder, dataset, teacher=None):
     ):
         raise ValueError("missing or duplicate evaluation answers")
     for row in raw:
+        # Score and token statistics must refer to the very same sampled response.
         verdict = author["results"][row["problem_index"]]["generations"][row["generation_index"]]
         if verdict["full_generation"] != row["text"]:
             raise ValueError("scorer and raw answer text differ")
@@ -79,6 +81,7 @@ def evaluation(folder, dataset, teacher=None):
 
 
 def training_rows(folder, method):
+    """Merge complete distributed monitor shards at valid distillation positions."""
     steps = defaultdict(list)
     layouts = defaultdict(set)
     worlds = {}
@@ -109,6 +112,7 @@ def training_rows(folder, method):
         for record in records:
             metrics = record["metrics"]
             for position, valid in enumerate(record["loss_valid_mask"]):
+                # Signal plots use valid-token means; SC/UL loss reductions stay separate.
                 if not valid:
                     continue
                 count += 1
@@ -214,6 +218,7 @@ def main():
         by_size[entry["size"]].extend(rows)
         replay_tokens = 0
         for path in (folder / "evidence").glob("aux-replay-rank*.jsonl"):
+            # Count only supervised suffix tokens; detached prefix caches are excluded.
             for line in path.read_text().splitlines():
                 replay_tokens += sum(
                     record.get("negative", {}).get("selected_tokens", 0)

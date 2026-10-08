@@ -11,6 +11,7 @@ def normalized(text):
 
 
 def repeated_text_spans(text):
+    """Locate the third occurrence of an exact normalized paragraph, line or sentence."""
     found = []
     patterns = (
         (r"[^\n]+(?:\n(?!\s*\n)[^\n]+)*", 40, "paragraph"),
@@ -43,6 +44,7 @@ def repeated_text_spans(text):
 
 
 def periodic_token_spans(ids):
+    """Find a third consecutive token-pattern copy at the fixed candidate periods."""
     import numpy as np
 
     a = np.asarray(ids, dtype=np.int64)
@@ -59,6 +61,7 @@ def periodic_token_spans(ids):
 
 
 def clean_token_ids(tok, ids, text, truncated=False):
+    """Check token/text identity, allowing only a verified terminal decoding fragment."""
     ids = list(ids)
 
     def decode(values):
@@ -79,7 +82,9 @@ def clean_token_ids(tok, ids, text, truncated=False):
 
 
 def interior_token_span(tok, ids, text, start, end):
-    # Same exact-token, inward Unicode alignment used by the existing T6 packer.
+    """Map a character interval to token boundaries contained wholly inside it."""
+
+    # Moving inward avoids including a neighboring character split across tokens.
     def boundary(c, ceil):
         lo, hi = 0, len(ids)
         while lo < hi:
@@ -109,6 +114,7 @@ def interior_token_span(tok, ids, text, start, end):
 
 
 def find_negative(tok, ids, text, prompt_length, truncated=False):
+    """Select the earliest admissible local repetition, with at most 256 target tokens."""
     ids = clean_token_ids(tok, ids, text, truncated=truncated)
     spans = []
     for r in repeated_text_spans(text):
@@ -120,6 +126,7 @@ def find_negative(tok, ids, text, prompt_length, truncated=False):
     for a, b in periodic_token_spans(ids):
         spans.append((a, b, "three_or_more_tandem_token_copies", None))
     for a, b, rule, occurrences in sorted(spans):
+        # Keep the full history and reject spans that cannot fit the replay context.
         b = min(b, a + 256)
         if prompt_length + a + 256 > 20000 or b <= a or any(t in STOP for t in ids[a:b]):
             continue
@@ -186,6 +193,7 @@ def main():
         if not span:
             continue
         start, end = span["start_token"], span["end_token"]
+        # C contains the prompt and every response token before the selected copy.
         out.append(
             dict(
                 id=r.get("id", "base-step0-" + str(h)),

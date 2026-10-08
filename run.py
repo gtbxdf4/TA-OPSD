@@ -66,7 +66,7 @@ def plan(size, method, output, model=None, asset_root=None, mode="formal", auxil
     data = [asset_path(path, assets) for path in case["data_files"]]
     dp = case["world_size"]
     if method in ("SFT", "GRPO"):
-        # Original native DONE receipts: 1.7B DP4; 4B/8B DP8, effective batch32.
+        # These baseline layouts differ from OPSD but keep their effective batch at 32.
         dp = 4 if size == "1.7B" else 8
     launch = [
         sys.executable,
@@ -126,6 +126,7 @@ def plan(size, method, output, model=None, asset_root=None, mode="formal", auxil
     else:
         aux = dict(case["auxiliary"])
         if auxiliary_manifest is not None:
+            # Fresh coefficients belong to one arm, initialization and exact bank bytes.
             if method not in (
                 "OPSD_SC",
                 "OPSD_UL",
@@ -161,6 +162,7 @@ def plan(size, method, output, model=None, asset_root=None, mode="formal", auxil
         monitor["question_index_path"] = asset_path(monitor["question_index_path"], assets)
         index_path = Path(monitor["question_index_path"])
         if index_path.exists():
+            # Installation paths may change; source-row and duplicate identities must not.
             sys.path.insert(0, str(ROOT / "src"))
             from data_identity import validate_index
 
@@ -179,6 +181,7 @@ def plan(size, method, output, model=None, asset_root=None, mode="formal", auxil
             V17_EVIDENCE=str(out / "evidence"),
             V17_UUID=size + "-" + method,
             V17_AUX_MANIFEST=str(out / "auxiliary.json"),
+            # Stop the smoke early while preserving the formal learning-rate horizon.
             V17_SMOKE_STOP="2" if mode == "smoke" else "0",
             V18_INITIALIZATION_MANIFEST=init,
             V18_MONITOR_CONTRACT=str(out / "monitor.json"),

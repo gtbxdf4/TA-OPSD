@@ -96,6 +96,7 @@ def build_cohort(model, checkpoint, assets, output):
 
 
 def continuation_cases(cohort, raw):
+    """Select shorter failed student answers that the independent teacher solved."""
     cases = []
     for question in cohort:
         name = question["problem_hash"] + "-seed0.json"
@@ -108,9 +109,11 @@ def continuation_cases(cohort, raw):
         ):
             continue
         prefix = list(student["token_ids"])
+        # Remove only terminal stop IDs; preserve every reasoning token in the prefix.
         while prefix and prefix[-1] in STOP:
             prefix.pop()
         prompt = question["teacher_prompt_token_ids"] + prefix
+        # Continuation receives the full reference prompt and the complete failed answer.
         if len(prompt) >= 32768:
             raise ValueError("selected continuation has no remaining context")
         cases.append(

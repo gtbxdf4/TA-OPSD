@@ -94,6 +94,7 @@ def calibrate(smoke, negatives, model_path, method, output):
     from shared_initialization_v18 import read_shared, validate_runtime_initialization
 
     values = [torch.load(path, map_location="cpu", weights_only=False) for path in packets]
+    # All ranks and both microbatches reconstruct one global initialization batch.
     if sum(len(row["student_input_ids"]) for row in values) != 32:
         raise ValueError("reference is not one global author batch of 32")
     rows = (
@@ -176,6 +177,7 @@ def calibrate(smoke, negatives, model_path, method, output):
     trainer.stop_sq = 0.0
 
     def prepared(packet):
+        # Replay the captured RNG state for both measurements on the same batch.
         torch.set_rng_state(packet["_rng_cpu"])
         torch.cuda.set_rng_state(packet["_rng_cuda"])
         return {
@@ -184,6 +186,7 @@ def calibrate(smoke, negatives, model_path, method, output):
             if not key.startswith("_rng")
         }
 
+    # SC matches the base objective in logit-gradient space, without updating weights.
     for packet in values:
         with torch.enable_grad():
             trainer.compute_loss(model, prepared(packet))
@@ -204,6 +207,7 @@ def calibrate(smoke, negatives, model_path, method, output):
             parameter.grad = None
 
     clear()
+    # UL uses a separate prefix set, so match gradients in the shared LoRA space.
     for packet in values:
         loss = trainer.compute_loss(model, prepared(packet)) / len(values)
         loss.backward()
@@ -212,6 +216,7 @@ def calibrate(smoke, negatives, model_path, method, output):
     coefficient_ul = 0.0
     ul_norm = None
     if method != "OPSD_SC":
+        # The reference includes SC only for the combined arm; UL-only uses OPSD.
         for row in rows:
             span = row["negative"]
             logits = detached_suffix_logits(model, span["prefix_ids"], span["suffix_ids"], device)

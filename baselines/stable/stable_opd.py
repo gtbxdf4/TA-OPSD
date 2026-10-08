@@ -188,10 +188,12 @@ def stable_opd_objective(
 ):
     """Real Stable-OPD tensor objective; teacher and rollout policy are frozen."""
     advantage = (teacher_logp - old_logp).detach()
+    # Importance correction is against the policy that generated the current rollouts.
     ratio = (current_logp - old_logp.detach()).exp()
     clipped_ratio = ratio.clamp(1.0 - epsilon, 1.0 + epsilon)
     surrogate = torch_min(ratio * advantage, clipped_ratio * advantage)
     policy_loss = -masked_response_mean(surrogate, rollout_mask)
+    # Golden-solution SFT and frozen-initial-policy KL provide the two stabilizers.
     loss = policy_loss + lambda_gold * golden_sft_loss + beta_ref_kl * reference_kl
     return {
         "loss": loss,

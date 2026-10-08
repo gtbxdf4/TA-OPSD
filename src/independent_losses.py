@@ -5,15 +5,18 @@ import torch.nn.functional as F
 
 
 def response_mean(values, mask):
+    """Give each nonempty response equal weight, regardless of its length."""
     if values.shape != mask.shape or values.ndim != 2:
         raise ValueError("expected matching [response, position] tensors")
     counts = mask.sum(-1)
     means = values.masked_fill(~mask.bool(), 0).sum(-1) / counts.clamp_min(1)
     present = counts > 0
+    # Empty rows contribute neither loss nor weight to the response average.
     return means.sum() / present.sum().clamp_min(1)
 
 
 def _binary_log_probabilities(logits, stop_ids):
+    """Collapse vocabulary logits into log probabilities for STOP and CONTINUE."""
     if not stop_ids or len(set(stop_ids)) != len(stop_ids):
         raise ValueError("stop IDs must be nonempty and unique")
     vocab = logits.shape[-1]
@@ -22,7 +25,7 @@ def _binary_log_probabilities(logits, stop_ids):
     x = logits.float()
     is_continue = torch.ones(vocab, dtype=torch.bool, device=x.device)
     is_continue[list(stop_ids)] = False
-    # Sum probability mass, not average token probabilities or mean token logits.
+    # Log-sum-exp aggregates probability mass without subtracting p(STOP) from one.
     binary_logits = torch.stack(
         (torch.logsumexp(x[..., list(stop_ids)], -1), torch.logsumexp(x[..., is_continue], -1)),
         dim=-1,
@@ -31,6 +34,7 @@ def _binary_log_probabilities(logits, stop_ids):
 
 
 def stop_kl(student_logits, teacher_logits, valid_mask, stop_ids):
+    """Teacher-to-student binary KL at the valid response positions (Eqs. 2–4)."""
     # The frozen teacher contributes targets, not gradients.
     teacher = _binary_log_probabilities(teacher_logits.detach(), stop_ids)
     student = _binary_log_probabilities(student_logits, stop_ids)
@@ -39,9 +43,11 @@ def stop_kl(student_logits, teacher_logits, valid_mask, stop_ids):
 
 
 def local_unlikelihood(logits, token_ids, selected, stop_ids):
+    """Penalize selected suffix tokens under their failure prefixes (Eq. 5)."""
     if logits.shape[:-1] != token_ids.shape or selected.shape != token_ids.shape:
         raise ValueError("logits and suffix token/mask alignment mismatch")
     valid = selected.bool() & (token_ids >= 0)
+    # UL targets repeated content; stopping tokens never receive this penalty.
     for token in stop_ids:
         valid = valid & (token_ids != token)
     logp = (

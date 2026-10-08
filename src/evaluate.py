@@ -18,6 +18,7 @@ EVAL_COUNTS = {"aime24": 30, "aime25": 30, "amc23": 40}
 
 
 def validate_lora_request(expected, request):
+    """Ensure an adapter evaluation cannot silently fall back to the base model."""
     if request is None or not getattr(request, "lora_path", None):
         raise ValueError("LoRARequest missing; base-model fallback forbidden")
     actual = Path(request.lora_path).resolve()
@@ -104,6 +105,7 @@ def main():
                     f"generation problem count mismatch: expected {EVAL_COUNTS[a.dataset]}, got {len(outputs)}"
                 )
             raw = out / "raw_responses.jsonl"
+            # Stable question/sample indices join tokens and stop reasons to scorer verdicts.
             rows = 0
             with raw.open("x", encoding="utf-8") as stream:
                 for problem_index, result in enumerate(outputs):
@@ -168,6 +170,7 @@ def main():
     if checkpoint is not None:
         sys.argv.extend(["--checkpoint_dir", str(checkpoint)])
     try:
+        # Retain the author's extraction and grading rules for every method.
         runpy.run_path(f"{SOURCE}/eval/evaluate_math.py", run_name="__main__")
     finally:
         datasets.load_dataset, vllm.LLM = original_load, original_llm

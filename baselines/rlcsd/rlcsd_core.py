@@ -50,6 +50,7 @@ def marginalize_wrong_log_probs(
     if (counts == 0).any():
         raise ValueError("every target must have at least one valid wrong hint")
     masked = teacher_wrong_multi_log_probs.masked_fill(~valid.unsqueeze(-1), float("-inf"))
+    # Mix probabilities uniformly across valid hints, not their log probabilities.
     return torch.logsumexp(masked, dim=1) - counts.to(masked.dtype).log().unsqueeze(-1)
 
 
@@ -104,6 +105,7 @@ def rlcsd_loss(
     ratio_clamped = ratio.clamp(1.0 - config.epsilon, 1.0 + config.epsilon)
 
     with torch.no_grad():
+        # Stop gradients through teacher scores and the selected-path decision.
         log_marginal_wrong = marginalize_wrong_log_probs(
             teacher_wrong_multi_log_probs, wrong_valid_mask
         )
@@ -115,6 +117,7 @@ def rlcsd_loss(
         residual_for_advantage = residual * selected.to(dtype=residual.dtype)
         raw_modulated = advantages + residual_for_advantage
         modulated = torch.where(
+            # The teacher residual must not reverse the verifier's advantage sign.
             advantages > 0,
             raw_modulated.clamp_min(0.0),
             torch.where(
@@ -135,6 +138,7 @@ def rlcsd_loss(
         selected_per_token = selected_per_token * weights
 
     nonselected_loss = _masked_rollout_mean(nonselected_per_token, nonselected_mask)
+    # Normalize the two paths separately before weighting the selected path.
     selected_loss = _masked_rollout_mean(selected_per_token, selected_mask)
     loss = nonselected_loss + config.eta * selected_loss
 

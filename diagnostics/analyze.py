@@ -12,6 +12,7 @@ def read(p):
 
 
 def compute(raw_root=None, input_dir=None):
+    """Summarize standalone failures and recovery from this run's unchanged prefixes."""
     raw = Path(raw_root) if raw_root else ROOT / "frozen"
     inputs = Path(input_dir) if input_dir else ROOT / "inputs/1.7B"
     cohort = read(inputs / "cohort.json")
@@ -47,6 +48,7 @@ def compute(raw_root=None, input_dir=None):
         )
     pairs = [r for r in rows if not r["student_correct"] and r["teacher_correct"]]
     shorter = {r["problem_hash"] for r in pairs if r["student_tokens"] < r["teacher_tokens"]}
+    # Derive eligibility from the newly generated answers, not a historical case count.
     cases = [
         json.loads(line)
         for line in (inputs / "failure_prefix_cases.jsonl").read_text().splitlines()

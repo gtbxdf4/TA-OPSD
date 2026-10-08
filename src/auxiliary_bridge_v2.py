@@ -14,6 +14,7 @@ from replay_v2 import detached_suffix_logits, exposure_ids, joint_backward_conte
 
 
 def with_auxiliary(original, config):
+    """Extend OPSD with SC on current rollouts and UL on the fixed replay bank."""
     if not any(config.get(k, 0) for k in ["lambda_eos", "lambda_ul"]):
         return original
 
@@ -57,6 +58,7 @@ def with_auxiliary(original, config):
                 stream.write(json.dumps(values, ensure_ascii=False) + "\n")
 
         def generalized_jsd_loss(self, student_logits, teacher_logits, labels=None, **kwargs):
+            # SC uses the same valid positions as the unchanged base distillation loss.
             base = super().generalized_jsd_loss(
                 student_logits=student_logits,
                 teacher_logits=teacher_logits,
@@ -80,6 +82,7 @@ def with_auxiliary(original, config):
             return base + coefficient * eos
 
         def compute_loss(self, model, inputs, *args, **kwargs):
+            # The on-policy objective and replay objective share one optimizer update.
             with (
                 joint_backward_context(self.accelerator.unwrap_model(model))
                 if self._aux_rows
@@ -104,6 +107,7 @@ def with_auxiliary(original, config):
             values = []
             evidence = []
             for index in indices:
+                # Each record carries its original causal prefix and local target span.
                 row = self._aux_rows[index]
                 record = {"id": row["id"], "asset_index": index, "micro": self._aux_micro}
                 auxiliary = base.new_zeros(())
@@ -133,6 +137,7 @@ def with_auxiliary(original, config):
                 values.append(auxiliary)
                 evidence.append(record)
             combined = base + torch.stack(values).mean()
+            # DDP and accumulation complete the global mean over 16 replay examples.
             self._aux_emit(
                 "replay",
                 {
