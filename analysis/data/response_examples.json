@@ -1,0 +1,54 @@
+{
+  "cases": {
+    "lottery": [
+      {
+        "method": "OPSD",
+        "problem_index": 9,
+        "generation_index": 11,
+        "tokens": 13,
+        "finish_reason": "stop",
+        "correct": false,
+        "predicted_answer": "11"
+      },
+      {
+        "method": "OPSD",
+        "problem_index": 9,
+        "generation_index": 3,
+        "tokens": 2251,
+        "finish_reason": "stop",
+        "correct": true,
+        "predicted_answer": "116"
+      },
+      {
+        "method": "TA-OPSD",
+        "problem_index": 9,
+        "generation_index": 3,
+        "tokens": 1154,
+        "finish_reason": "stop",
+        "correct": true,
+        "predicted_answer": "116"
+      }
+    ],
+    "logarithm": [
+      {
+        "method": "OPSD",
+        "problem_index": 24,
+        "generation_index": 0,
+        "tokens": 32597,
+        "finish_reason": "length",
+        "correct": false,
+        "predicted_answer": "[No boxed answer found]"
+      },
+      {
+        "method": "TA-OPSD",
+        "problem_index": 24,
+        "generation_index": 1,
+        "tokens": 3026,
+        "finish_reason": "stop",
+        "correct": true,
+        "predicted_answer": "33"
+      }
+    ]
+  },
+  "distribution": "selected case metrics only; full questions/responses are external"
+}

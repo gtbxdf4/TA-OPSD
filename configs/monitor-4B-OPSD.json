@@ -1,0 +1,59 @@
+{
+  "schema": "v18-raw-monitor-contract-v1",
+  "approved_scope": "all six frozen arms, all real main-rollout tokens",
+  "model": "models/Qwen3-4B",
+  "source_commit": "ae7d2519e94920c4eb6206c0c26de46d9c50abae",
+  "shared_initialization_tensor_sha256": "9247591d2b82e09c6b152f61fb4706df7cf5e7d1880f91c42659a1393953c476",
+  "arms": [
+    "NEW_T0_OFFICIAL",
+    "NEW_T1_EOS",
+    "NEW_T6_ON_T1_MAIN",
+    "NEW_T6_ON_T1_UL",
+    "NEW_T6_ON_T0_MAIN",
+    "NEW_T6_ON_T0_UL"
+  ],
+  "world_size": 4,
+  "per_device_train_batch_size": 4,
+  "gradient_accumulation_steps": 2,
+  "question_index_path": "assets/training/question-index-c5b0cfb70cfb.json",
+  "question_index_sha256": "c5b0cfb70cfb5894ec40a09e98df3c185139db671c22d0c39dcdcfcbcade93b3",
+  "source_parquet_sha256": {
+    "assets/training/train-00000-of-00002.parquet": "d0cb1cfc402f211bc3527c6c23cac0561b461dce0bbdd2679c5b9c045ee1cc21",
+    "assets/training/train-00001-of-00002.parquet": "da396c34d82405c1aeda1f5fa4531140d717a68bbdcdc5ddc99f079d6e13cd26"
+  },
+  "source_row_count": 29434,
+  "unique_pair_count": 29434,
+  "duplicate_source_identity_rule": "preserve all source_row_ids for byte-identical problem/solution; no content dedup in training or observations",
+  "k": 100,
+  "temperature": 1.0,
+  "loss_temperature_unchanged": 1.1,
+  "chunk_tokens": 32,
+  "stop_ids": [
+    151643,
+    151645
+  ],
+  "stop_token_labels": {
+    "151643": "<|endoftext|>",
+    "151645": "<|im_end|>"
+  },
+  "stop_union": "primary engine EOS plus inherited generation eos_token_id extras; verified again at each live trainer init",
+  "overlap_definition": "size(Top100(student) intersection Top100(teacher))/100, includes special tokens; not Jaccard or probability mass",
+  "entropy_definition": "full-vocabulary Shannon -sum p*ln(p), p=softmax(detached logits at T=1), nats, FP32, no sampling truncation",
+  "eos_logp_gap_sign": "teacher minus student; each stop ID separate",
+  "stop_set_logp": "logsumexp(log_softmax(logits)[stop_ids]); never sum individual logps",
+  "actual_token_logp": "separate sampled-token quantity, not entropy; same aligned full distribution",
+  "position_alignment": "incoming author compute_loss [prompt_length-1:-1]; sampled IDs and labels [prompt_length:]; no second shift",
+  "real_token_support": "raw vLLM token_ids, including actual terminal pad-ID token; exclude physical padding only by raw length",
+  "loss_support": "original labels != -100 stored separately, no change; mask-mapped real EOS retained as observed token with false loss mask",
+  "stop_event_rule": "finish_reason stop natural; length right-censored even if final ID is EOS; raw stop_reason and eos_events both retained",
+  "normalization": "raw arrays only; summaries must separately name all-real vs loss-valid support and token vs response weighting",
+  "stream": "main_opsd_rollout",
+  "teacher_privileged": true,
+  "auxiliary_replay": "existing aux-replay records separate; this monitor does not add/recompute replay forwards or merge their denominators",
+  "sampling": "none; every optimizer microbatch/rank/response/real token retained",
+  "storage": "one atomic gzip JSON per rank/microbatch/launch segment; no overwrite; checkpoint/resume selects committed prefix without deleting history",
+  "passivity": "detach+no_grad existing logits; no extra model forward, no RNG calls, no in-place mutation, original loss expression untouched",
+  "smoke_gate": "existing T0 and T6_ON_T1_MAIN DP4 2step->native resume3step plus adapter canonical smoke; monitor schema/fullness/RNG/cost required",
+  "cost_bounds": "max 3200 main responses and 3276800 real tokens per arm at step100; no full-logit archive; compressed metric arrays plus prompt/source IDs",
+  "provenance_audit": "source-record:PROVENANCE_PROPOSAL.md"
+}

@@ -1,0 +1,15 @@
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+exclude = ["upstream", "assets", "analysis/output"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]
+ignore = ["E402"]
+
+[tool.ruff.lint.per-file-ignores]
+"src/observed_entry*.py" = ["F401", "I001"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

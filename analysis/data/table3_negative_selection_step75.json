@@ -1,0 +1,152 @@
+{
+  "comparison_checkpoint": 75,
+  "macro_rule": "equal-weight average of AIME24, AIME25, AMC23",
+  "model_assisted_exact_subset_count": 5,
+  "model_assisted_count": 5,
+  "comparison": {
+    "OPSD": {
+      "datasets": {
+        "aime24": {
+          "n": 360,
+          "correct": 50,
+          "accuracy": 13.88888888888889,
+          "mean_length": 6365.872222222222,
+          "capping_rate": 9.722222222222223,
+          "source": "source-record:raw.jsonl",
+          "sha256": "c187f13248bbd4f4e38b30bac2963f49ff983e145c34f4db7f480e14f4b8ad29"
+        },
+        "aime25": {
+          "n": 360,
+          "correct": 34,
+          "accuracy": 9.444444444444445,
+          "mean_length": 6348.555555555556,
+          "capping_rate": 10.0,
+          "source": "source-record:raw.jsonl",
+          "sha256": "5c85e3ee19ca2cc193c30baf84ea8c0ff7ff9cdf2faa9e7a8c0cfe1a9bcc96cb"
+        },
+        "amc23": {
+          "n": 480,
+          "correct": 219,
+          "accuracy": 45.625,
+          "mean_length": 2942.170833333333,
+          "capping_rate": 2.9166666666666665,
+          "source": "source-record:raw.jsonl",
+          "sha256": "9e86ad4b8eca0f10cdf369ab2330d673660a9ea023124d8f8e2ff326fe9a15b7"
+        }
+      },
+      "macro": {
+        "accuracy": 22.986111111111114,
+        "mean_length": 5218.866203703704,
+        "capping_rate": 7.546296296296297
+      }
+    },
+    "TA-OPSD": {
+      "datasets": {
+        "aime24": {
+          "n": 360,
+          "correct": 66,
+          "accuracy": 18.333333333333332,
+          "mean_length": 6392.902777777777,
+          "capping_rate": 5.833333333333333,
+          "source": "source-record:raw.jsonl",
+          "sha256": "e7e636f0d6dc8a84ccf8f4233ec23cce34a52074f832e3bc0c307c15de5b7df0"
+        },
+        "aime25": {
+          "n": 360,
+          "correct": 50,
+          "accuracy": 13.88888888888889,
+          "mean_length": 6414.155555555555,
+          "capping_rate": 7.222222222222221,
+          "source": "source-record:raw.jsonl",
+          "sha256": "d516dac46adef0a44c6330fd86e6132b1e15cab84e2842029dee47389103d121"
+        },
+        "amc23": {
+          "n": 480,
+          "correct": 246,
+          "accuracy": 51.24999999999999,
+          "mean_length": 2786.6833333333334,
+          "capping_rate": 1.25,
+          "source": "source-record:raw.jsonl",
+          "sha256": "182a1caa493f82422de0e672a0802c1d20c3aeb2a4e9b3b680a45e3dc5cf10f1"
+        }
+      },
+      "macro": {
+        "accuracy": 27.824074074074073,
+        "mean_length": 5197.913888888888,
+        "capping_rate": 4.768518518518518
+      }
+    },
+    "TA-OPSD (trained-OPSD negatives)": {
+      "datasets": {
+        "aime24": {
+          "n": 360,
+          "correct": 57,
+          "accuracy": 15.833333333333332,
+          "mean_length": 6855.683333333333,
+          "capping_rate": 8.055555555555555,
+          "source": "source-record:raw_responses.jsonl",
+          "sha256": "1cf46b5639384b5388022b0d2b4d2dda1e2564ed7950aef4aa2853ab44d145de"
+        },
+        "aime25": {
+          "n": 360,
+          "correct": 59,
+          "accuracy": 16.38888888888889,
+          "mean_length": 4985.144444444444,
+          "capping_rate": 2.2222222222222223,
+          "source": "source-record:raw_responses.jsonl",
+          "sha256": "499afc7d75828934af27b536f184c0263457a337d5f3f2ac2350bc78fbe45982"
+        },
+        "amc23": {
+          "n": 480,
+          "correct": 254,
+          "accuracy": 52.916666666666664,
+          "mean_length": 2354.825,
+          "capping_rate": 0.20833333333333334,
+          "source": "source-record:raw_responses.jsonl",
+          "sha256": "7ef1febf2dbcb3d09f8ef50d4b4ceafa76052bd70d012867788111ece3276cca"
+        }
+      },
+      "macro": {
+        "accuracy": 28.37962962962963,
+        "mean_length": 4731.884259259259,
+        "capping_rate": 3.4953703703703707
+      }
+    },
+    "TA-OPSD (LLM-assisted selection)": {
+      "datasets": {
+        "aime24": {
+          "n": 360,
+          "correct": 63,
+          "accuracy": 17.5,
+          "mean_length": 6258.155555555555,
+          "capping_rate": 5.277777777777778,
+          "source": "source-record:raw_responses.jsonl",
+          "sha256": "6cd1850b714a20e539c46da4ce698e9d94bea22052b93c7c3c240522d223ca49"
+        },
+        "aime25": {
+          "n": 360,
+          "correct": 65,
+          "accuracy": 18.055555555555554,
+          "mean_length": 5470.077777777778,
+          "capping_rate": 3.888888888888889,
+          "source": "source-record:raw_responses.jsonl",
+          "sha256": "57dfa162bf834afef165d31b387f7028f75422b55749c575deb2ca515648286c"
+        },
+        "amc23": {
+          "n": 480,
+          "correct": 230,
+          "accuracy": 47.91666666666667,
+          "mean_length": 2586.8166666666666,
+          "capping_rate": 0.625,
+          "source": "source-record:raw_responses.jsonl",
+          "sha256": "a7035a65df7c67cc4759507123f18d52e1fadd13e9450e4d7d2c8fd7ff5b7638"
+        }
+      },
+      "macro": {
+        "accuracy": 27.824074074074076,
+        "mean_length": 4771.683333333333,
+        "capping_rate": 3.263888888888889
+      }
+    }
+  }
+}

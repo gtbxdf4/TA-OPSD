@@ -1,0 +1,57 @@
+{
+  "files": [
+    {
+      "path": "assets/initialization/1.7B/initial-lora.safetensors",
+      "sha256": "a222f7748071bc3d96d588250347330067717b091d8f93d74f2cfc67ff639af7"
+    },
+    {
+      "path": "assets/negatives/1.7B-mechanical.jsonl",
+      "sha256": "e984a0136e6ce0dc7c453fc47b2d2757d1f20fd22fe77e3708f96ed2cec6aabe"
+    },
+    {
+      "path": "assets/initialization/4B/initial-lora.safetensors",
+      "sha256": "7ff9a022b4de8fc352c4936e4f7e2d185dd8a0663ddf98035c695113650b13d6"
+    },
+    {
+      "path": "assets/negatives/4B-mechanical.jsonl",
+      "sha256": "96443130edd9280f3def62b9cbe9a8b3c468897b3290483c635128ee5bd7db15"
+    },
+    {
+      "path": "assets/initialization/8B/initial-lora.safetensors",
+      "sha256": "5af80938fefa326038d5e8b5f37208f1f2250cbf2b41039a6222bf6277c74f56"
+    },
+    {
+      "path": "assets/negatives/8B-mechanical.jsonl",
+      "sha256": "8a9001dab501a9ff4ad529e2ba0f36ad50d8fe9da442372ae5b068737afe7994"
+    },
+    {
+      "path": "assets/training/train-00000-of-00002.parquet",
+      "sha256": "d0cb1cfc402f211bc3527c6c23cac0561b461dce0bbdd2679c5b9c045ee1cc21"
+    },
+    {
+      "path": "assets/training/train-00001-of-00002.parquet",
+      "sha256": "da396c34d82405c1aeda1f5fa4531140d717a68bbdcdc5ddc99f079d6e13cd26"
+    },
+    {
+      "path": "assets/evaluation/aime24.parquet",
+      "sha256": "26139847601a5037c237d5928b195e7260ca8074cf4f264b794af42847f79ccf"
+    },
+    {
+      "path": "assets/evaluation/aime25.parquet",
+      "sha256": "b74b507c1a4de7c9fafd2c83dfe2ef7b80579bcf0e0a754a1765db0f21c205fc"
+    },
+    {
+      "path": "assets/evaluation/amc23.parquet",
+      "sha256": "b696e87ba47be4e879a60fd4ef1d4aa522ba78c5ae013c6aff5cc9788a397c5e"
+    },
+    {
+      "path": "assets/negatives/1.7B-TA_OPSD_trained_negatives.jsonl",
+      "sha256": "0d9e5713146a3708dd6da7d28cb6b832e07c6b961ab599a01a352a4b9fa5062a"
+    },
+    {
+      "path": "assets/negatives/1.7B-TA_OPSD_semantic_negatives.jsonl",
+      "sha256": "d9679f3a1f81df6f69a856aa01e7749a1ee8596f2991cc5731a92fa0c6e65275"
+    }
+  ],
+  "data_in_git": false
+}

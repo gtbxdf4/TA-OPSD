@@ -1,0 +1,1064 @@
+{
+  "cells": [
+    {
+      "size": "1.7B",
+      "method": "base",
+      "dataset": "aime24",
+      "path": "source-record:attempt-20260908T130540559663Z-7f0f8567",
+      "correct": 49,
+      "total": 360,
+      "accuracy_pct": 13.61111111111111,
+      "prompt_sha256": "643c92534a0ce159f88edcf4c916946f002ef36ce60ab328f581d9fed0d68868",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [],
+      "errors": []
+    },
+    {
+      "size": "1.7B",
+      "method": "base",
+      "dataset": "aime25",
+      "path": "source-record:attempt-20260908T142915632050Z-c0449af2",
+      "correct": 31,
+      "total": 360,
+      "accuracy_pct": 8.61111111111111,
+      "prompt_sha256": "6e7b373e1a24e6f83251c283c1073c09204bc8a4f68484d9ec8566b9937ac6f2",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [],
+      "errors": []
+    },
+    {
+      "size": "1.7B",
+      "method": "base",
+      "dataset": "amc23",
+      "path": "source-record:attempt-20260909T035421561294Z-56cbd0b4",
+      "correct": 221,
+      "total": 480,
+      "accuracy_pct": 46.041666666666664,
+      "prompt_sha256": "202d25c5ac004ef8d070b3b3b2b1c3495d3172e5d434c92586ab63e82c79d2d8",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [],
+      "errors": []
+    },
+    {
+      "size": "1.7B",
+      "method": "SFT",
+      "dataset": "aime24",
+      "path": "source-record:aime24",
+      "correct": 32,
+      "total": 360,
+      "accuracy_pct": 8.88888888888889,
+      "prompt_sha256": "643c92534a0ce159f88edcf4c916946f002ef36ce60ab328f581d9fed0d68868",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-75"
+      ],
+      "errors": []
+    },
+    {
+      "size": "1.7B",
+      "method": "SFT",
+      "dataset": "aime25",
+      "path": "source-record:aime25",
+      "correct": 32,
+      "total": 360,
+      "accuracy_pct": 8.88888888888889,
+      "prompt_sha256": "6e7b373e1a24e6f83251c283c1073c09204bc8a4f68484d9ec8566b9937ac6f2",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-75"
+      ],
+      "errors": []
+    },
+    {
+      "size": "1.7B",
+      "method": "SFT",
+      "dataset": "amc23",
+      "path": "source-record:amc23",
+      "correct": 197,
+      "total": 480,
+      "accuracy_pct": 41.041666666666664,
+      "prompt_sha256": "202d25c5ac004ef8d070b3b3b2b1c3495d3172e5d434c92586ab63e82c79d2d8",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-75"
+      ],
+      "errors": []
+    },
+    {
+      "size": "1.7B",
+      "method": "GRPO",
+      "dataset": "aime24",
+      "path": "source-record:aime24",
+      "correct": 46,
+      "total": 360,
+      "accuracy_pct": 12.777777777777779,
+      "prompt_sha256": "643c92534a0ce159f88edcf4c916946f002ef36ce60ab328f581d9fed0d68868",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-300"
+      ],
+      "errors": []
+    },
+    {
+      "size": "1.7B",
+      "method": "GRPO",
+      "dataset": "aime25",
+      "path": "source-record:aime25",
+      "correct": 33,
+      "total": 360,
+      "accuracy_pct": 9.166666666666666,
+      "prompt_sha256": "6e7b373e1a24e6f83251c283c1073c09204bc8a4f68484d9ec8566b9937ac6f2",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-300"
+      ],
+      "errors": []
+    },
+    {
+      "size": "1.7B",
+      "method": "GRPO",
+      "dataset": "amc23",
+      "path": "source-record:amc23",
+      "correct": 216,
+      "total": 480,
+      "accuracy_pct": 45.0,
+      "prompt_sha256": "202d25c5ac004ef8d070b3b3b2b1c3495d3172e5d434c92586ab63e82c79d2d8",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-300"
+      ],
+      "errors": []
+    },
+    {
+      "size": "1.7B",
+      "method": "T0",
+      "dataset": "aime24",
+      "path": "source-record:attempt-paper-main-1789436598",
+      "correct": 50,
+      "total": 360,
+      "accuracy_pct": 13.88888888888889,
+      "prompt_sha256": "643c92534a0ce159f88edcf4c916946f002ef36ce60ab328f581d9fed0d68868",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [],
+      "errors": []
+    },
+    {
+      "size": "1.7B",
+      "method": "T0",
+      "dataset": "aime25",
+      "path": "source-record:attempt-paper-main-1789436783",
+      "correct": 34,
+      "total": 360,
+      "accuracy_pct": 9.444444444444445,
+      "prompt_sha256": "6e7b373e1a24e6f83251c283c1073c09204bc8a4f68484d9ec8566b9937ac6f2",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [],
+      "errors": []
+    },
+    {
+      "size": "1.7B",
+      "method": "T0",
+      "dataset": "amc23",
+      "path": "source-record:attempt-paper-main-1789436861",
+      "correct": 219,
+      "total": 480,
+      "accuracy_pct": 45.625,
+      "prompt_sha256": "202d25c5ac004ef8d070b3b3b2b1c3495d3172e5d434c92586ab63e82c79d2d8",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [],
+      "errors": []
+    },
+    {
+      "size": "1.7B",
+      "method": "STABLE",
+      "dataset": "aime24",
+      "path": "source-record:attempt-1790041673385498943",
+      "correct": 35,
+      "total": 360,
+      "accuracy_pct": 9.722222222222221,
+      "prompt_sha256": "643c92534a0ce159f88edcf4c916946f002ef36ce60ab328f581d9fed0d68868",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-75"
+      ],
+      "errors": []
+    },
+    {
+      "size": "1.7B",
+      "method": "STABLE",
+      "dataset": "aime25",
+      "path": "source-record:attempt-1790043674454314534",
+      "correct": 40,
+      "total": 360,
+      "accuracy_pct": 11.11111111111111,
+      "prompt_sha256": "6e7b373e1a24e6f83251c283c1073c09204bc8a4f68484d9ec8566b9937ac6f2",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-75"
+      ],
+      "errors": []
+    },
+    {
+      "size": "1.7B",
+      "method": "STABLE",
+      "dataset": "amc23",
+      "path": "source-record:attempt-1790047285300457995",
+      "correct": 229,
+      "total": 480,
+      "accuracy_pct": 47.708333333333336,
+      "prompt_sha256": "202d25c5ac004ef8d070b3b3b2b1c3495d3172e5d434c92586ab63e82c79d2d8",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-75"
+      ],
+      "errors": []
+    },
+    {
+      "size": "1.7B",
+      "method": "RLCSD",
+      "dataset": "aime24",
+      "path": "source-record:attempt-1790050264633764934",
+      "correct": 57,
+      "total": 360,
+      "accuracy_pct": 15.833333333333334,
+      "prompt_sha256": "643c92534a0ce159f88edcf4c916946f002ef36ce60ab328f581d9fed0d68868",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-75"
+      ],
+      "errors": []
+    },
+    {
+      "size": "1.7B",
+      "method": "RLCSD",
+      "dataset": "aime25",
+      "path": "source-record:attempt-1790052024339523529",
+      "correct": 34,
+      "total": 360,
+      "accuracy_pct": 9.444444444444445,
+      "prompt_sha256": "6e7b373e1a24e6f83251c283c1073c09204bc8a4f68484d9ec8566b9937ac6f2",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-75"
+      ],
+      "errors": []
+    },
+    {
+      "size": "1.7B",
+      "method": "RLCSD",
+      "dataset": "amc23",
+      "path": "source-record:attempt-1790055439679878201",
+      "correct": 227,
+      "total": 480,
+      "accuracy_pct": 47.291666666666664,
+      "prompt_sha256": "202d25c5ac004ef8d070b3b3b2b1c3495d3172e5d434c92586ab63e82c79d2d8",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-75"
+      ],
+      "errors": []
+    },
+    {
+      "size": "1.7B",
+      "method": "Ours",
+      "dataset": "aime24",
+      "path": "source-record:attempt-paper-main-1789460816",
+      "correct": 66,
+      "total": 360,
+      "accuracy_pct": 18.333333333333332,
+      "prompt_sha256": "643c92534a0ce159f88edcf4c916946f002ef36ce60ab328f581d9fed0d68868",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [],
+      "errors": []
+    },
+    {
+      "size": "1.7B",
+      "method": "Ours",
+      "dataset": "aime25",
+      "path": "source-record:attempt-paper-main-1789462356",
+      "correct": 50,
+      "total": 360,
+      "accuracy_pct": 13.88888888888889,
+      "prompt_sha256": "6e7b373e1a24e6f83251c283c1073c09204bc8a4f68484d9ec8566b9937ac6f2",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [],
+      "errors": []
+    },
+    {
+      "size": "1.7B",
+      "method": "Ours",
+      "dataset": "amc23",
+      "path": "source-record:attempt-098d945a036947ed900e7d07fc71eef9",
+      "correct": 246,
+      "total": 480,
+      "accuracy_pct": 51.25,
+      "prompt_sha256": "202d25c5ac004ef8d070b3b3b2b1c3495d3172e5d434c92586ab63e82c79d2d8",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [],
+      "errors": []
+    },
+    {
+      "size": "4B",
+      "method": "base",
+      "dataset": "aime24",
+      "path": "source-record:attempt-paper-main-1789314831",
+      "correct": 86,
+      "total": 360,
+      "accuracy_pct": 23.88888888888889,
+      "prompt_sha256": "643c92534a0ce159f88edcf4c916946f002ef36ce60ab328f581d9fed0d68868",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [],
+      "errors": []
+    },
+    {
+      "size": "4B",
+      "method": "base",
+      "dataset": "aime25",
+      "path": "source-record:attempt-paper-main-1789319858",
+      "correct": 77,
+      "total": 360,
+      "accuracy_pct": 21.38888888888889,
+      "prompt_sha256": "6e7b373e1a24e6f83251c283c1073c09204bc8a4f68484d9ec8566b9937ac6f2",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [],
+      "errors": []
+    },
+    {
+      "size": "4B",
+      "method": "base",
+      "dataset": "amc23",
+      "path": "source-record:attempt-paper-main-1789315513",
+      "correct": 317,
+      "total": 480,
+      "accuracy_pct": 66.04166666666667,
+      "prompt_sha256": "202d25c5ac004ef8d070b3b3b2b1c3495d3172e5d434c92586ab63e82c79d2d8",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [],
+      "errors": []
+    },
+    {
+      "size": "4B",
+      "method": "SFT",
+      "dataset": "aime24",
+      "path": "source-record:aime24",
+      "correct": 60,
+      "total": 360,
+      "accuracy_pct": 16.666666666666668,
+      "prompt_sha256": "643c92534a0ce159f88edcf4c916946f002ef36ce60ab328f581d9fed0d68868",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-50"
+      ],
+      "errors": []
+    },
+    {
+      "size": "4B",
+      "method": "SFT",
+      "dataset": "aime25",
+      "path": "source-record:aime25",
+      "correct": 51,
+      "total": 360,
+      "accuracy_pct": 14.166666666666666,
+      "prompt_sha256": "6e7b373e1a24e6f83251c283c1073c09204bc8a4f68484d9ec8566b9937ac6f2",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-50"
+      ],
+      "errors": []
+    },
+    {
+      "size": "4B",
+      "method": "SFT",
+      "dataset": "amc23",
+      "path": "source-record:amc23",
+      "correct": 271,
+      "total": 480,
+      "accuracy_pct": 56.458333333333336,
+      "prompt_sha256": "202d25c5ac004ef8d070b3b3b2b1c3495d3172e5d434c92586ab63e82c79d2d8",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-50"
+      ],
+      "errors": []
+    },
+    {
+      "size": "4B",
+      "method": "GRPO",
+      "dataset": "aime24",
+      "path": "source-record:aime24",
+      "correct": 87,
+      "total": 360,
+      "accuracy_pct": 24.166666666666668,
+      "prompt_sha256": "643c92534a0ce159f88edcf4c916946f002ef36ce60ab328f581d9fed0d68868",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-200"
+      ],
+      "errors": []
+    },
+    {
+      "size": "4B",
+      "method": "GRPO",
+      "dataset": "aime25",
+      "path": "source-record:aime25",
+      "correct": 71,
+      "total": 360,
+      "accuracy_pct": 19.72222222222222,
+      "prompt_sha256": "6e7b373e1a24e6f83251c283c1073c09204bc8a4f68484d9ec8566b9937ac6f2",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-200"
+      ],
+      "errors": []
+    },
+    {
+      "size": "4B",
+      "method": "GRPO",
+      "dataset": "amc23",
+      "path": "source-record:amc23",
+      "correct": 319,
+      "total": 480,
+      "accuracy_pct": 66.45833333333333,
+      "prompt_sha256": "202d25c5ac004ef8d070b3b3b2b1c3495d3172e5d434c92586ab63e82c79d2d8",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-200"
+      ],
+      "errors": []
+    },
+    {
+      "size": "4B",
+      "method": "T0",
+      "dataset": "aime24",
+      "path": "source-record:aime24",
+      "correct": 70,
+      "total": 360,
+      "accuracy_pct": 19.444444444444443,
+      "prompt_sha256": "643c92534a0ce159f88edcf4c916946f002ef36ce60ab328f581d9fed0d68868",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [],
+      "errors": []
+    },
+    {
+      "size": "4B",
+      "method": "T0",
+      "dataset": "aime25",
+      "path": "source-record:aime25",
+      "correct": 64,
+      "total": 360,
+      "accuracy_pct": 17.77777777777778,
+      "prompt_sha256": "6e7b373e1a24e6f83251c283c1073c09204bc8a4f68484d9ec8566b9937ac6f2",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [],
+      "errors": []
+    },
+    {
+      "size": "4B",
+      "method": "T0",
+      "dataset": "amc23",
+      "path": "source-record:amc23",
+      "correct": 338,
+      "total": 480,
+      "accuracy_pct": 70.41666666666667,
+      "prompt_sha256": "202d25c5ac004ef8d070b3b3b2b1c3495d3172e5d434c92586ab63e82c79d2d8",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [],
+      "errors": []
+    },
+    {
+      "size": "4B",
+      "method": "STABLE",
+      "dataset": "aime24",
+      "path": "source-record:attempt-1790068709847650585",
+      "correct": 83,
+      "total": 360,
+      "accuracy_pct": 23.055555555555557,
+      "prompt_sha256": "643c92534a0ce159f88edcf4c916946f002ef36ce60ab328f581d9fed0d68868",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-50"
+      ],
+      "errors": []
+    },
+    {
+      "size": "4B",
+      "method": "STABLE",
+      "dataset": "aime25",
+      "path": "source-record:attempt-1790072034855143420",
+      "correct": 72,
+      "total": 360,
+      "accuracy_pct": 20.0,
+      "prompt_sha256": "6e7b373e1a24e6f83251c283c1073c09204bc8a4f68484d9ec8566b9937ac6f2",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-50"
+      ],
+      "errors": []
+    },
+    {
+      "size": "4B",
+      "method": "STABLE",
+      "dataset": "amc23",
+      "path": "source-record:attempt-1790078097783484330",
+      "correct": 316,
+      "total": 480,
+      "accuracy_pct": 65.83333333333333,
+      "prompt_sha256": "202d25c5ac004ef8d070b3b3b2b1c3495d3172e5d434c92586ab63e82c79d2d8",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-50"
+      ],
+      "errors": []
+    },
+    {
+      "size": "4B",
+      "method": "RLCSD",
+      "dataset": "aime24",
+      "path": "source-record:attempt-1790067055189235449",
+      "correct": 78,
+      "total": 360,
+      "accuracy_pct": 21.666666666666668,
+      "prompt_sha256": "643c92534a0ce159f88edcf4c916946f002ef36ce60ab328f581d9fed0d68868",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-50"
+      ],
+      "errors": []
+    },
+    {
+      "size": "4B",
+      "method": "RLCSD",
+      "dataset": "aime25",
+      "path": "source-record:attempt-1790084918735426936",
+      "correct": 69,
+      "total": 360,
+      "accuracy_pct": 19.166666666666668,
+      "prompt_sha256": "6e7b373e1a24e6f83251c283c1073c09204bc8a4f68484d9ec8566b9937ac6f2",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-50"
+      ],
+      "errors": []
+    },
+    {
+      "size": "4B",
+      "method": "RLCSD",
+      "dataset": "amc23",
+      "path": "source-record:attempt-1790090611481408719",
+      "correct": 329,
+      "total": 480,
+      "accuracy_pct": 68.54166666666667,
+      "prompt_sha256": "202d25c5ac004ef8d070b3b3b2b1c3495d3172e5d434c92586ab63e82c79d2d8",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-50"
+      ],
+      "errors": []
+    },
+    {
+      "size": "4B",
+      "method": "Ours",
+      "dataset": "aime24",
+      "path": "source-record:aime24",
+      "correct": 92,
+      "total": 360,
+      "accuracy_pct": 25.555555555555557,
+      "prompt_sha256": "643c92534a0ce159f88edcf4c916946f002ef36ce60ab328f581d9fed0d68868",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-50"
+      ],
+      "errors": []
+    },
+    {
+      "size": "4B",
+      "method": "Ours",
+      "dataset": "aime25",
+      "path": "source-record:aime25",
+      "correct": 80,
+      "total": 360,
+      "accuracy_pct": 22.22222222222222,
+      "prompt_sha256": "6e7b373e1a24e6f83251c283c1073c09204bc8a4f68484d9ec8566b9937ac6f2",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-50"
+      ],
+      "errors": []
+    },
+    {
+      "size": "4B",
+      "method": "Ours",
+      "dataset": "amc23",
+      "path": "source-record:amc23",
+      "correct": 341,
+      "total": 480,
+      "accuracy_pct": 71.04166666666667,
+      "prompt_sha256": "202d25c5ac004ef8d070b3b3b2b1c3495d3172e5d434c92586ab63e82c79d2d8",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-50"
+      ],
+      "errors": []
+    },
+    {
+      "size": "8B",
+      "method": "base",
+      "dataset": "aime24",
+      "path": "source-record:attempt-paper-main-1789330787",
+      "correct": 107,
+      "total": 360,
+      "accuracy_pct": 29.72222222222222,
+      "prompt_sha256": "643c92534a0ce159f88edcf4c916946f002ef36ce60ab328f581d9fed0d68868",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [],
+      "errors": []
+    },
+    {
+      "size": "8B",
+      "method": "base",
+      "dataset": "aime25",
+      "path": "source-record:attempt-paper-main-1789330980",
+      "correct": 69,
+      "total": 360,
+      "accuracy_pct": 19.166666666666668,
+      "prompt_sha256": "6e7b373e1a24e6f83251c283c1073c09204bc8a4f68484d9ec8566b9937ac6f2",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [],
+      "errors": []
+    },
+    {
+      "size": "8B",
+      "method": "base",
+      "dataset": "amc23",
+      "path": "source-record:attempt-paper-main-1789331531",
+      "correct": 327,
+      "total": 480,
+      "accuracy_pct": 68.125,
+      "prompt_sha256": "202d25c5ac004ef8d070b3b3b2b1c3495d3172e5d434c92586ab63e82c79d2d8",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [],
+      "errors": []
+    },
+    {
+      "size": "8B",
+      "method": "SFT",
+      "dataset": "aime24",
+      "path": "source-record:aime24",
+      "correct": 51,
+      "total": 360,
+      "accuracy_pct": 14.166666666666666,
+      "prompt_sha256": "643c92534a0ce159f88edcf4c916946f002ef36ce60ab328f581d9fed0d68868",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-100"
+      ],
+      "errors": []
+    },
+    {
+      "size": "8B",
+      "method": "SFT",
+      "dataset": "aime25",
+      "path": "source-record:aime25",
+      "correct": 41,
+      "total": 360,
+      "accuracy_pct": 11.38888888888889,
+      "prompt_sha256": "6e7b373e1a24e6f83251c283c1073c09204bc8a4f68484d9ec8566b9937ac6f2",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-100"
+      ],
+      "errors": []
+    },
+    {
+      "size": "8B",
+      "method": "SFT",
+      "dataset": "amc23",
+      "path": "source-record:amc23",
+      "correct": 251,
+      "total": 480,
+      "accuracy_pct": 52.291666666666664,
+      "prompt_sha256": "202d25c5ac004ef8d070b3b3b2b1c3495d3172e5d434c92586ab63e82c79d2d8",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-100"
+      ],
+      "errors": []
+    },
+    {
+      "size": "8B",
+      "method": "GRPO",
+      "dataset": "aime24",
+      "path": "source-record:aime24",
+      "correct": 107,
+      "total": 360,
+      "accuracy_pct": 29.72222222222222,
+      "prompt_sha256": "643c92534a0ce159f88edcf4c916946f002ef36ce60ab328f581d9fed0d68868",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-400"
+      ],
+      "errors": []
+    },
+    {
+      "size": "8B",
+      "method": "GRPO",
+      "dataset": "aime25",
+      "path": "source-record:aime25",
+      "correct": 78,
+      "total": 360,
+      "accuracy_pct": 21.666666666666668,
+      "prompt_sha256": "6e7b373e1a24e6f83251c283c1073c09204bc8a4f68484d9ec8566b9937ac6f2",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-400"
+      ],
+      "errors": []
+    },
+    {
+      "size": "8B",
+      "method": "GRPO",
+      "dataset": "amc23",
+      "path": "source-record:amc23",
+      "correct": 334,
+      "total": 480,
+      "accuracy_pct": 69.58333333333333,
+      "prompt_sha256": "202d25c5ac004ef8d070b3b3b2b1c3495d3172e5d434c92586ab63e82c79d2d8",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-400"
+      ],
+      "errors": []
+    },
+    {
+      "size": "8B",
+      "method": "T0",
+      "dataset": "aime24",
+      "path": "source-record:aime24",
+      "correct": 160,
+      "total": 360,
+      "accuracy_pct": 44.44444444444444,
+      "prompt_sha256": "643c92534a0ce159f88edcf4c916946f002ef36ce60ab328f581d9fed0d68868",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [],
+      "errors": []
+    },
+    {
+      "size": "8B",
+      "method": "T0",
+      "dataset": "aime25",
+      "path": "source-record:aime25",
+      "correct": 112,
+      "total": 360,
+      "accuracy_pct": 31.11111111111111,
+      "prompt_sha256": "6e7b373e1a24e6f83251c283c1073c09204bc8a4f68484d9ec8566b9937ac6f2",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [],
+      "errors": []
+    },
+    {
+      "size": "8B",
+      "method": "T0",
+      "dataset": "amc23",
+      "path": "source-record:amc23",
+      "correct": 394,
+      "total": 480,
+      "accuracy_pct": 82.08333333333333,
+      "prompt_sha256": "202d25c5ac004ef8d070b3b3b2b1c3495d3172e5d434c92586ab63e82c79d2d8",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [],
+      "errors": []
+    },
+    {
+      "size": "8B",
+      "method": "STABLE",
+      "dataset": "aime24",
+      "path": "source-record:attempt-1790121365318344912",
+      "correct": 93,
+      "total": 360,
+      "accuracy_pct": 25.833333333333332,
+      "prompt_sha256": "643c92534a0ce159f88edcf4c916946f002ef36ce60ab328f581d9fed0d68868",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-100"
+      ],
+      "errors": []
+    },
+    {
+      "size": "8B",
+      "method": "STABLE",
+      "dataset": "aime25",
+      "path": "source-record:attempt-1790124453448314441",
+      "correct": 70,
+      "total": 360,
+      "accuracy_pct": 19.444444444444443,
+      "prompt_sha256": "6e7b373e1a24e6f83251c283c1073c09204bc8a4f68484d9ec8566b9937ac6f2",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-100"
+      ],
+      "errors": []
+    },
+    {
+      "size": "8B",
+      "method": "STABLE",
+      "dataset": "amc23",
+      "path": "source-record:attempt-1790130645973017944",
+      "correct": 320,
+      "total": 480,
+      "accuracy_pct": 66.66666666666667,
+      "prompt_sha256": "202d25c5ac004ef8d070b3b3b2b1c3495d3172e5d434c92586ab63e82c79d2d8",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-100"
+      ],
+      "errors": []
+    },
+    {
+      "size": "8B",
+      "method": "RLCSD",
+      "dataset": "aime24",
+      "path": "source-record:attempt-1790135495020336971",
+      "correct": 103,
+      "total": 360,
+      "accuracy_pct": 28.61111111111111,
+      "prompt_sha256": "643c92534a0ce159f88edcf4c916946f002ef36ce60ab328f581d9fed0d68868",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-100"
+      ],
+      "errors": []
+    },
+    {
+      "size": "8B",
+      "method": "RLCSD",
+      "dataset": "aime25",
+      "path": "source-record:attempt-1790138733952230885",
+      "correct": 77,
+      "total": 360,
+      "accuracy_pct": 21.38888888888889,
+      "prompt_sha256": "6e7b373e1a24e6f83251c283c1073c09204bc8a4f68484d9ec8566b9937ac6f2",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-100"
+      ],
+      "errors": []
+    },
+    {
+      "size": "8B",
+      "method": "RLCSD",
+      "dataset": "amc23",
+      "path": "source-record:attempt-1790145182179887495",
+      "correct": 334,
+      "total": 480,
+      "accuracy_pct": 69.58333333333333,
+      "prompt_sha256": "202d25c5ac004ef8d070b3b3b2b1c3495d3172e5d434c92586ab63e82c79d2d8",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-100"
+      ],
+      "errors": []
+    },
+    {
+      "size": "8B",
+      "method": "Ours",
+      "dataset": "aime24",
+      "path": "source-record:aime24",
+      "correct": 162,
+      "total": 360,
+      "accuracy_pct": 45.0,
+      "prompt_sha256": "643c92534a0ce159f88edcf4c916946f002ef36ce60ab328f581d9fed0d68868",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-100"
+      ],
+      "errors": []
+    },
+    {
+      "size": "8B",
+      "method": "Ours",
+      "dataset": "aime25",
+      "path": "source-record:aime25",
+      "correct": 122,
+      "total": 360,
+      "accuracy_pct": 33.888888888888886,
+      "prompt_sha256": "6e7b373e1a24e6f83251c283c1073c09204bc8a4f68484d9ec8566b9937ac6f2",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-100"
+      ],
+      "errors": []
+    },
+    {
+      "size": "8B",
+      "method": "Ours",
+      "dataset": "amc23",
+      "path": "source-record:amc23",
+      "correct": 397,
+      "total": 480,
+      "accuracy_pct": 82.70833333333333,
+      "prompt_sha256": "202d25c5ac004ef8d070b3b3b2b1c3495d3172e5d434c92586ab63e82c79d2d8",
+      "seeds": [
+        20260727
+      ],
+      "adapters": [
+        "source-record:checkpoint-100"
+      ],
+      "errors": []
+    }
+  ],
+  "n": 63,
+  "failures": [],
+  "prompt_hashes": {
+    "1.7B:aime24": [
+      "643c92534a0ce159f88edcf4c916946f002ef36ce60ab328f581d9fed0d68868"
+    ],
+    "1.7B:aime25": [
+      "6e7b373e1a24e6f83251c283c1073c09204bc8a4f68484d9ec8566b9937ac6f2"
+    ],
+    "1.7B:amc23": [
+      "202d25c5ac004ef8d070b3b3b2b1c3495d3172e5d434c92586ab63e82c79d2d8"
+    ],
+    "4B:aime24": [
+      "643c92534a0ce159f88edcf4c916946f002ef36ce60ab328f581d9fed0d68868"
+    ],
+    "4B:aime25": [
+      "6e7b373e1a24e6f83251c283c1073c09204bc8a4f68484d9ec8566b9937ac6f2"
+    ],
+    "4B:amc23": [
+      "202d25c5ac004ef8d070b3b3b2b1c3495d3172e5d434c92586ab63e82c79d2d8"
+    ],
+    "8B:aime24": [
+      "643c92534a0ce159f88edcf4c916946f002ef36ce60ab328f581d9fed0d68868"
+    ],
+    "8B:aime25": [
+      "6e7b373e1a24e6f83251c283c1073c09204bc8a4f68484d9ec8566b9937ac6f2"
+    ],
+    "8B:amc23": [
+      "202d25c5ac004ef8d070b3b3b2b1c3495d3172e5d434c92586ab63e82c79d2d8"
+    ]
+  }
+}

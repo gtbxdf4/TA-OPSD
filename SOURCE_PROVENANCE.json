@@ -1,0 +1,127 @@
+{
+  "source_release": "ta_opsd_iclr2027_20260927",
+  "source_files": [
+    {
+      "path": "upstream/opsd/opsd_train.py",
+      "sha256": "524edd3f9a5ee9ad1496410dd9c51019301e8e1ab72289f5982b34adaf81f26e"
+    },
+    {
+      "path": "upstream/opsd/opsd_trainer.py",
+      "sha256": "aa11fc2a3f3cd814da37db38c6fb2351cab7f98a5a572d808a9b75de16097c9d"
+    },
+    {
+      "path": "upstream/opsd/data_collator.py",
+      "sha256": "5b96f3b3ae2f04e2b9dbf03509d3cd723c1b637d9362ab4697135d9f885b8381"
+    },
+    {
+      "path": "upstream/opsd/sft_train.py",
+      "sha256": "a8d4e7988a527315482f9fcfd42cc4b350a4b847579fa294f78717b4db82727c"
+    },
+    {
+      "path": "upstream/opsd/grpo_train.py",
+      "sha256": "cd4e5e9714f68a902d61392907c78916979e9131bf1b9a471bae95b8c636dde4"
+    },
+    {
+      "path": "upstream/opsd/accelerate.yaml",
+      "sha256": "9ea562ab6c1f0492894ad3f986a3515c1e3371b4b0956bb7376762af8c39bf7b"
+    },
+    {
+      "path": "upstream/opsd/eval/evaluate_math.py",
+      "sha256": "d1c10fb407461ae8f989c94544a252e9a00776e405e55848d0d4b7ebfd2d6076"
+    },
+    {
+      "path": "baselines/stable/stable_opd.py",
+      "sha256": "576675ef09df0cdd18adde4706f495cc6cab7af728676605c7de4cf27398f416"
+    },
+    {
+      "path": "baselines/stable/train_stable_opd.py",
+      "sha256": "4f6eb612ea7b6c56c1abd8f00611f42600d8fc2f3cd41801ae4853792c157126"
+    },
+    {
+      "path": "baselines/rlcsd/rlcsd_core.py",
+      "sha256": "03c1e126bc3fc8a81240bb998ab3d9ccf6077ac75615d360530ac90f22234ab5"
+    },
+    {
+      "path": "baselines/rlcsd/rlcsd_data.py",
+      "sha256": "adab7580b3990cbdbe7f2bd6d54dbc31ec3261813a70319c90993af2e003fa8d"
+    },
+    {
+      "path": "baselines/rlcsd/rlcsd_runner.py",
+      "sha256": "03bca04ed3d3890586c8bb3805c6a3f791d3df4e075a5e77518ba3c2c49606b4"
+    },
+    {
+      "path": "baselines/rlcsd/train_rlcsd.py",
+      "sha256": "5a805484ab068666d9dad52f3e7e5cb67f747c395874acead8d19fc2ef8d27f6"
+    },
+    {
+      "path": "src/independent_losses.py",
+      "sha256": "c0936de40c49518a9fa96ee992940ddbb6eb65aa1619febd1eec9aed064bb124"
+    },
+    {
+      "path": "src/replay_v2.py",
+      "sha256": "d542ade1b9a7b8e29dcf0101111c3822c53cd405c3e27857a39cca53e1864d00"
+    },
+    {
+      "path": "src/auxiliary_bridge_v2.py",
+      "sha256": "310c192b30cf59b826e4413e8f78a4a6a935264975a1e5b208bdb76f13cb3f3a"
+    },
+    {
+      "path": "src/observed_entry.py",
+      "sha256": "af7f4d06a8176fdd90eff61038f78e5f39e45e7f7717e4cfccc470fc4a7cdff8"
+    },
+    {
+      "path": "src/observed_entry_v2.py",
+      "sha256": "c8fe80f5f5a191bf041fe3077802200394589fcd1dba49d607820f3f58dc2295"
+    },
+    {
+      "path": "src/shared_initialization_v18.py",
+      "sha256": "f36db950d2304766577c192af7d98fbf7cba81ab1cbbbfeaec7b55a96a60fc58"
+    },
+    {
+      "path": "src/monitor_runtime_v18.py",
+      "sha256": "16291c3d1352eb18a57f76952927f66bd7b120bccc6bad43574832b0102c6404"
+    },
+    {
+      "path": "src/raw_monitor_v18.py",
+      "sha256": "0922facc38b8e8cffd7fc6a473cc7fb9753791c9f754868185fbd7f4bd605f96"
+    },
+    {
+      "path": "src/answer_transport_repair.py",
+      "sha256": "b1b3d2cd8dc8ae53644d5e02c56d6d1b2e7251611c54fb25bc4346d0bbd9cce5"
+    },
+    {
+      "path": "src/evaluate.py",
+      "sha256": "aeb3bbb7b6c997e7e0a2cc047c8e96d6c815dc2f27a4f76d4085faf4682a5d63"
+    },
+    {
+      "path": "src/mine_negatives.py",
+      "sha256": "d85eb726f074fd6086198fbbcdfd25ac45dd287f27d3db3f4a58ee613e38e70d"
+    },
+    {
+      "path": "baselines/baseline_bootstrap.py",
+      "sha256": "29baa380804852319dcb1d29ba4f9aedd857e08250db338015456c6bc11d2539"
+    },
+    {
+      "path": "baselines/baseline_runner.py",
+      "sha256": "b5bbbb5f0408446d3b33e80dc512f015a556d7fed9302c88932d8bdd590ff4fa"
+    },
+    {
+      "path": "src/generate_initialization.py",
+      "sha256": "76ac246c4e7559e075d8bbd5cb47f69effa4356b7322f071a78bcdaa53adc60b"
+    },
+    {
+      "path": "src/generate_candidates.py",
+      "sha256": "5e99fef1b79fac4089aec2557a6a9f1c873158b4a65233fb7e20e2374f0df85f"
+    }
+  ],
+  "validation_scope": "Source and CPU checks; no claim of a fresh full GPU replay",
+  "source_public_commit": "004fc84",
+  "release_changes": [
+    "Portable public input and diagnostic reconstruction",
+    "Fresh SC/UL calibration and semantic subset application",
+    "Fresh-output collection using the paper metrics",
+    "Launcher environment and capped UTF-8 fixes",
+    "Formatting and concise comments; original source unchanged"
+  ],
+  "source_hash_scope": "Original extracted files before publication edits; not final-release file hashes"
+}

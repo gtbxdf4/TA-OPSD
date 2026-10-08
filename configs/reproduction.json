@@ -1,0 +1,890 @@
+{
+  "teacher_aime24": "../runs/1.7B/teacher-aime24/teacher_results.json",
+  "evaluations": [
+    {
+      "size": "1.7B",
+      "method": "Base",
+      "step": 0,
+      "dataset": "aime24",
+      "path": "../runs/1.7B/Base/eval/step0/aime24",
+      "main_table": true
+    },
+    {
+      "size": "1.7B",
+      "method": "Base",
+      "step": 0,
+      "dataset": "aime25",
+      "path": "../runs/1.7B/Base/eval/step0/aime25",
+      "main_table": true
+    },
+    {
+      "size": "1.7B",
+      "method": "Base",
+      "step": 0,
+      "dataset": "amc23",
+      "path": "../runs/1.7B/Base/eval/step0/amc23",
+      "main_table": true
+    },
+    {
+      "size": "1.7B",
+      "method": "SFT",
+      "step": 75,
+      "dataset": "aime24",
+      "path": "../runs/1.7B/SFT/eval/step75/aime24",
+      "main_table": true
+    },
+    {
+      "size": "1.7B",
+      "method": "SFT",
+      "step": 75,
+      "dataset": "aime25",
+      "path": "../runs/1.7B/SFT/eval/step75/aime25",
+      "main_table": true
+    },
+    {
+      "size": "1.7B",
+      "method": "SFT",
+      "step": 75,
+      "dataset": "amc23",
+      "path": "../runs/1.7B/SFT/eval/step75/amc23",
+      "main_table": true
+    },
+    {
+      "size": "1.7B",
+      "method": "GRPO",
+      "step": 300,
+      "dataset": "aime24",
+      "path": "../runs/1.7B/GRPO/eval/step300/aime24",
+      "main_table": true
+    },
+    {
+      "size": "1.7B",
+      "method": "GRPO",
+      "step": 300,
+      "dataset": "aime25",
+      "path": "../runs/1.7B/GRPO/eval/step300/aime25",
+      "main_table": true
+    },
+    {
+      "size": "1.7B",
+      "method": "GRPO",
+      "step": 300,
+      "dataset": "amc23",
+      "path": "../runs/1.7B/GRPO/eval/step300/amc23",
+      "main_table": true
+    },
+    {
+      "size": "1.7B",
+      "method": "OPSD",
+      "step": 75,
+      "dataset": "aime24",
+      "path": "../runs/1.7B/OPSD/eval/step75/aime24",
+      "main_table": true,
+      "negative_table": "OPSD"
+    },
+    {
+      "size": "1.7B",
+      "method": "OPSD",
+      "step": 75,
+      "dataset": "aime25",
+      "path": "../runs/1.7B/OPSD/eval/step75/aime25",
+      "main_table": true,
+      "negative_table": "OPSD"
+    },
+    {
+      "size": "1.7B",
+      "method": "OPSD",
+      "step": 75,
+      "dataset": "amc23",
+      "path": "../runs/1.7B/OPSD/eval/step75/amc23",
+      "main_table": true,
+      "negative_table": "OPSD"
+    },
+    {
+      "size": "1.7B",
+      "method": "Stable_OPD",
+      "step": 75,
+      "dataset": "aime24",
+      "path": "../runs/1.7B/Stable_OPD/eval/step75/aime24",
+      "main_table": true
+    },
+    {
+      "size": "1.7B",
+      "method": "Stable_OPD",
+      "step": 75,
+      "dataset": "aime25",
+      "path": "../runs/1.7B/Stable_OPD/eval/step75/aime25",
+      "main_table": true
+    },
+    {
+      "size": "1.7B",
+      "method": "Stable_OPD",
+      "step": 75,
+      "dataset": "amc23",
+      "path": "../runs/1.7B/Stable_OPD/eval/step75/amc23",
+      "main_table": true
+    },
+    {
+      "size": "1.7B",
+      "method": "RLCSD",
+      "step": 75,
+      "dataset": "aime24",
+      "path": "../runs/1.7B/RLCSD/eval/step75/aime24",
+      "main_table": true
+    },
+    {
+      "size": "1.7B",
+      "method": "RLCSD",
+      "step": 75,
+      "dataset": "aime25",
+      "path": "../runs/1.7B/RLCSD/eval/step75/aime25",
+      "main_table": true
+    },
+    {
+      "size": "1.7B",
+      "method": "RLCSD",
+      "step": 75,
+      "dataset": "amc23",
+      "path": "../runs/1.7B/RLCSD/eval/step75/amc23",
+      "main_table": true
+    },
+    {
+      "size": "1.7B",
+      "method": "TA_OPSD",
+      "step": 75,
+      "dataset": "aime24",
+      "path": "../runs/1.7B/TA_OPSD/eval/step75/aime24",
+      "main_table": true,
+      "negative_table": "TA-OPSD"
+    },
+    {
+      "size": "1.7B",
+      "method": "TA_OPSD",
+      "step": 75,
+      "dataset": "aime25",
+      "path": "../runs/1.7B/TA_OPSD/eval/step75/aime25",
+      "main_table": true,
+      "negative_table": "TA-OPSD"
+    },
+    {
+      "size": "1.7B",
+      "method": "TA_OPSD",
+      "step": 75,
+      "dataset": "amc23",
+      "path": "../runs/1.7B/TA_OPSD/eval/step75/amc23",
+      "main_table": true,
+      "negative_table": "TA-OPSD"
+    },
+    {
+      "size": "4B",
+      "method": "Base",
+      "step": 0,
+      "dataset": "aime24",
+      "path": "../runs/4B/Base/eval/step0/aime24",
+      "main_table": true
+    },
+    {
+      "size": "4B",
+      "method": "Base",
+      "step": 0,
+      "dataset": "aime25",
+      "path": "../runs/4B/Base/eval/step0/aime25",
+      "main_table": true
+    },
+    {
+      "size": "4B",
+      "method": "Base",
+      "step": 0,
+      "dataset": "amc23",
+      "path": "../runs/4B/Base/eval/step0/amc23",
+      "main_table": true
+    },
+    {
+      "size": "4B",
+      "method": "SFT",
+      "step": 50,
+      "dataset": "aime24",
+      "path": "../runs/4B/SFT/eval/step50/aime24",
+      "main_table": true
+    },
+    {
+      "size": "4B",
+      "method": "SFT",
+      "step": 50,
+      "dataset": "aime25",
+      "path": "../runs/4B/SFT/eval/step50/aime25",
+      "main_table": true
+    },
+    {
+      "size": "4B",
+      "method": "SFT",
+      "step": 50,
+      "dataset": "amc23",
+      "path": "../runs/4B/SFT/eval/step50/amc23",
+      "main_table": true
+    },
+    {
+      "size": "4B",
+      "method": "GRPO",
+      "step": 200,
+      "dataset": "aime24",
+      "path": "../runs/4B/GRPO/eval/step200/aime24",
+      "main_table": true
+    },
+    {
+      "size": "4B",
+      "method": "GRPO",
+      "step": 200,
+      "dataset": "aime25",
+      "path": "../runs/4B/GRPO/eval/step200/aime25",
+      "main_table": true
+    },
+    {
+      "size": "4B",
+      "method": "GRPO",
+      "step": 200,
+      "dataset": "amc23",
+      "path": "../runs/4B/GRPO/eval/step200/amc23",
+      "main_table": true
+    },
+    {
+      "size": "4B",
+      "method": "OPSD",
+      "step": 50,
+      "dataset": "aime24",
+      "path": "../runs/4B/OPSD/eval/step50/aime24",
+      "main_table": true
+    },
+    {
+      "size": "4B",
+      "method": "OPSD",
+      "step": 50,
+      "dataset": "aime25",
+      "path": "../runs/4B/OPSD/eval/step50/aime25",
+      "main_table": true
+    },
+    {
+      "size": "4B",
+      "method": "OPSD",
+      "step": 50,
+      "dataset": "amc23",
+      "path": "../runs/4B/OPSD/eval/step50/amc23",
+      "main_table": true
+    },
+    {
+      "size": "4B",
+      "method": "Stable_OPD",
+      "step": 50,
+      "dataset": "aime24",
+      "path": "../runs/4B/Stable_OPD/eval/step50/aime24",
+      "main_table": true
+    },
+    {
+      "size": "4B",
+      "method": "Stable_OPD",
+      "step": 50,
+      "dataset": "aime25",
+      "path": "../runs/4B/Stable_OPD/eval/step50/aime25",
+      "main_table": true
+    },
+    {
+      "size": "4B",
+      "method": "Stable_OPD",
+      "step": 50,
+      "dataset": "amc23",
+      "path": "../runs/4B/Stable_OPD/eval/step50/amc23",
+      "main_table": true
+    },
+    {
+      "size": "4B",
+      "method": "RLCSD",
+      "step": 50,
+      "dataset": "aime24",
+      "path": "../runs/4B/RLCSD/eval/step50/aime24",
+      "main_table": true
+    },
+    {
+      "size": "4B",
+      "method": "RLCSD",
+      "step": 50,
+      "dataset": "aime25",
+      "path": "../runs/4B/RLCSD/eval/step50/aime25",
+      "main_table": true
+    },
+    {
+      "size": "4B",
+      "method": "RLCSD",
+      "step": 50,
+      "dataset": "amc23",
+      "path": "../runs/4B/RLCSD/eval/step50/amc23",
+      "main_table": true
+    },
+    {
+      "size": "4B",
+      "method": "TA_OPSD",
+      "step": 50,
+      "dataset": "aime24",
+      "path": "../runs/4B/TA_OPSD/eval/step50/aime24",
+      "main_table": true
+    },
+    {
+      "size": "4B",
+      "method": "TA_OPSD",
+      "step": 50,
+      "dataset": "aime25",
+      "path": "../runs/4B/TA_OPSD/eval/step50/aime25",
+      "main_table": true
+    },
+    {
+      "size": "4B",
+      "method": "TA_OPSD",
+      "step": 50,
+      "dataset": "amc23",
+      "path": "../runs/4B/TA_OPSD/eval/step50/amc23",
+      "main_table": true
+    },
+    {
+      "size": "8B",
+      "method": "Base",
+      "step": 0,
+      "dataset": "aime24",
+      "path": "../runs/8B/Base/eval/step0/aime24",
+      "main_table": true
+    },
+    {
+      "size": "8B",
+      "method": "Base",
+      "step": 0,
+      "dataset": "aime25",
+      "path": "../runs/8B/Base/eval/step0/aime25",
+      "main_table": true
+    },
+    {
+      "size": "8B",
+      "method": "Base",
+      "step": 0,
+      "dataset": "amc23",
+      "path": "../runs/8B/Base/eval/step0/amc23",
+      "main_table": true
+    },
+    {
+      "size": "8B",
+      "method": "SFT",
+      "step": 100,
+      "dataset": "aime24",
+      "path": "../runs/8B/SFT/eval/step100/aime24",
+      "main_table": true
+    },
+    {
+      "size": "8B",
+      "method": "SFT",
+      "step": 100,
+      "dataset": "aime25",
+      "path": "../runs/8B/SFT/eval/step100/aime25",
+      "main_table": true
+    },
+    {
+      "size": "8B",
+      "method": "SFT",
+      "step": 100,
+      "dataset": "amc23",
+      "path": "../runs/8B/SFT/eval/step100/amc23",
+      "main_table": true
+    },
+    {
+      "size": "8B",
+      "method": "GRPO",
+      "step": 400,
+      "dataset": "aime24",
+      "path": "../runs/8B/GRPO/eval/step400/aime24",
+      "main_table": true
+    },
+    {
+      "size": "8B",
+      "method": "GRPO",
+      "step": 400,
+      "dataset": "aime25",
+      "path": "../runs/8B/GRPO/eval/step400/aime25",
+      "main_table": true
+    },
+    {
+      "size": "8B",
+      "method": "GRPO",
+      "step": 400,
+      "dataset": "amc23",
+      "path": "../runs/8B/GRPO/eval/step400/amc23",
+      "main_table": true
+    },
+    {
+      "size": "8B",
+      "method": "OPSD",
+      "step": 100,
+      "dataset": "aime24",
+      "path": "../runs/8B/OPSD/eval/step100/aime24",
+      "main_table": true
+    },
+    {
+      "size": "8B",
+      "method": "OPSD",
+      "step": 100,
+      "dataset": "aime25",
+      "path": "../runs/8B/OPSD/eval/step100/aime25",
+      "main_table": true
+    },
+    {
+      "size": "8B",
+      "method": "OPSD",
+      "step": 100,
+      "dataset": "amc23",
+      "path": "../runs/8B/OPSD/eval/step100/amc23",
+      "main_table": true
+    },
+    {
+      "size": "8B",
+      "method": "Stable_OPD",
+      "step": 100,
+      "dataset": "aime24",
+      "path": "../runs/8B/Stable_OPD/eval/step100/aime24",
+      "main_table": true
+    },
+    {
+      "size": "8B",
+      "method": "Stable_OPD",
+      "step": 100,
+      "dataset": "aime25",
+      "path": "../runs/8B/Stable_OPD/eval/step100/aime25",
+      "main_table": true
+    },
+    {
+      "size": "8B",
+      "method": "Stable_OPD",
+      "step": 100,
+      "dataset": "amc23",
+      "path": "../runs/8B/Stable_OPD/eval/step100/amc23",
+      "main_table": true
+    },
+    {
+      "size": "8B",
+      "method": "RLCSD",
+      "step": 100,
+      "dataset": "aime24",
+      "path": "../runs/8B/RLCSD/eval/step100/aime24",
+      "main_table": true
+    },
+    {
+      "size": "8B",
+      "method": "RLCSD",
+      "step": 100,
+      "dataset": "aime25",
+      "path": "../runs/8B/RLCSD/eval/step100/aime25",
+      "main_table": true
+    },
+    {
+      "size": "8B",
+      "method": "RLCSD",
+      "step": 100,
+      "dataset": "amc23",
+      "path": "../runs/8B/RLCSD/eval/step100/amc23",
+      "main_table": true
+    },
+    {
+      "size": "8B",
+      "method": "TA_OPSD",
+      "step": 100,
+      "dataset": "aime24",
+      "path": "../runs/8B/TA_OPSD/eval/step100/aime24",
+      "main_table": true
+    },
+    {
+      "size": "8B",
+      "method": "TA_OPSD",
+      "step": 100,
+      "dataset": "aime25",
+      "path": "../runs/8B/TA_OPSD/eval/step100/aime25",
+      "main_table": true
+    },
+    {
+      "size": "8B",
+      "method": "TA_OPSD",
+      "step": 100,
+      "dataset": "amc23",
+      "path": "../runs/8B/TA_OPSD/eval/step100/amc23",
+      "main_table": true
+    },
+    {
+      "size": "1.7B",
+      "method": "OPSD",
+      "step": 25,
+      "dataset": "aime24",
+      "path": "../runs/1.7B/OPSD/eval/step25/aime24"
+    },
+    {
+      "size": "1.7B",
+      "method": "OPSD",
+      "step": 25,
+      "dataset": "aime25",
+      "path": "../runs/1.7B/OPSD/eval/step25/aime25"
+    },
+    {
+      "size": "1.7B",
+      "method": "OPSD",
+      "step": 25,
+      "dataset": "amc23",
+      "path": "../runs/1.7B/OPSD/eval/step25/amc23"
+    },
+    {
+      "size": "1.7B",
+      "method": "OPSD",
+      "step": 50,
+      "dataset": "aime24",
+      "path": "../runs/1.7B/OPSD/eval/step50/aime24"
+    },
+    {
+      "size": "1.7B",
+      "method": "OPSD",
+      "step": 50,
+      "dataset": "aime25",
+      "path": "../runs/1.7B/OPSD/eval/step50/aime25"
+    },
+    {
+      "size": "1.7B",
+      "method": "OPSD",
+      "step": 50,
+      "dataset": "amc23",
+      "path": "../runs/1.7B/OPSD/eval/step50/amc23"
+    },
+    {
+      "size": "1.7B",
+      "method": "OPSD",
+      "step": 100,
+      "dataset": "aime24",
+      "path": "../runs/1.7B/OPSD/eval/step100/aime24"
+    },
+    {
+      "size": "1.7B",
+      "method": "OPSD",
+      "step": 100,
+      "dataset": "aime25",
+      "path": "../runs/1.7B/OPSD/eval/step100/aime25"
+    },
+    {
+      "size": "1.7B",
+      "method": "OPSD",
+      "step": 100,
+      "dataset": "amc23",
+      "path": "../runs/1.7B/OPSD/eval/step100/amc23"
+    },
+    {
+      "size": "1.7B",
+      "method": "OPSD_SC",
+      "step": 25,
+      "dataset": "aime24",
+      "path": "../runs/1.7B/OPSD_SC/eval/step25/aime24"
+    },
+    {
+      "size": "1.7B",
+      "method": "OPSD_SC",
+      "step": 25,
+      "dataset": "aime25",
+      "path": "../runs/1.7B/OPSD_SC/eval/step25/aime25"
+    },
+    {
+      "size": "1.7B",
+      "method": "OPSD_SC",
+      "step": 25,
+      "dataset": "amc23",
+      "path": "../runs/1.7B/OPSD_SC/eval/step25/amc23"
+    },
+    {
+      "size": "1.7B",
+      "method": "OPSD_SC",
+      "step": 50,
+      "dataset": "aime24",
+      "path": "../runs/1.7B/OPSD_SC/eval/step50/aime24"
+    },
+    {
+      "size": "1.7B",
+      "method": "OPSD_SC",
+      "step": 50,
+      "dataset": "aime25",
+      "path": "../runs/1.7B/OPSD_SC/eval/step50/aime25"
+    },
+    {
+      "size": "1.7B",
+      "method": "OPSD_SC",
+      "step": 50,
+      "dataset": "amc23",
+      "path": "../runs/1.7B/OPSD_SC/eval/step50/amc23"
+    },
+    {
+      "size": "1.7B",
+      "method": "OPSD_SC",
+      "step": 75,
+      "dataset": "aime24",
+      "path": "../runs/1.7B/OPSD_SC/eval/step75/aime24"
+    },
+    {
+      "size": "1.7B",
+      "method": "OPSD_SC",
+      "step": 75,
+      "dataset": "aime25",
+      "path": "../runs/1.7B/OPSD_SC/eval/step75/aime25"
+    },
+    {
+      "size": "1.7B",
+      "method": "OPSD_SC",
+      "step": 75,
+      "dataset": "amc23",
+      "path": "../runs/1.7B/OPSD_SC/eval/step75/amc23"
+    },
+    {
+      "size": "1.7B",
+      "method": "OPSD_SC",
+      "step": 100,
+      "dataset": "aime24",
+      "path": "../runs/1.7B/OPSD_SC/eval/step100/aime24"
+    },
+    {
+      "size": "1.7B",
+      "method": "OPSD_SC",
+      "step": 100,
+      "dataset": "aime25",
+      "path": "../runs/1.7B/OPSD_SC/eval/step100/aime25"
+    },
+    {
+      "size": "1.7B",
+      "method": "OPSD_SC",
+      "step": 100,
+      "dataset": "amc23",
+      "path": "../runs/1.7B/OPSD_SC/eval/step100/amc23"
+    },
+    {
+      "size": "1.7B",
+      "method": "OPSD_UL",
+      "step": 25,
+      "dataset": "aime24",
+      "path": "../runs/1.7B/OPSD_UL/eval/step25/aime24"
+    },
+    {
+      "size": "1.7B",
+      "method": "OPSD_UL",
+      "step": 25,
+      "dataset": "aime25",
+      "path": "../runs/1.7B/OPSD_UL/eval/step25/aime25"
+    },
+    {
+      "size": "1.7B",
+      "method": "OPSD_UL",
+      "step": 25,
+      "dataset": "amc23",
+      "path": "../runs/1.7B/OPSD_UL/eval/step25/amc23"
+    },
+    {
+      "size": "1.7B",
+      "method": "OPSD_UL",
+      "step": 50,
+      "dataset": "aime24",
+      "path": "../runs/1.7B/OPSD_UL/eval/step50/aime24"
+    },
+    {
+      "size": "1.7B",
+      "method": "OPSD_UL",
+      "step": 50,
+      "dataset": "aime25",
+      "path": "../runs/1.7B/OPSD_UL/eval/step50/aime25"
+    },
+    {
+      "size": "1.7B",
+      "method": "OPSD_UL",
+      "step": 50,
+      "dataset": "amc23",
+      "path": "../runs/1.7B/OPSD_UL/eval/step50/amc23"
+    },
+    {
+      "size": "1.7B",
+      "method": "OPSD_UL",
+      "step": 75,
+      "dataset": "aime24",
+      "path": "../runs/1.7B/OPSD_UL/eval/step75/aime24"
+    },
+    {
+      "size": "1.7B",
+      "method": "OPSD_UL",
+      "step": 75,
+      "dataset": "aime25",
+      "path": "../runs/1.7B/OPSD_UL/eval/step75/aime25"
+    },
+    {
+      "size": "1.7B",
+      "method": "OPSD_UL",
+      "step": 75,
+      "dataset": "amc23",
+      "path": "../runs/1.7B/OPSD_UL/eval/step75/amc23"
+    },
+    {
+      "size": "1.7B",
+      "method": "OPSD_UL",
+      "step": 100,
+      "dataset": "aime24",
+      "path": "../runs/1.7B/OPSD_UL/eval/step100/aime24"
+    },
+    {
+      "size": "1.7B",
+      "method": "OPSD_UL",
+      "step": 100,
+      "dataset": "aime25",
+      "path": "../runs/1.7B/OPSD_UL/eval/step100/aime25"
+    },
+    {
+      "size": "1.7B",
+      "method": "OPSD_UL",
+      "step": 100,
+      "dataset": "amc23",
+      "path": "../runs/1.7B/OPSD_UL/eval/step100/amc23"
+    },
+    {
+      "size": "1.7B",
+      "method": "TA_OPSD",
+      "step": 25,
+      "dataset": "aime24",
+      "path": "../runs/1.7B/TA_OPSD/eval/step25/aime24"
+    },
+    {
+      "size": "1.7B",
+      "method": "TA_OPSD",
+      "step": 25,
+      "dataset": "aime25",
+      "path": "../runs/1.7B/TA_OPSD/eval/step25/aime25"
+    },
+    {
+      "size": "1.7B",
+      "method": "TA_OPSD",
+      "step": 25,
+      "dataset": "amc23",
+      "path": "../runs/1.7B/TA_OPSD/eval/step25/amc23"
+    },
+    {
+      "size": "1.7B",
+      "method": "TA_OPSD",
+      "step": 50,
+      "dataset": "aime24",
+      "path": "../runs/1.7B/TA_OPSD/eval/step50/aime24"
+    },
+    {
+      "size": "1.7B",
+      "method": "TA_OPSD",
+      "step": 50,
+      "dataset": "aime25",
+      "path": "../runs/1.7B/TA_OPSD/eval/step50/aime25"
+    },
+    {
+      "size": "1.7B",
+      "method": "TA_OPSD",
+      "step": 50,
+      "dataset": "amc23",
+      "path": "../runs/1.7B/TA_OPSD/eval/step50/amc23"
+    },
+    {
+      "size": "1.7B",
+      "method": "TA_OPSD",
+      "step": 100,
+      "dataset": "aime24",
+      "path": "../runs/1.7B/TA_OPSD/eval/step100/aime24"
+    },
+    {
+      "size": "1.7B",
+      "method": "TA_OPSD",
+      "step": 100,
+      "dataset": "aime25",
+      "path": "../runs/1.7B/TA_OPSD/eval/step100/aime25"
+    },
+    {
+      "size": "1.7B",
+      "method": "TA_OPSD",
+      "step": 100,
+      "dataset": "amc23",
+      "path": "../runs/1.7B/TA_OPSD/eval/step100/amc23"
+    },
+    {
+      "size": "1.7B",
+      "method": "TA_OPSD_trained_negatives",
+      "step": 75,
+      "dataset": "aime24",
+      "path": "../runs/1.7B/TA_OPSD_trained_negatives/eval/step75/aime24",
+      "negative_table": "TA-OPSD (trained negatives)"
+    },
+    {
+      "size": "1.7B",
+      "method": "TA_OPSD_trained_negatives",
+      "step": 75,
+      "dataset": "aime25",
+      "path": "../runs/1.7B/TA_OPSD_trained_negatives/eval/step75/aime25",
+      "negative_table": "TA-OPSD (trained negatives)"
+    },
+    {
+      "size": "1.7B",
+      "method": "TA_OPSD_trained_negatives",
+      "step": 75,
+      "dataset": "amc23",
+      "path": "../runs/1.7B/TA_OPSD_trained_negatives/eval/step75/amc23",
+      "negative_table": "TA-OPSD (trained negatives)"
+    },
+    {
+      "size": "1.7B",
+      "method": "TA_OPSD_semantic_negatives",
+      "step": 75,
+      "dataset": "aime24",
+      "path": "../runs/1.7B/TA_OPSD_semantic_negatives/eval/step75/aime24",
+      "negative_table": "TA-OPSD (semantic negatives)"
+    },
+    {
+      "size": "1.7B",
+      "method": "TA_OPSD_semantic_negatives",
+      "step": 75,
+      "dataset": "aime25",
+      "path": "../runs/1.7B/TA_OPSD_semantic_negatives/eval/step75/aime25",
+      "negative_table": "TA-OPSD (semantic negatives)"
+    },
+    {
+      "size": "1.7B",
+      "method": "TA_OPSD_semantic_negatives",
+      "step": 75,
+      "dataset": "amc23",
+      "path": "../runs/1.7B/TA_OPSD_semantic_negatives/eval/step75/amc23",
+      "negative_table": "TA-OPSD (semantic negatives)"
+    }
+  ],
+  "training": [
+    {
+      "size": "1.7B",
+      "method": "OPSD",
+      "path": "../runs/1.7B/OPSD/train"
+    },
+    {
+      "size": "1.7B",
+      "method": "TA_OPSD",
+      "path": "../runs/1.7B/TA_OPSD/train"
+    },
+    {
+      "size": "4B",
+      "method": "OPSD",
+      "path": "../runs/4B/OPSD/train"
+    },
+    {
+      "size": "4B",
+      "method": "TA_OPSD",
+      "path": "../runs/4B/TA_OPSD/train"
+    },
+    {
+      "size": "8B",
+      "method": "OPSD",
+      "path": "../runs/8B/OPSD/train"
+    },
+    {
+      "size": "8B",
+      "method": "TA_OPSD",
+      "path": "../runs/8B/TA_OPSD/train"
+    }
+  ],
+  "examples": []
+}

@@ -1,0 +1,96 @@
+{
+  "PASS": true,
+  "teacher_question_count": 22,
+  "new_teacher_questions": [
+    1,
+    2,
+    4,
+    6,
+    23,
+    28
+  ],
+  "results": {
+    "0": {
+      "OPSD": {
+        "short": 22,
+        "eligible": 21,
+        "total": 360,
+        "pct": 5.833333333333333,
+        "raw_sha256": "ee9f86edbb7057680cc2ff64ba7406b90cdeb1b3d0bf3ae1cd57e48b76efeb04"
+      },
+      "Ours": {
+        "short": 22,
+        "eligible": 21,
+        "total": 360,
+        "pct": 5.833333333333333,
+        "raw_sha256": "ee9f86edbb7057680cc2ff64ba7406b90cdeb1b3d0bf3ae1cd57e48b76efeb04"
+      }
+    },
+    "25": {
+      "OPSD": {
+        "short": 15,
+        "eligible": 15,
+        "total": 360,
+        "pct": 4.166666666666667,
+        "raw_sha256": "6175facebb5198119dc9ad382605477c8977e342f36018a1ff0be9202daa487c"
+      },
+      "Ours": {
+        "short": 7,
+        "eligible": 5,
+        "total": 360,
+        "pct": 1.3888888888888888,
+        "raw_sha256": "b1b48a934bcfdc2b28754db547e8c2b78dc55f5865d1d7594ae2b94959f95b5c"
+      }
+    },
+    "50": {
+      "OPSD": {
+        "short": 26,
+        "eligible": 22,
+        "total": 360,
+        "pct": 6.111111111111111,
+        "raw_sha256": "2c63d29b964254dee793130b24407f035ef314ae8411599bb3891e9826431813"
+      },
+      "Ours": {
+        "short": 7,
+        "eligible": 6,
+        "total": 360,
+        "pct": 1.6666666666666667,
+        "raw_sha256": "38aef4dcc875bac4932a852bfa0dcc965853e6bef77ff6ccb412fb3017ff5414"
+      }
+    },
+    "75": {
+      "OPSD": {
+        "short": 48,
+        "eligible": 46,
+        "total": 360,
+        "pct": 12.777777777777779,
+        "raw_sha256": "c187f13248bbd4f4e38b30bac2963f49ff983e145c34f4db7f480e14f4b8ad29"
+      },
+      "Ours": {
+        "short": 11,
+        "eligible": 11,
+        "total": 360,
+        "pct": 3.0555555555555554,
+        "raw_sha256": "e7e636f0d6dc8a84ccf8f4233ec23cce34a52074f832e3bc0c307c15de5b7df0"
+      }
+    },
+    "100": {
+      "OPSD": {
+        "short": 44,
+        "eligible": 42,
+        "total": 360,
+        "pct": 11.666666666666666,
+        "raw_sha256": "e728c710e039d5d76452b9f497dbf0608b14086ed9d3b855d17d1e9009beb3f9"
+      },
+      "Ours": {
+        "short": 6,
+        "eligible": 6,
+        "total": 360,
+        "pct": 1.6666666666666667,
+        "raw_sha256": "8d2d0173c825d25de933bb54f010bf086112719ecd639a28363970c334baca17"
+      }
+    }
+  },
+  "frozen_source": "source-record:RESULTS.json",
+  "frozen_source_sha256": "17c7615e0d0a0ab500dfb21da287e48d94d45ee4ad822e5bf93df533e30c8458"
+}

@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-08",
+  "stage": "source and CPU release validation",
+  "source_release": "ta_opsd_iclr2027_20260927",
+  "original_source_unchanged": true,
+  "cpu_tests_passed": 15,
+  "loss_value_and_gradient_parity": "bitwise",
+  "training_rows_reconstructed": 29434,
+  "mining_prompts_reconstructed": 1195,
+  "diagnostic_prompts_reconstructed": 500,
+  "figure_pairs": 4,
+  "table_rows": [
+    21,
+    4,
+    4
+  ],
+  "fresh_full_gpu_replay_completed": false,
+  "validation_document": "docs/VALIDATION.md"
+}
