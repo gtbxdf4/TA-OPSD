@@ -25,7 +25,7 @@ DOWNLOADS = {
         "yentinglin/aime_2025",
         "data/train-00000-of-00001-243207c6c994e1bd.parquet",
     ),
-    "assets/evaluation/amc23.parquet": ("math-ai/amc23", "data/test-00000-of-00001.parquet"),
+    "assets/evaluation/amc23.parquet": ("math-ai/amc23", "test-00000-of-00001.parquet"),
 }
 
 

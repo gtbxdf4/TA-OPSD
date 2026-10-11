@@ -106,3 +106,37 @@ def test_training_aggregation_excludes_masked_positions_and_missing_ranks(tmp_pa
     (root / "s100-r3-m1.json.gz").unlink()
     with pytest.raises(ValueError, match="incomplete distributed"):
         training_rows(tmp_path, "T0")
+
+
+def test_monitor_keeps_only_paper_signals_without_changing_rng():
+    torch = pytest.importorskip("torch")
+    from src.raw_monitor_v18 import token_metrics
+
+    torch.manual_seed(42)
+    student, teacher = torch.randn(7, 256), torch.randn(7, 256)
+    state = torch.get_rng_state().clone()
+    values = token_metrics(student, teacher, torch.arange(7), 100, [20, 21], chunk_tokens=3)
+    assert torch.equal(state, torch.get_rng_state())
+    assert set(values) == {
+        "topk_overlap_fraction",
+        "student_eos_logp",
+        "teacher_eos_logp",
+        "eos_logp_gap_teacher_minus_student",
+    }
+    expected_student = student.log_softmax(-1)[:, [20, 21]]
+    expected_teacher = teacher.log_softmax(-1)[:, [20, 21]]
+    for column, token in enumerate((20, 21)):
+        assert torch.allclose(
+            torch.tensor(values["student_eos_logp"][str(token)]), expected_student[:, column]
+        )
+        assert torch.allclose(
+            torch.tensor(values["teacher_eos_logp"][str(token)]), expected_teacher[:, column]
+        )
+        assert torch.allclose(
+            torch.tensor(values["eos_logp_gap_teacher_minus_student"][str(token)]),
+            (expected_teacher - expected_student)[:, column],
+        )
+    for row in range(7):
+        left = set(student[row].topk(100).indices.tolist())
+        right = set(teacher[row].topk(100).indices.tolist())
+        assert values["topk_overlap_fraction"][row] == pytest.approx(len(left & right) / 100)

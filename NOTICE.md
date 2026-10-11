@@ -12,11 +12,10 @@ those supplied by its authors; this repository grants no additional rights
 to that dependency.
 
 Stable-OPD and RLCSD code here implements the matched adaptations used in the
-paper. See their module documentation and docs/ALGORITHM_MAP.md for the
+paper. See their module documentation and docs/PAPER_ANALYSIS_MAP.md for the
 mathematical sources and differences from native paper recipes.
 
 Models and datasets retain their upstream terms. They are external inputs,
 not Git-tracked payloads. Asset hashes establish experiment identity and do
 not grant redistribution permission. Aggregated numerical figure/table inputs
-are included; private filesystem provenance is replaced by logical source
-identifiers, with original evidence retained outside this public package.
+are included; large training and evaluation inputs are acquired separately.

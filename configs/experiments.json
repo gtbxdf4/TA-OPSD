@@ -4,8 +4,6 @@
     "method": "OPSD",
     "world_size": 4,
     "source_commit": "ae7d2519e94920c4eb6206c0c26de46d9c50abae",
-    "original_launch": "source-record:LAUNCH.json",
-    "source_dir": "upstream/opsd",
     "init_manifest": "assets/initialization/1.7B/SHARED_INIT.json",
     "auxiliary": {
       "lambda_eos": 0,
@@ -92,8 +90,6 @@
     ],
     "original_model": "models/Qwen3-1.7B",
     "paper_table_step": 75,
-    "code_source": "source-record:code",
-    "training_data_source": "source-record:dataset",
     "auxiliary_reduction": "response mean then mean across present responses",
     "monitor_contract": "configs/monitor-1.7B-OPSD.json",
     "data_files": [
@@ -101,16 +97,13 @@
       "assets/training/train-00001-of-00002.parquet"
     ],
     "model_id": "Qwen/Qwen3-1.7B",
-    "model_revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
-    "source_run_id": "shared-init-seed42-v18-20260909-NEW_T0_OFFICIAL-formal-clean-retry1"
+    "model_revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e"
   },
   "1.7B/OPSD_SC": {
     "size": "1.7B",
     "method": "OPSD_SC",
     "world_size": 4,
     "source_commit": "ae7d2519e94920c4eb6206c0c26de46d9c50abae",
-    "original_launch": "source-record:LAUNCH.json",
-    "source_dir": "upstream/opsd",
     "init_manifest": "assets/initialization/1.7B/SHARED_INIT.json",
     "auxiliary": {
       "lambda_eos": 5.228043664862209,
@@ -197,8 +190,6 @@
     ],
     "original_model": "models/Qwen3-1.7B",
     "paper_table_step": 75,
-    "code_source": "source-record:code",
-    "training_data_source": "source-record:dataset",
     "auxiliary_reduction": "response mean then mean across present responses",
     "monitor_contract": "configs/monitor-1.7B-OPSD_SC.json",
     "data_files": [
@@ -206,16 +197,13 @@
       "assets/training/train-00001-of-00002.parquet"
     ],
     "model_id": "Qwen/Qwen3-1.7B",
-    "model_revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
-    "source_run_id": "shared-init-seed42-v18-20260909-NEW_T1_EOS-formal"
+    "model_revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e"
   },
   "1.7B/OPSD_UL": {
     "size": "1.7B",
     "method": "OPSD_UL",
     "world_size": 4,
     "source_commit": "ae7d2519e94920c4eb6206c0c26de46d9c50abae",
-    "original_launch": "source-record:LAUNCH.json",
-    "source_dir": "upstream/opsd",
     "init_manifest": "assets/initialization/1.7B/SHARED_INIT.json",
     "auxiliary": {
       "lambda_eos": 0,
@@ -306,8 +294,6 @@
     ],
     "original_model": "models/Qwen3-1.7B",
     "paper_table_step": 75,
-    "code_source": "source-record:code",
-    "training_data_source": "source-record:dataset",
     "auxiliary_reduction": "response mean then mean across present responses",
     "monitor_contract": "configs/monitor-1.7B-OPSD_UL.json",
     "data_files": [
@@ -315,16 +301,13 @@
       "assets/training/train-00001-of-00002.parquet"
     ],
     "model_id": "Qwen/Qwen3-1.7B",
-    "model_revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
-    "source_run_id": "C-base-unseen-NEW_T6_ON_T0_UL-seed42-formal"
+    "model_revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e"
   },
   "1.7B/TA_OPSD": {
     "size": "1.7B",
     "method": "TA_OPSD",
     "world_size": 4,
     "source_commit": "ae7d2519e94920c4eb6206c0c26de46d9c50abae",
-    "original_launch": "source-record:LAUNCH.json",
-    "source_dir": "upstream/opsd",
     "init_manifest": "assets/initialization/1.7B/SHARED_INIT.json",
     "auxiliary": {
       "lambda_eos": 5.228043664862209,
@@ -415,8 +398,6 @@
     ],
     "original_model": "models/Qwen3-1.7B",
     "paper_table_step": 75,
-    "code_source": "source-record:code",
-    "training_data_source": "source-record:dataset",
     "auxiliary_reduction": "response mean then mean across present responses",
     "monitor_contract": "configs/monitor-1.7B-TA_OPSD.json",
     "data_files": [
@@ -424,16 +405,13 @@
       "assets/training/train-00001-of-00002.parquet"
     ],
     "model_id": "Qwen/Qwen3-1.7B",
-    "model_revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
-    "source_run_id": "base-main-C_T1-NEW_T6_ON_T1_UL-seed42-formal"
+    "model_revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e"
   },
   "4B/OPSD": {
     "size": "4B",
     "method": "OPSD",
     "world_size": 4,
     "source_commit": "ae7d2519e94920c4eb6206c0c26de46d9c50abae",
-    "original_launch": "source-record:LAUNCH.json",
-    "source_dir": "upstream/opsd",
     "init_manifest": "assets/initialization/4B/SHARED_INIT.json",
     "auxiliary": {
       "lambda_eos": 0,
@@ -524,8 +502,6 @@
     ],
     "original_model": "models/Qwen3-4B",
     "paper_table_step": 50,
-    "code_source": "source-record:code",
-    "training_data_source": "source-record:dataset",
     "auxiliary_reduction": "response mean then mean across present responses",
     "monitor_contract": "configs/monitor-4B-OPSD.json",
     "data_files": [
@@ -533,16 +509,13 @@
       "assets/training/train-00001-of-00002.parquet"
     ],
     "model_id": "Qwen/Qwen3-4B",
-    "model_revision": "1cfa9a7208912126459214e8b04321603b3df60c",
-    "source_run_id": "scale-seed42-NEW_T0_OFFICIAL-formal-v1"
+    "model_revision": "1cfa9a7208912126459214e8b04321603b3df60c"
   },
   "4B/TA_OPSD": {
     "size": "4B",
     "method": "TA_OPSD",
     "world_size": 4,
     "source_commit": "ae7d2519e94920c4eb6206c0c26de46d9c50abae",
-    "original_launch": "source-record:LAUNCH.json",
-    "source_dir": "upstream/opsd",
     "init_manifest": "assets/initialization/4B/SHARED_INIT.json",
     "auxiliary": {
       "lambda_eos": 3.8690446542260792,
@@ -638,8 +611,6 @@
     ],
     "original_model": "models/Qwen3-4B",
     "paper_table_step": 50,
-    "code_source": "source-record:code",
-    "training_data_source": "source-record:dataset",
     "auxiliary_reduction": "response mean then mean across present responses",
     "monitor_contract": "configs/monitor-4B-TA_OPSD.json",
     "data_files": [
@@ -647,16 +618,13 @@
       "assets/training/train-00001-of-00002.parquet"
     ],
     "model_id": "Qwen/Qwen3-4B",
-    "model_revision": "1cfa9a7208912126459214e8b04321603b3df60c",
-    "source_run_id": "independent-1789878306272573752"
+    "model_revision": "1cfa9a7208912126459214e8b04321603b3df60c"
   },
   "8B/OPSD": {
     "size": "8B",
     "method": "OPSD",
     "world_size": 8,
     "source_commit": "ae7d2519e94920c4eb6206c0c26de46d9c50abae",
-    "original_launch": "source-record:LAUNCH.json",
-    "source_dir": "upstream/opsd",
     "init_manifest": "assets/initialization/8B/SHARED_INIT.json",
     "auxiliary": {
       "lambda_eos": 0,
@@ -747,8 +715,6 @@
     ],
     "original_model": "models/Qwen3-8B",
     "paper_table_step": 100,
-    "code_source": "source-record:code",
-    "training_data_source": "source-record:dataset",
     "auxiliary_reduction": "response mean then mean across present responses",
     "monitor_contract": "configs/monitor-8B-OPSD.json",
     "data_files": [
@@ -756,16 +722,13 @@
       "assets/training/train-00001-of-00002.parquet"
     ],
     "model_id": "Qwen/Qwen3-8B",
-    "model_revision": "b968826d9c46dd6066d109eabc6255188de91218",
-    "source_run_id": "scale-seed42-NEW_T0_OFFICIAL-formal-v1"
+    "model_revision": "b968826d9c46dd6066d109eabc6255188de91218"
   },
   "8B/TA_OPSD": {
     "size": "8B",
     "method": "TA_OPSD",
     "world_size": 8,
     "source_commit": "ae7d2519e94920c4eb6206c0c26de46d9c50abae",
-    "original_launch": "source-record:LAUNCH.json",
-    "source_dir": "upstream/opsd",
     "init_manifest": "assets/initialization/8B/SHARED_INIT.json",
     "auxiliary": {
       "lambda_eos": 3.980663829129175,
@@ -861,8 +824,6 @@
     ],
     "original_model": "models/Qwen3-8B",
     "paper_table_step": 100,
-    "code_source": "source-record:code",
-    "training_data_source": "source-record:dataset",
     "auxiliary_reduction": "response mean then mean across present responses",
     "monitor_contract": "configs/monitor-8B-TA_OPSD.json",
     "data_files": [
@@ -870,16 +831,13 @@
       "assets/training/train-00001-of-00002.parquet"
     ],
     "model_id": "Qwen/Qwen3-8B",
-    "model_revision": "b968826d9c46dd6066d109eabc6255188de91218",
-    "source_run_id": "independent-1789887648984573085"
+    "model_revision": "b968826d9c46dd6066d109eabc6255188de91218"
   },
   "1.7B/TA_OPSD_trained_negatives": {
     "size": "1.7B",
     "method": "TA_OPSD_trained_negatives",
     "world_size": 4,
     "source_commit": "ae7d2519e94920c4eb6206c0c26de46d9c50abae",
-    "original_launch": "source-record:LAUNCH.json",
-    "source_dir": "upstream/opsd",
     "init_manifest": "assets/initialization/1.7B/SHARED_INIT.json",
     "auxiliary": {
       "lambda_eos": 5.228043664862209,
@@ -971,8 +929,6 @@
     ],
     "original_model": "models/Qwen3-1.7B",
     "paper_table_step": 75,
-    "code_source": "source-record:code",
-    "training_data_source": "source-record:dataset",
     "auxiliary_reduction": "response mean then mean across present responses",
     "monitor_contract": "configs/monitor-1.7B-TA_OPSD.json",
     "data_files": [
@@ -980,16 +936,13 @@
       "assets/training/train-00001-of-00002.parquet"
     ],
     "model_id": "Qwen/Qwen3-1.7B",
-    "model_revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
-    "source_run_id": "independent-1790363465260097635"
+    "model_revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e"
   },
   "1.7B/TA_OPSD_semantic_negatives": {
     "size": "1.7B",
     "method": "TA_OPSD_semantic_negatives",
     "world_size": 4,
     "source_commit": "ae7d2519e94920c4eb6206c0c26de46d9c50abae",
-    "original_launch": "source-record:LAUNCH.json",
-    "source_dir": "upstream/opsd",
     "init_manifest": "assets/initialization/1.7B/SHARED_INIT.json",
     "auxiliary": {
       "lambda_eos": 5.228043664862209,
@@ -1081,8 +1034,6 @@
     ],
     "original_model": "models/Qwen3-1.7B",
     "paper_table_step": 75,
-    "code_source": "source-record:code",
-    "training_data_source": "source-record:dataset",
     "auxiliary_reduction": "response mean then mean across present responses",
     "monitor_contract": "configs/monitor-1.7B-TA_OPSD.json",
     "data_files": [
@@ -1090,7 +1041,6 @@
       "assets/training/train-00001-of-00002.parquet"
     ],
     "model_id": "Qwen/Qwen3-1.7B",
-    "model_revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
-    "source_run_id": "independent-1790385064515753451"
+    "model_revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e"
   }
 }

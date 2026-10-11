@@ -31,3 +31,13 @@ observations. Figures 3 and 5 connect only the evaluated checkpoints.
 `analysis/reproduce.py` defaults to the small frozen inputs in `analysis/data`.
 Use `--data-dir` with aggregates emitted by `analysis/collect.py` for fresh runs.
 Generated figures and raw results are excluded from Git.
+
+The stop set is `[151643, 151645]`; `</think>` is not a stop token. SC and UL
+average selected positions within each response, then average responses.
+Training-signal plots use the separately recorded valid-token support.
+
+Stable-OPD is the matched self-distillation adaptation of arXiv:2604.08527v1;
+RLCSD uses the objective of arXiv:2606.11709v2. Their native objective and
+sampling conventions are retained in `baselines/`; all methods use the common
+evaluation scorer. The reference-conditioned frozen self-teacher replaces the
+external teacher in the Stable-OPD adaptation.

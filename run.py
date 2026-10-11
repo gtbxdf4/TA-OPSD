@@ -204,7 +204,6 @@ def plan(size, method, output, model=None, asset_root=None, mode="formal", auxil
         model_revision=case["model_revision"],
         world_size=dp,
         required_assets=required,
-        original_launch=case.get("original_launch"),
         frozen_coefficients=case.get("auxiliary"),
     )
 

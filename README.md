@@ -321,13 +321,15 @@ docs/           reproduction details and paper-to-code mappings
 
 ```bash
 python -m pip install -r requirements-dev.txt
+python scripts/fetch_upstream.py
 ruff check .
 ruff format --check .
 pytest
 ```
 
-PyTorch is needed for the loss tests. [VALIDATION.md](docs/VALIDATION.md)
-distinguishes source/CPU checks from a fresh GPU training-and-evaluation replay.
+PyTorch and the pinned OPSD source are needed for the loss-interface tests.
+These checks cover source and CPU behavior; a fresh GPU training-and-evaluation
+replay is a separate validation step.
 
 ## Citation
 

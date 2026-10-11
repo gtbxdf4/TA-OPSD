@@ -152,7 +152,7 @@ def calibrate(smoke, negatives, model_path, method, output):
 
         def generalized_jsd_loss(self, student_logits, teacher_logits, labels=None, **kwargs):
             primary = OPSDTrainer.generalized_jsd_loss(
-                self, student_logits, teacher_logits, labels, **kwargs
+                student_logits, teacher_logits, labels, **kwargs
             )
             auxiliary = stop_kl(student_logits, teacher_logits, labels != -100, STOP_IDS)
             if self.collect_logits:
