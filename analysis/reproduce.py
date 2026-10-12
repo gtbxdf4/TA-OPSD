@@ -20,16 +20,7 @@ ROOT = Path(__file__).resolve().parent
 DATA = ROOT / "data"
 DATASETS = ("aime24", "aime25", "amc23")
 STEPS = (0, 25, 50, 75, 100)
-LABELS = {
-    "base": "Base",
-    "T0": "OPSD",
-    "T1": "OPSD+SC",
-    "T0+UL": "OPSD+UL",
-    "T1+UL": "TA-OPSD",
-    "STABLE": "Stable-OPD (OPSD adaptation)",
-    "RLCSD": "RLCSD",
-}
-COLORS = {"T0": "#5B3B9E", "T1": "#007C9E", "T0+UL": "#CB7B00", "T1+UL": "#B2183A"}
+COLORS = {"OPSD": "#5B3B9E", "OPSD+SC": "#007C9E", "OPSD+UL": "#CB7B00", "TA-OPSD": "#B2183A"}
 plt.rcParams.update(
     {
         "font.family": "DejaVu Serif",
@@ -90,12 +81,12 @@ def save(fig, out, stem):
 def training():
     result = {}
     for size in ("1.7B", "4B", "8B"):
-        arms = {"T0": [], "T1+UL": []}
+        arms = {"OPSD": [], "TA-OPSD": []}
         with (DATA / f"training_{size}.csv").open() as f:
             for row in csv.DictReader(f):
-                if row["method"] in arms:
-                    arms[row["method"]].append(
-                        {k: float(v) for k, v in row.items() if k != "method"}
+                if row["Method"] in arms:
+                    arms[row["Method"]].append(
+                        {k: float(v) for k, v in row.items() if k != "Method"}
                     )
         for rows in arms.values():
             rows.sort(key=lambda r: r["step"])
@@ -112,7 +103,7 @@ def tables(out, generations):
         assert cell["dataset"] in DATASETS
         value = 100 * cell["correct"] / cell["total"]
         close(value, cell["accuracy_pct"])
-        method = {"Ours": "T1+UL"}.get(cell["method"], cell["method"])
+        method = cell["method"]
         group = grouped[(cell["size"], method)]
         assert cell["dataset"] not in group
         group[cell["dataset"]] = value
@@ -122,25 +113,25 @@ def tables(out, generations):
         table1.append(
             {
                 "model_size": size,
-                "method": LABELS.get(method, method),
+                "Method": method,
                 **{d: values[d] for d in DATASETS},
                 "mean_accuracy_pct": sum(values.values()) / 3,
             }
         )
     csv_export(out / "table1_accuracy.csv", table1)
     table2 = []
-    for arm in ("T0", "T1", "T0+UL", "T1+UL"):
+    for arm in ("OPSD", "OPSD+SC", "OPSD+UL", "TA-OPSD"):
         row = generations["steps"]["75"][arm]
         table2.append(
             {
-                "method": LABELS[arm],
+                "Method": arm,
                 "checkpoint": 75,
                 **{d: row[d]["acc"] for d in DATASETS},
                 "mean_accuracy_pct": macro(row, "acc"),
             }
         )
     csv_export(out / "table2_components_step75.csv", table2)
-    for arm in ("T0", "T1+UL"):
+    for arm in ("OPSD", "TA-OPSD"):
         for d in DATASETS:
             close(grouped[("1.7B", arm)][d], generations["steps"]["75"][arm][d]["acc"])
     negative = load("table3_negative_selection_step75.json")
@@ -158,7 +149,7 @@ def tables(out, generations):
         close(cap, result["macro"]["capping_rate"])
         table3.append(
             {
-                "method": method,
+                "Method": method,
                 "checkpoint": 75,
                 "mean_accuracy_pct": accuracy,
                 "mean_length_tokens": length,
@@ -166,7 +157,7 @@ def tables(out, generations):
             }
         )
     csv_export(out / "table3_negative_construction_step75.csv", table3)
-    for method, arm in (("OPSD", "T0"), ("TA-OPSD", "T1+UL")):
+    for method, arm in (("OPSD", "OPSD"), ("TA-OPSD", "TA-OPSD")):
         value = negative["comparison"][method]
         for d in DATASETS:
             curve_row = generations["steps"]["75"][arm][d]
@@ -201,7 +192,7 @@ def tables(out, generations):
 
 
 def figures(out, generations, train):
-    rows = train["1.7B"]["T0"]
+    rows = train["1.7B"]["OPSD"]
     steps = [r["step"] for r in rows]
     student = np.array([r["student_eos_logp_151645"] for r in rows])
     teacher = student + np.array([r["eos_logp_gap_teacher_minus_student_151645"] for r in rows])
@@ -213,27 +204,27 @@ def figures(out, generations, train):
     save(fig, out, "figure2_eos_teacher_student")
     short = load("teacher_solvable_short_errors.json")["results"]
     fig, axes = plt.subplots(1, 3, figsize=(11.5, 3.0), constrained_layout=True)
-    for arm, short_label in (("T0", "OPSD"), ("T1+UL", "Ours")):
+    for arm in ("OPSD", "TA-OPSD"):
         short_values = []
         for s in STEPS:
-            r = short[str(s)][short_label]
+            r = short[str(s)][arm]
             close(r["pct"], 100 * r["eligible"] / r["total"])
             assert r["raw_sha256"] == generations["steps"][str(s)][arm]["aime24"]["raw_sha256"]
             short_values.append(r["pct"])
-        curve(axes[0], STEPS, short_values, COLORS[arm], LABELS[arm])
+        curve(axes[0], STEPS, short_values, COLORS[arm], arm)
         curve(
             axes[1],
             STEPS,
             [macro(generations["steps"][str(s)][arm], "length") for s in STEPS],
             COLORS[arm],
-            LABELS[arm],
+            arm,
         )
         curve(
             axes[2],
             STEPS,
             [macro(generations["steps"][str(s)][arm], "cap") for s in STEPS],
             COLORS[arm],
-            LABELS[arm],
+            arm,
         )
     for ax, label in zip(
         axes,
@@ -249,7 +240,7 @@ def figures(out, generations, train):
     save(fig, out, "figure3_generation_outcomes")
     fig, axes = plt.subplots(2, 3, figsize=(11.5, 5.6), constrained_layout=True)
     for col, size in enumerate(("1.7B", "4B", "8B")):
-        for arm in ("T0", "T1+UL"):
+        for arm in ("OPSD", "TA-OPSD"):
             rows = train[size][arm]
             x = [r["step"] for r in rows]
             curve(
@@ -257,12 +248,10 @@ def figures(out, generations, train):
                 x,
                 [100 * r["topk_overlap_fraction"] for r in rows],
                 COLORS[arm],
-                LABELS[arm],
+                arm,
                 True,
             )
-            curve(
-                axes[1, col], x, [r["eos_gap_mean"] for r in rows], COLORS[arm], LABELS[arm], True
-            )
+            curve(axes[1, col], x, [r["eos_gap_mean"] for r in rows], COLORS[arm], arm, True)
         axes[0, col].set_title("Qwen3-" + size)
         axes[0, col].set_ylim(25, 100)
         axes[1, col].set_ylim(0, 25)
@@ -272,12 +261,11 @@ def figures(out, generations, train):
     save(fig, out, "figure4_training_signals")
     fig, ax = plt.subplots(figsize=(5.1, 3.3), constrained_layout=True)
     cap_rows = []
-    for arm in ("T0", "T1", "T0+UL", "T1+UL"):
+    for arm in ("OPSD", "OPSD+SC", "OPSD+UL", "TA-OPSD"):
         y = [macro(generations["steps"][str(s)][arm], "cap") for s in STEPS]
-        curve(ax, STEPS, y, COLORS[arm], LABELS[arm])
+        curve(ax, STEPS, y, COLORS[arm], arm)
         cap_rows += [
-            {"checkpoint": s, "method": LABELS[arm], "mean_capping_pct": cap}
-            for s, cap in zip(STEPS, y)
+            {"checkpoint": s, "Method": arm, "mean_capping_pct": cap} for s, cap in zip(STEPS, y)
         ]
     ax.set_ylabel("Mean capping rate (%)")
     ax.set_xticks(STEPS)
@@ -308,10 +296,10 @@ def main():
     case_rows = [
         {
             "case": name,
+            "Method": r["method"],
             **{
                 k: r[k]
                 for k in (
-                    "method",
                     "problem_index",
                     "generation_index",
                     "tokens",
@@ -335,8 +323,8 @@ def main():
         "figure3_endpoint": 100,
         "table3_checkpoint": 75,
         "figure3_step100_macro": {
-            LABELS[a]: {k: macro(data["steps"]["100"][a], k) for k in ("acc", "length", "cap")}
-            for a in ("T0", "T1+UL")
+            a: {k: macro(data["steps"]["100"][a], k) for k in ("acc", "length", "cap")}
+            for a in ("OPSD", "TA-OPSD")
         },
         "source_sha256": {
             p.name: hashlib.sha256(p.read_bytes()).hexdigest()

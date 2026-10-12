@@ -98,14 +98,15 @@ def test_training_aggregation_excludes_masked_positions_and_missing_ranks(tmp_pa
                 )
                 with gzip.open(root / f"s{step}-r{rank}-m{micro}.json.gz", "wt") as stream:
                     json.dump(packet, stream)
-    rows = training_rows(tmp_path, "T0")
+    rows = training_rows(tmp_path, "OPSD")
     assert len(rows) == 100 and rows[0]["tokens"] == 32
+    assert rows[0]["Method"] == "OPSD"
     assert rows[0]["topk_overlap_fraction"] == 0.75
     assert rows[0]["student_eos_logp_151645"] == -5
     assert rows[0]["eos_gap_mean"] == 2
     (root / "s100-r3-m1.json.gz").unlink()
     with pytest.raises(ValueError, match="incomplete distributed"):
-        training_rows(tmp_path, "T0")
+        training_rows(tmp_path, "OPSD")
 
 
 def test_monitor_keeps_only_paper_signals_without_changing_rng():

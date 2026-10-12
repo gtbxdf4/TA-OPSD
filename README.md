@@ -2,9 +2,11 @@
 
 Code for **Learning When to Continue and When to Stop: Termination-Aware OPSD**.
 
-TA-OPSD augments on-policy self-distillation with two auxiliary objectives:
-**stop/continue distillation (SC)** aligns the teacher and student on stopping
-probability, and **repetition-aware unlikelihood (UL)** suppresses local loops
+Termination-Aware OPSD (TA-OPSD) addresses **Termination Mismatch**, including
+**Premature Termination** and **Repetition-Driven Over-Generation**, with two
+auxiliary objectives:
+**Stop/Continue Distillation (SC)** aligns the teacher and student on stopping
+probability, and **Repetition-Aware Unlikelihood Training (UL)** suppresses local loops
 under their original failure prefixes. Inference uses the trained student alone.
 
 ```text
@@ -34,21 +36,21 @@ Avg@12 on the three mathematical reasoning benchmarks:
 | | OPSD | 13.89 | 9.44 | 45.62 | 22.99 |
 | | Stable-OPD | 9.72 | 11.11 | 47.71 | 22.85 |
 | | RLCSD | 15.83 | 9.44 | 47.29 | 24.19 |
-| | **TA-OPSD (Ours)** | **18.33** (+4.44) | **13.89** (+4.44) | **51.25** (+5.62) | **27.82** (+4.84) |
+| | **TA-OPSD** | **18.33** (+4.44) | **13.89** (+4.44) | **51.25** (+5.62) | **27.82** (+4.84) |
 | Qwen3-4B | Base | 23.89 | 21.39 | 66.04 | 37.11 |
 | | SFT | 16.67 | 14.17 | 56.46 | 29.10 |
 | | GRPO | 24.17 | 19.72 | 66.46 | 36.78 |
 | | OPSD | 19.44 | 17.78 | 70.42 | 35.88 |
 | | Stable-OPD | 23.06 | 20.00 | 65.83 | 36.30 |
 | | RLCSD | 21.67 | 19.17 | 68.54 | 36.46 |
-| | **TA-OPSD (Ours)** | **25.56** (+6.11) | **22.22** (+4.44) | **71.04** (+0.62) | **39.61** (+3.73) |
+| | **TA-OPSD** | **25.56** (+6.11) | **22.22** (+4.44) | **71.04** (+0.62) | **39.61** (+3.73) |
 | Qwen3-8B | Base | 29.72 | 19.17 | 68.12 | 39.00 |
 | | SFT | 14.17 | 11.39 | 52.29 | 25.95 |
 | | GRPO | 29.72 | 21.67 | 69.58 | 40.32 |
 | | OPSD | 44.44 | 31.11 | 82.08 | 52.55 |
 | | Stable-OPD | 25.83 | 19.44 | 66.67 | 37.31 |
 | | RLCSD | 28.61 | 21.39 | 69.58 | 39.86 |
-| | **TA-OPSD (Ours)** | **45.00** (+0.56) | **33.89** (+2.78) | **82.71** (+0.62) | **53.87** (+1.32) |
+| | **TA-OPSD** | **45.00** (+0.56) | **33.89** (+2.78) | **82.71** (+0.62) | **53.87** (+1.32) |
 
 Parentheses show the absolute improvement over OPSD in percentage points.
 
@@ -61,7 +63,7 @@ Qwen3-1.7B average accuracy across the three benchmarks:
 | OPSD | 22.99 |
 | OPSD+SC | 26.34 |
 | OPSD+UL | 23.66 |
-| **TA-OPSD (Ours)** | **27.82** |
+| **TA-OPSD** | **27.82** |
 
 ### Negative construction
 

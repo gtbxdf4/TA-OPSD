@@ -1,2 +1,2 @@
-# Preserve the frozen CSV byte stream, including its source CRLF line endings.
-analysis/data/training_*.csv -text -diff
+# Keep statistic tables readable as portable text.
+analysis/data/training_*.csv text eol=lf

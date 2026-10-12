@@ -2,7 +2,7 @@
   "cells": [
     {
       "size": "1.7B",
-      "method": "base",
+      "method": "Base",
       "dataset": "aime24",
       "path": "source-record:attempt-20260908T130540559663Z-7f0f8567",
       "correct": 49,
@@ -17,7 +17,7 @@
     },
     {
       "size": "1.7B",
-      "method": "base",
+      "method": "Base",
       "dataset": "aime25",
       "path": "source-record:attempt-20260908T142915632050Z-c0449af2",
       "correct": 31,
@@ -32,7 +32,7 @@
     },
     {
       "size": "1.7B",
-      "method": "base",
+      "method": "Base",
       "dataset": "amc23",
       "path": "source-record:attempt-20260909T035421561294Z-56cbd0b4",
       "correct": 221,
@@ -149,7 +149,7 @@
     },
     {
       "size": "1.7B",
-      "method": "T0",
+      "method": "OPSD",
       "dataset": "aime24",
       "path": "source-record:attempt-paper-main-1789436598",
       "correct": 50,
@@ -164,7 +164,7 @@
     },
     {
       "size": "1.7B",
-      "method": "T0",
+      "method": "OPSD",
       "dataset": "aime25",
       "path": "source-record:attempt-paper-main-1789436783",
       "correct": 34,
@@ -179,7 +179,7 @@
     },
     {
       "size": "1.7B",
-      "method": "T0",
+      "method": "OPSD",
       "dataset": "amc23",
       "path": "source-record:attempt-paper-main-1789436861",
       "correct": 219,
@@ -194,7 +194,7 @@
     },
     {
       "size": "1.7B",
-      "method": "STABLE",
+      "method": "Stable-OPD",
       "dataset": "aime24",
       "path": "source-record:attempt-1790041673385498943",
       "correct": 35,
@@ -211,7 +211,7 @@
     },
     {
       "size": "1.7B",
-      "method": "STABLE",
+      "method": "Stable-OPD",
       "dataset": "aime25",
       "path": "source-record:attempt-1790043674454314534",
       "correct": 40,
@@ -228,7 +228,7 @@
     },
     {
       "size": "1.7B",
-      "method": "STABLE",
+      "method": "Stable-OPD",
       "dataset": "amc23",
       "path": "source-record:attempt-1790047285300457995",
       "correct": 229,
@@ -296,7 +296,7 @@
     },
     {
       "size": "1.7B",
-      "method": "Ours",
+      "method": "TA-OPSD",
       "dataset": "aime24",
       "path": "source-record:attempt-paper-main-1789460816",
       "correct": 66,
@@ -311,7 +311,7 @@
     },
     {
       "size": "1.7B",
-      "method": "Ours",
+      "method": "TA-OPSD",
       "dataset": "aime25",
       "path": "source-record:attempt-paper-main-1789462356",
       "correct": 50,
@@ -326,7 +326,7 @@
     },
     {
       "size": "1.7B",
-      "method": "Ours",
+      "method": "TA-OPSD",
       "dataset": "amc23",
       "path": "source-record:attempt-098d945a036947ed900e7d07fc71eef9",
       "correct": 246,
@@ -341,7 +341,7 @@
     },
     {
       "size": "4B",
-      "method": "base",
+      "method": "Base",
       "dataset": "aime24",
       "path": "source-record:attempt-paper-main-1789314831",
       "correct": 86,
@@ -356,7 +356,7 @@
     },
     {
       "size": "4B",
-      "method": "base",
+      "method": "Base",
       "dataset": "aime25",
       "path": "source-record:attempt-paper-main-1789319858",
       "correct": 77,
@@ -371,7 +371,7 @@
     },
     {
       "size": "4B",
-      "method": "base",
+      "method": "Base",
       "dataset": "amc23",
       "path": "source-record:attempt-paper-main-1789315513",
       "correct": 317,
@@ -488,7 +488,7 @@
     },
     {
       "size": "4B",
-      "method": "T0",
+      "method": "OPSD",
       "dataset": "aime24",
       "path": "source-record:aime24",
       "correct": 70,
@@ -503,7 +503,7 @@
     },
     {
       "size": "4B",
-      "method": "T0",
+      "method": "OPSD",
       "dataset": "aime25",
       "path": "source-record:aime25",
       "correct": 64,
@@ -518,7 +518,7 @@
     },
     {
       "size": "4B",
-      "method": "T0",
+      "method": "OPSD",
       "dataset": "amc23",
       "path": "source-record:amc23",
       "correct": 338,
@@ -533,7 +533,7 @@
     },
     {
       "size": "4B",
-      "method": "STABLE",
+      "method": "Stable-OPD",
       "dataset": "aime24",
       "path": "source-record:attempt-1790068709847650585",
       "correct": 83,
@@ -550,7 +550,7 @@
     },
     {
       "size": "4B",
-      "method": "STABLE",
+      "method": "Stable-OPD",
       "dataset": "aime25",
       "path": "source-record:attempt-1790072034855143420",
       "correct": 72,
@@ -567,7 +567,7 @@
     },
     {
       "size": "4B",
-      "method": "STABLE",
+      "method": "Stable-OPD",
       "dataset": "amc23",
       "path": "source-record:attempt-1790078097783484330",
       "correct": 316,
@@ -635,7 +635,7 @@
     },
     {
       "size": "4B",
-      "method": "Ours",
+      "method": "TA-OPSD",
       "dataset": "aime24",
       "path": "source-record:aime24",
       "correct": 92,
@@ -652,7 +652,7 @@
     },
     {
       "size": "4B",
-      "method": "Ours",
+      "method": "TA-OPSD",
       "dataset": "aime25",
       "path": "source-record:aime25",
       "correct": 80,
@@ -669,7 +669,7 @@
     },
     {
       "size": "4B",
-      "method": "Ours",
+      "method": "TA-OPSD",
       "dataset": "amc23",
       "path": "source-record:amc23",
       "correct": 341,
@@ -686,7 +686,7 @@
     },
     {
       "size": "8B",
-      "method": "base",
+      "method": "Base",
       "dataset": "aime24",
       "path": "source-record:attempt-paper-main-1789330787",
       "correct": 107,
@@ -701,7 +701,7 @@
     },
     {
       "size": "8B",
-      "method": "base",
+      "method": "Base",
       "dataset": "aime25",
       "path": "source-record:attempt-paper-main-1789330980",
       "correct": 69,
@@ -716,7 +716,7 @@
     },
     {
       "size": "8B",
-      "method": "base",
+      "method": "Base",
       "dataset": "amc23",
       "path": "source-record:attempt-paper-main-1789331531",
       "correct": 327,
@@ -833,7 +833,7 @@
     },
     {
       "size": "8B",
-      "method": "T0",
+      "method": "OPSD",
       "dataset": "aime24",
       "path": "source-record:aime24",
       "correct": 160,
@@ -848,7 +848,7 @@
     },
     {
       "size": "8B",
-      "method": "T0",
+      "method": "OPSD",
       "dataset": "aime25",
       "path": "source-record:aime25",
       "correct": 112,
@@ -863,7 +863,7 @@
     },
     {
       "size": "8B",
-      "method": "T0",
+      "method": "OPSD",
       "dataset": "amc23",
       "path": "source-record:amc23",
       "correct": 394,
@@ -878,7 +878,7 @@
     },
     {
       "size": "8B",
-      "method": "STABLE",
+      "method": "Stable-OPD",
       "dataset": "aime24",
       "path": "source-record:attempt-1790121365318344912",
       "correct": 93,
@@ -895,7 +895,7 @@
     },
     {
       "size": "8B",
-      "method": "STABLE",
+      "method": "Stable-OPD",
       "dataset": "aime25",
       "path": "source-record:attempt-1790124453448314441",
       "correct": 70,
@@ -912,7 +912,7 @@
     },
     {
       "size": "8B",
-      "method": "STABLE",
+      "method": "Stable-OPD",
       "dataset": "amc23",
       "path": "source-record:attempt-1790130645973017944",
       "correct": 320,
@@ -980,7 +980,7 @@
     },
     {
       "size": "8B",
-      "method": "Ours",
+      "method": "TA-OPSD",
       "dataset": "aime24",
       "path": "source-record:aime24",
       "correct": 162,
@@ -997,7 +997,7 @@
     },
     {
       "size": "8B",
-      "method": "Ours",
+      "method": "TA-OPSD",
       "dataset": "aime25",
       "path": "source-record:aime25",
       "correct": 122,
@@ -1014,7 +1014,7 @@
     },
     {
       "size": "8B",
-      "method": "Ours",
+      "method": "TA-OPSD",
       "dataset": "amc23",
       "path": "source-record:amc23",
       "correct": 397,

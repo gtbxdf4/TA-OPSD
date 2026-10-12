@@ -811,7 +811,7 @@
       "step": 75,
       "dataset": "aime24",
       "path": "../runs/1.7B/TA_OPSD_trained_negatives/eval/step75/aime24",
-      "negative_table": "TA-OPSD (trained negatives)"
+      "negative_table": "TA-OPSD (OPSD-trained negatives)"
     },
     {
       "size": "1.7B",
@@ -819,7 +819,7 @@
       "step": 75,
       "dataset": "aime25",
       "path": "../runs/1.7B/TA_OPSD_trained_negatives/eval/step75/aime25",
-      "negative_table": "TA-OPSD (trained negatives)"
+      "negative_table": "TA-OPSD (OPSD-trained negatives)"
     },
     {
       "size": "1.7B",
@@ -827,7 +827,7 @@
       "step": 75,
       "dataset": "amc23",
       "path": "../runs/1.7B/TA_OPSD_trained_negatives/eval/step75/amc23",
-      "negative_table": "TA-OPSD (trained negatives)"
+      "negative_table": "TA-OPSD (OPSD-trained negatives)"
     },
     {
       "size": "1.7B",
@@ -835,7 +835,7 @@
       "step": 75,
       "dataset": "aime24",
       "path": "../runs/1.7B/TA_OPSD_semantic_negatives/eval/step75/aime24",
-      "negative_table": "TA-OPSD (semantic negatives)"
+      "negative_table": "TA-OPSD (LLM-assisted selection)"
     },
     {
       "size": "1.7B",
@@ -843,7 +843,7 @@
       "step": 75,
       "dataset": "aime25",
       "path": "../runs/1.7B/TA_OPSD_semantic_negatives/eval/step75/aime25",
-      "negative_table": "TA-OPSD (semantic negatives)"
+      "negative_table": "TA-OPSD (LLM-assisted selection)"
     },
     {
       "size": "1.7B",
@@ -851,7 +851,7 @@
       "step": 75,
       "dataset": "amc23",
       "path": "../runs/1.7B/TA_OPSD_semantic_negatives/eval/step75/amc23",
-      "negative_table": "TA-OPSD (semantic negatives)"
+      "negative_table": "TA-OPSD (LLM-assisted selection)"
     }
   ],
   "training": [

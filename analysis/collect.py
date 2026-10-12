@@ -12,13 +12,15 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 DATASETS = ("aime24", "aime25", "amc23")
-ARMS = {
-    "Base": "base",
-    "OPSD": "T0",
-    "OPSD_SC": "T1",
-    "OPSD_UL": "T0+UL",
-    "TA_OPSD": "T1+UL",
-    "Stable_OPD": "STABLE",
+METHOD_NAMES = {
+    "Base": "Base",
+    "OPSD": "OPSD",
+    "OPSD_SC": "OPSD+SC",
+    "OPSD_UL": "OPSD+UL",
+    "TA_OPSD": "TA-OPSD",
+    "Stable_OPD": "Stable-OPD",
+    "TA_OPSD_trained_negatives": "TA-OPSD (OPSD-trained negatives)",
+    "TA_OPSD_semantic_negatives": "TA-OPSD (LLM-assisted selection)",
 }
 
 
@@ -129,7 +131,7 @@ def training_rows(folder, method):
         means = {key: value / count for key, value in sums.items()}
         output.append(
             dict(
-                method=method,
+                Method=method,
                 step=step,
                 tokens=count,
                 responses=32,
@@ -167,7 +169,7 @@ def main():
             raise ValueError("unknown paper benchmark")
         metric, raw = evaluation(folder, dataset, teacher if dataset == "aime24" else None)
         cached[str(folder)] = raw
-        arm = ARMS.get(method, method)
+        arm = METHOD_NAMES.get(method, method)
         size, step = entry["size"], str(entry["step"])
         if entry.get("main_table"):
             cells.append(
@@ -180,12 +182,14 @@ def main():
                     accuracy_pct=metric["acc"],
                 )
             )
-        if size == "1.7B" and (arm in ("T0", "T1", "T0+UL", "T1+UL") or method == "Base"):
-            arms = ("T0", "T1", "T0+UL", "T1+UL") if method == "Base" else (arm,)
+        if size == "1.7B" and (
+            arm in ("OPSD", "OPSD+SC", "OPSD+UL", "TA-OPSD") or method == "Base"
+        ):
+            arms = ("OPSD", "OPSD+SC", "OPSD+UL", "TA-OPSD") if method == "Base" else (arm,)
             for name in arms:
                 curves[step].setdefault(name, {})[dataset] = metric
-                if dataset == "aime24" and name in ("T0", "T1+UL"):
-                    short[step]["OPSD" if name == "T0" else "Ours"] = metric["short_errors"]
+                if dataset == "aime24" and name in ("OPSD", "TA-OPSD"):
+                    short[step][name] = metric["short_errors"]
         if entry.get("negative_table"):
             label = entry["negative_table"]
             negatives.setdefault(label, {"datasets": {}})["datasets"][dataset] = dict(
@@ -214,7 +218,7 @@ def main():
     budgets = {}
     for entry in spec["training"]:
         folder = (base / entry["path"]).resolve()
-        rows = training_rows(folder, ARMS[entry["method"]])
+        rows = training_rows(folder, METHOD_NAMES[entry["method"]])
         by_size[entry["size"]].extend(rows)
         replay_tokens = 0
         for path in (folder / "evidence").glob("aux-replay-rank*.jsonl"):
@@ -224,7 +228,7 @@ def main():
                     record.get("negative", {}).get("selected_tokens", 0)
                     for record in json.loads(line)["records"]
                 )
-        budgets[entry["size"] + "/" + entry["method"]] = dict(
+        budgets[entry["size"] + "/" + METHOD_NAMES.get(entry["method"], entry["method"])] = dict(
             main_supervised_tokens=sum(row["tokens"] for row in rows),
             negative_supervised_tokens=replay_tokens,
         )
@@ -244,7 +248,7 @@ def main():
         )
         examples[entry["case"]].append(
             dict(
-                method=entry["method"],
+                method=METHOD_NAMES.get(entry["method"], entry["method"]),
                 problem_index=row["problem_index"],
                 generation_index=row["generation_index"],
                 tokens=len(row["token_ids"]),

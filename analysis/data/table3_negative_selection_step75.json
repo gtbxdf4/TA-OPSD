@@ -76,7 +76,7 @@
         "capping_rate": 4.768518518518518
       }
     },
-    "TA-OPSD (trained-OPSD negatives)": {
+    "TA-OPSD (OPSD-trained negatives)": {
       "datasets": {
         "aime24": {
           "n": 360,

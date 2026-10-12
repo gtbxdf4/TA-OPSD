@@ -241,7 +241,7 @@ def calibrate(smoke, negatives, model_path, method, output):
         "record_count": len(rows),
         "global_replays": 16,
         "calibration_mode": "shared initialization, negative-only",
-        "reference_loss": "T0 JSD" if method == "OPSD_UL" else "T1 JSD+EOS",
+        "reference_loss": "OPSD" if method == "OPSD_UL" else "OPSD+SC",
         "source_smoke_sha256": sha(smoke / "LAUNCH.json"),
         "initial_lora_sha256": sha(initial),
         "measurements": {
