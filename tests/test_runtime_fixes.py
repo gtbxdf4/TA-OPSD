@@ -1,5 +1,7 @@
 """Regression checks for observed launcher and capped UTF-8 mining failures."""
 
+import hashlib
+import json
 import os
 import shutil
 import sys
@@ -10,6 +12,7 @@ from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import run
+from scripts import fetch_upstream
 from src.mine_negatives import clean_token_ids
 
 
@@ -23,6 +26,36 @@ class ByteTokenizer:
 
 
 class RuntimeFixTest(unittest.TestCase):
+    def test_upstream_fetch_stamps_only_verified_source_commit(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source = root / "upstream/opsd"
+            source.mkdir(parents=True)
+            core = source / "core.py"
+            valid = b"# frozen source\n"
+            commit = "a" * 40
+            (root / "UPSTREAM.json").write_text(
+                json.dumps(
+                    dict(
+                        url="https://example.invalid/no-network",
+                        commit=commit,
+                        files=[dict(path="core.py", sha256=hashlib.sha256(valid).hexdigest())],
+                    )
+                )
+            )
+            stamp = source / "SOURCE_COMMIT"
+            with (
+                patch.object(fetch_upstream, "ROOT", root),
+                patch.object(fetch_upstream.subprocess, "check_output", return_value=commit + "\n"),
+            ):
+                core.write_bytes(b"changed source\n")
+                with self.assertRaisesRegex(ValueError, "upstream file differs"):
+                    fetch_upstream.main()
+                self.assertFalse(stamp.exists())
+                core.write_bytes(valid)
+                fetch_upstream.main()
+                self.assertEqual(stamp.read_text(), commit + "\n")
+
     def test_absolute_python_launch_finds_its_environment_ninja(self):
         with tempfile.TemporaryDirectory() as directory:
             binary = Path(directory) / "bin"

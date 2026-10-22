@@ -11,6 +11,11 @@ from pathlib import Path
 
 
 def tensor_manifest(state):
+    """Hash sorted tensor names, shapes, dtypes and contiguous CPU bytes.
+
+    Return per-tensor hashes, their aggregate identity, and whether a nonempty
+    collection of LoRA-B tensors is entirely zero. Dtype is part of the identity.
+    """
     import torch
 
     rows = []
@@ -36,6 +41,12 @@ def tensor_manifest(state):
 
 
 def install_state(model, state):
+    """Install exact shared LoRA tensors after validating keys, dtype and shape.
+
+    Reject non-LoRA keys and nonzero initial B matrices, then compare the loaded
+    adapter manifest byte for byte. Return the same model; do not construct a new
+    adapter or alter its trainable parameter selection.
+    """
     from peft import get_peft_model_state_dict, set_peft_model_state_dict
 
     current = get_peft_model_state_dict(model)
@@ -58,6 +69,12 @@ def install_state(model, state):
 
 
 def read_shared(path):
+    """Load CPU safetensors only after verifying seed, file and tensor identity.
+
+    Relative weight paths are resolved beside the JSON manifest. DP defaults to
+    four when omitted and must be four or eight. Return (state, manifest); reject
+    seed, file or tensor mismatches and missing zero-B initialization proof.
+    """
     from safetensors.torch import load_file
 
     manifest = json.loads(Path(path).read_text())
@@ -89,6 +106,7 @@ def runtime_initialization_manifest(state):
 
 
 def validate_runtime_initialization(actual, shared):
+    """Require exact shared tensor identity after the frozen BF16 conversion."""
     observed = tensor_manifest(actual)
     if observed != runtime_initialization_manifest(shared):
         raise ValueError("pre-update rank adapter differs from exact shared BF16 initialization")
@@ -96,6 +114,12 @@ def validate_runtime_initialization(actual, shared):
 
 
 def install_runtime():
+    """Seed model construction and install a process-local TRL PEFT creation hook.
+
+    V18_INITIALIZATION_MANIFEST supplies the frozen adapter and V17_EVIDENCE the
+    receipts directory. Call before importing/building the upstream trainer.
+    Loading must preserve CPU RNG; installing this hook twice is rejected.
+    """
     import trl.trainer.sft_trainer as sft
     from transformers import set_seed
 

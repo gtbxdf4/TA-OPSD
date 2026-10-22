@@ -8,6 +8,7 @@ from typing import Any
 
 
 def verify_rollout_prompt(tokenizer, messages, actual_ids):
+    """Require exact actual engine IDs for the explicit nonthinking student prompt."""
     expected = tokenizer.apply_chat_template(
         messages, tokenize=True, add_generation_prompt=True, enable_thinking=False
     )
@@ -72,6 +73,7 @@ def extract_boxed_answer(text: str | None) -> str | None:
 
 def build_student_message(problem: str) -> list[dict[str, str]]:
     # Byte-for-byte pinned T-series SelfDistillationDataCollator wording.
+    """Return the pinned unprivileged problem wrapper with the boxed-answer instruction."""
     return [{"role": "user", "content": f"Problem: {problem}\n\n{BOXED_INSTRUCTION}"}]
 
 

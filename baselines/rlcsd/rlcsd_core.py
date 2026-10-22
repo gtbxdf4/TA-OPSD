@@ -18,6 +18,12 @@ def selected_token_log_mass(logits: torch.Tensor, token_ids: tuple[int, ...]) ->
 
 @dataclass(frozen=True)
 class RLCSDConfig:
+    """Coefficients for the matched two-path objective, not generation temperature.
+
+    tau scales the correct/wrong teacher log-probability contrast before tanh.
+    Each rollout's selected and nonselected branches are normalized separately.
+    """
+
     epsilon: float = 0.2
     tau: float = 1.3
     beta: float = 1.0
@@ -75,10 +81,17 @@ def rlcsd_loss(
 ) -> tuple[torch.Tensor, dict[str, float], dict[str, torch.Tensor]]:
     """Compute the complete verifier-anchored, two-path RLCSD PPO objective.
 
-    Teacher quantities and branch routing are stop-gradient by construction.
-    The two branch means are intentionally normalized independently before
-    ``nonselected + eta * selected``; replacing this with a global token mean
-    is a different objective.
+    Current/old/correct-teacher log-probs and response_mask are [batch, tokens];
+    wrong-teacher scores are [batch, hints, tokens] with a [batch, hints] mask.
+    Advantages may be [batch], [batch, 1] or [batch, tokens]. Caller-provided old
+    policy scores and optional importance weights must be frozen; teachers and
+    branch routing are stop-gradient here. Log-probs already include the policy
+    temperature; config.tau only scales the teacher contrast.
+
+    Normalize each branch within each rollout, then average all batch rows,
+    including zero-mask rows as zeros, before nonselected + eta * selected.
+    This differs from SC/UL's nonempty-response mean. Return differentiable loss,
+    detached scalar metrics, and detached routing/teacher details.
     """
     if (
         old_log_probs.shape != current_log_probs.shape

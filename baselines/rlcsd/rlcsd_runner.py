@@ -38,6 +38,12 @@ def _read_json_arg(value: str | os.PathLike[str]) -> tuple[dict[str, Any], str |
 
 
 def normalize_spec(raw: dict[str, Any]) -> dict[str, Any]:
+    """Validate allowed paths/layout and attach the fixed matched RLCSD protocol.
+
+    Deep-copy the input; reject unknown fields rather than accept scientific
+    overrides. Choose DP-dependent accumulation for 256 sequences (32 groups of
+    eight) per optimizer update. Smoke changes only the early-stop target.
+    """
     missing = sorted(REQUIRED - raw.keys())
     if missing:
         raise ValueError("missing required spec fields: " + ", ".join(missing))
@@ -166,6 +172,7 @@ def build_command(spec_arg: str, spec: dict[str, Any]) -> list[str]:
 
 
 def execute(spec_arg: str, spec: dict[str, Any]) -> None:
+    """Launch the validated spec offline in a fresh output path via Accelerate."""
     output = Path(spec["output"])
     if output.exists():
         raise FileExistsError(f"fresh output required; refusing existing path: {output}")

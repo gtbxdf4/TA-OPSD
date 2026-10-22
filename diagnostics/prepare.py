@@ -25,6 +25,7 @@ def write(path, value):
 
 
 def build_cohort(model, checkpoint, assets, output):
+    """Rebuild the frozen diagnostic cohort after checking data, answer and prompt hashes."""
     import pyarrow.parquet as pq
     from grading import extract_boxed_answer
     from transformers import AutoTokenizer
@@ -96,7 +97,12 @@ def build_cohort(model, checkpoint, assets, output):
 
 
 def continuation_cases(cohort, raw):
-    """Select shorter failed student answers that the independent teacher solved."""
+    """Derive this run's shorter, teacher-solvable student failures for continuation.
+
+    Preserve every reasoning token; remove only terminal stop IDs. The privileged
+    teacher receives its full reference prompt plus that unchanged failure prefix,
+    with the remaining 32,768-token context as the suffix budget.
+    """
     cases = []
     for question in cohort:
         name = question["problem_hash"] + "-seed0.json"

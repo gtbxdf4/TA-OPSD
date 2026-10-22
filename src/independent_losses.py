@@ -5,7 +5,12 @@ import torch.nn.functional as F
 
 
 def response_mean(values, mask):
-    """Give each nonempty response equal weight, regardless of its length."""
+    """Reduce [responses, positions] values using a binary validity mask.
+
+    Average valid positions within each response, then average nonempty responses
+    equally. An entirely empty mask returns a differentiable zero. Numeric masks
+    are expected to contain only zero and one; their sums supply the denominators.
+    """
     if values.shape != mask.shape or values.ndim != 2:
         raise ValueError("expected matching [response, position] tensors")
     counts = mask.sum(-1)
@@ -34,7 +39,15 @@ def _binary_log_probabilities(logits, stop_ids):
 
 
 def stop_kl(student_logits, teacher_logits, valid_mask, stop_ids):
-    """Teacher-to-student binary KL at the valid response positions (Eqs. 2–4)."""
+    """Return mean KL(teacher || student) after grouping STOP and CONTINUE.
+
+    Logits have shape [responses, positions, vocabulary]; valid_mask has shape
+    [responses, positions] at the already shifted causal prediction positions.
+    stop_ids must be a unique, nonempty proper vocabulary subset. Teacher targets
+    are detached, and both distributions use float32 with no temperature scaling
+    here (SC temperature is one). Empty responses are excluded by response_mean.
+    This implements the binary distillation objective in Eqs. 2-4.
+    """
     # The frozen teacher contributes targets, not gradients.
     teacher = _binary_log_probabilities(teacher_logits.detach(), stop_ids)
     student = _binary_log_probabilities(student_logits, stop_ids)
@@ -43,7 +56,15 @@ def stop_kl(student_logits, teacher_logits, valid_mask, stop_ids):
 
 
 def local_unlikelihood(logits, token_ids, selected, stop_ids):
-    """Penalize selected suffix tokens under their failure prefixes (Eq. 5)."""
+    """Penalize selected suffix targets under their original causal prefixes.
+
+    logits is [responses, suffix_positions, vocabulary]; token_ids and selected
+    share its first two dimensions. Negative target IDs are ignored. All other
+    IDs must be in vocabulary, even at unselected positions, because gather occurs
+    before masking. Stop IDs are excluded. Float32 probabilities use temperature
+    one and are clamped below one before -log(1-p); reduce with response_mean
+    as in Eq. 5.
+    """
     if logits.shape[:-1] != token_ids.shape or selected.shape != token_ids.shape:
         raise ValueError("logits and suffix token/mask alignment mismatch")
     valid = selected.bool() & (token_ids >= 0)

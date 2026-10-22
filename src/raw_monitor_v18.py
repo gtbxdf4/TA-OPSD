@@ -13,6 +13,7 @@ import torch
 
 
 def rng_fingerprint():
+    """Hash Python, NumPy, Torch CPU and initialized current-device CUDA RNG state."""
     values = {
         "python": pickle.dumps(random.getstate()),
         "numpy": pickle.dumps(np.random.get_state()),
@@ -24,12 +25,14 @@ def rng_fingerprint():
 
 
 def effective_stop_ids(primary, fields):
+    """Return the sorted union of primary EOS and engine eos_token_id fields."""
     extra = fields.get("eos_token_id", [])
     extra = extra if isinstance(extra, (list, tuple)) else [extra]
     return sorted({int(x) for x in [primary, *extra] if x is not None})
 
 
 def local_outputs(outputs, local_batch_size, tp_size, group_rank):
+    """Select this TP rank's contiguous local slice from the gathered rollout batch."""
     if len(outputs) != local_batch_size * tp_size or not 0 <= group_rank < tp_size:
         raise ValueError("generated TP batch cannot be assigned uniquely to local responses")
     return outputs[group_rank * local_batch_size : (group_rank + 1) * local_batch_size]
@@ -44,6 +47,13 @@ def align_response(
     finish_reason,
     stop_ids,
 ):
+    """Describe real generation tokens at upstream shifted prediction positions.
+
+    raw_ids must exactly prefix sampled_ids; labels must span sampled_ids.
+    Prompt lengths refer to padded upstream prompts, so response token zero is
+    predicted at prompt_length - 1. Keep all real tokens and expose labels != -100
+    separately; natural stop and length censoring come from the engine reason.
+    """
     size = len(raw_ids)
     if not size or list(sampled_ids[:size]) != list(raw_ids) or len(labels) != len(sampled_ids):
         raise ValueError("raw response IDs and official shifted prediction positions disagree")
@@ -68,6 +78,12 @@ def align_response(
 
 
 def atomic_gzip(path, value):
+    """Publish one deterministic gzip JSON shard without replacing an existing file.
+
+    fsync the exclusive temporary file, then publish by a same-filesystem hard
+    link. Return compressed bytes; existing destinations raise FileExistsError.
+    NaN/Infinity values are rejected by JSON serialization.
+    """
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_name(path.name + f".tmp-{os.getpid()}")
@@ -92,6 +108,14 @@ def atomic_gzip(path, value):
 def token_metrics(
     student_logits, teacher_logits, token_ids, k, stop_ids, temperature=1.0, chunk_tokens=32
 ):
+    """Measure detached, per-real-token teacher/student distributions in chunks.
+
+    Both logits are aligned [real_response_tokens, vocabulary] and are divided by
+    temperature before float32 softmax. token_ids supplies only the expected
+    token count. Return top-k set intersection/k and individual stop-token log
+    probabilities/gaps in nats, not aggregate STOP mass. No loss mask is applied
+    here; the collector filters loss_valid_mask when producing training curves.
+    """
     if student_logits.ndim != 2 or student_logits.shape != teacher_logits.shape:
         raise ValueError("expected aligned [real_response_tokens, full_vocab] logits")
     size, vocab = student_logits.shape

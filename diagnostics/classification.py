@@ -4,6 +4,7 @@ import collections
 
 
 def repeat(text):
+    """Detect three normalized long lines or an exact periodic final 480-character tail."""
     lines = [" ".join(line.split()) for line in text.splitlines()]
     counts = collections.Counter(
         line for line in lines if len(line) >= 40 and sum(x.isalnum() for x in line) >= 8
@@ -17,6 +18,7 @@ def repeat(text):
 
 
 def short_error(response):
+    """Identify an incorrect, naturally stopped, nonrepeating response of at most 1024 tokens."""
     return (
         not response["correct"]
         and response["finish_reason"] == "stop"

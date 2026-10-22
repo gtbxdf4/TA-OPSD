@@ -51,6 +51,8 @@ def _disable_adapter(model: torch.nn.Module):
 
 
 class StopAtOptimizerUpdate(TrainerCallback):
+    """End a smoke after the requested updates without shortening the LR horizon."""
+
     def __init__(self, stop: int):
         self.stop = stop
 
@@ -61,6 +63,13 @@ class StopAtOptimizerUpdate(TrainerCallback):
 
 
 class MatchedRLCSDTrainer(GRPOTrainer):
+    """Adapt TRL GRPO with frozen correct/wrong-hint scores and the RLCSD objective.
+
+    Negatives are verified-incorrect siblings of the same query with the target
+    excluded. Rows without an admissible sibling remain zero-masked in the DDP
+    batch. Teacher scoring disables adapters and tracks context truncation.
+    """
+
     def __init__(self, *args, rlcsd_spec: dict[str, Any], correctness_fn, **kwargs):
         self.rlcsd_spec = rlcsd_spec
         algorithm = rlcsd_spec["algorithm"]
@@ -458,6 +467,7 @@ class MatchedRLCSDTrainer(GRPOTrainer):
 
 
 def install_shared_initialization(spec: dict[str, Any], output: Path):
+    """Hook GRPO PEFT construction to load and attest the common zero-B adapter."""
     sys.path.insert(0, spec["helper_dir"])
     from shared_initialization_v18 import install_state, read_shared
 

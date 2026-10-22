@@ -33,7 +33,12 @@ def write(path, value):
 
 
 def evaluation(folder, dataset, teacher=None):
-    """Join raw generations to Avg@12 verdicts and compute response-level behavior."""
+    """Join a complete Avg@12 raw-response grid to exact matching author verdict texts.
+
+    Return response-weighted accuracy/length/capping metrics and the joined rows.
+    Optional teacher flags count teacher-solvable short errors over all answers,
+    not just the subset of short errors. Missing/duplicate responses are rejected.
+    """
     author = read(folder / "author_result.json")
     done = read(folder / "DONE.json")
     questions = 40 if dataset == "amc23" else 30
@@ -83,7 +88,13 @@ def evaluation(folder, dataset, teacher=None):
 
 
 def training_rows(folder, method):
-    """Merge complete distributed monitor shards at valid distillation positions."""
+    """Aggregate valid-token means from every DP rank and both GA microbatches.
+
+    Require 100 steps with 32 responses each and reject missing/duplicate shards.
+    Metrics use only loss_valid_mask positions; this plotting reduction is distinct
+    from SC/UL response-balanced losses. eos_gap_mean averages the two individual
+    stop-token log-probability gaps, not the gap of aggregate STOP probability.
+    """
     steps = defaultdict(list)
     layouts = defaultdict(set)
     worlds = {}

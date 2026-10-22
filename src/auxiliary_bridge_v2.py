@@ -14,11 +14,18 @@ from replay_v2 import detached_suffix_logits, exposure_ids, joint_backward_conte
 
 
 def with_auxiliary(original, config):
-    """Extend OPSD with SC on current rollouts and UL on the fixed replay bank."""
+    """Build an OPSD subclass adding SC and fixed-bank UL with frozen coefficients.
+
+    A zero-coefficient configuration returns the original class. Active trainers
+    require GA2 with DP4 or DP8; UL verifies bank bytes and approved fit records.
+    The returned class preserves the author's scalar/tuple loss return contract.
+    """
     if not any(config.get(k, 0) for k in ["lambda_eos", "lambda_ul"]):
         return original
 
     class AuxiliaryTrainer(original):
+        """Apply SC on current rollout positions and replay UL once per microbatch."""
+
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
             self._aux_config = dict(config)
@@ -59,6 +66,7 @@ def with_auxiliary(original, config):
 
         def generalized_jsd_loss(self, student_logits, teacher_logits, labels=None, **kwargs):
             # SC uses the same valid positions as the unchanged base distillation loss.
+            """Add temperature-one SC using the base loss's labels != -100 mask."""
             base = super().generalized_jsd_loss(
                 student_logits=student_logits,
                 teacher_logits=teacher_logits,
@@ -83,6 +91,12 @@ def with_auxiliary(original, config):
 
         def compute_loss(self, model, inputs, *args, **kwargs):
             # The on-policy objective and replay objective share one optimizer update.
+            """Combine the on-policy loss with this rank's mean replay loss.
+
+            The author's causal shifts and loss remain upstream. DDP and GA2 turn
+            local replay means into 16 equally weighted global exposures per update;
+            prefix-KV detachment is handled by detached_suffix_logits.
+            """
             with (
                 joint_backward_context(self.accelerator.unwrap_model(model))
                 if self._aux_rows

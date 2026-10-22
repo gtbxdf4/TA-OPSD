@@ -56,6 +56,11 @@ def close(a, b):
 
 
 def curve(ax, x, y, color, label, smooth=False):
+    """Draw observed points and optionally a smoothed visual trend.
+
+    Smoothing uses a Gaussian filter followed by a natural cubic spline. It is
+    display-only: exported table values and raw points are not recomputed from it.
+    """
     x, y = np.asarray(x, dtype=float), np.asarray(y, dtype=float)
     assert np.isfinite(y).all()
     if smooth:
@@ -79,6 +84,7 @@ def save(fig, out, stem):
 
 
 def training():
+    """Load both methods' frozen 100-step training curves, requiring 32 responses per step."""
     result = {}
     for size in ("1.7B", "4B", "8B"):
         arms = {"OPSD": [], "TA-OPSD": []}

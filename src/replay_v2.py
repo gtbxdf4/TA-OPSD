@@ -7,7 +7,12 @@ import torch
 
 
 def exposure_ids(step, micro, rank, count, world=4):
-    """Partition 16 replay examples across two microbatches and all DP ranks."""
+    """Return this rank's cyclic replay-bank indices for one microbatch.
+
+    step is the zero-based optimizer step and micro is zero or one. DP4 assigns
+    two records per rank/microbatch; DP8 assigns one, giving 16 global exposures
+    per update in either layout. Indices wrap modulo the positive bank count.
+    """
     if world not in (4, 8) or not (0 <= micro < 2 and 0 <= rank < world and count > 0):
         raise ValueError("DP4/DP8 GA2 replay layout invalid")
     per = 8 // world
@@ -64,7 +69,14 @@ def joint_backward_context(model):
 
 
 def detached_suffix_logits(model, prefix, suffix, device):
-    """Return one prediction per suffix token while detaching the earlier prefix."""
+    """Return [1, len(suffix), vocabulary] causal logits for suffix targets.
+
+    Cache prefix[:-1] under no_grad, then use prefix[-1] and suffix[:-1] as the
+    differentiable inputs. Thus the cached history has no backward graph, while
+    the suffix forward and model parameters retain gradients. Prefix and suffix
+    must be nonempty token-ID sequences. Checkpoint flags and RNG are restored;
+    missing prefix KV raises instead of silently enabling full-prefix gradients.
+    """
     if not prefix or not suffix:
         raise ValueError("nonempty causal prefix and target required")
     with replay_context(model, device):

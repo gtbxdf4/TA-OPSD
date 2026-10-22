@@ -59,6 +59,7 @@ class CapturedTrainer(Original):
                 )
 
     def compute_loss(self, model, inputs, *args, **kwargs):
+        """Attest the first pre-update adapter and capture two step-zero RNG/input packets."""
         if not getattr(self, "_v18_pre_update_verified", False):
             verify_before_update(self.model, self.state.global_step)
             self._v18_pre_update_verified = True

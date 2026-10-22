@@ -6,6 +6,12 @@ from pathlib import Path
 
 
 def select(library, decisions):
+    """Return the nonempty keep subset in library order without changing its records.
+
+    Every unique library ID requires exactly one Boolean decision; unknown,
+    duplicate, incomplete or all-drop reviews raise ValueError. This function
+    applies existing offline decisions and performs no model/API selection.
+    """
     by_id = {row["id"]: row for row in library}
     if len(by_id) != len(library):
         raise ValueError("negative IDs must be unique")

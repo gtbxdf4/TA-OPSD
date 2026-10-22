@@ -114,7 +114,14 @@ def interior_token_span(tok, ids, text, start, end):
 
 
 def find_negative(tok, ids, text, prompt_length, truncated=False):
-    """Select the earliest admissible local repetition, with at most 256 target tokens."""
+    """Select the earliest admissible third-repeat span and return it with clean IDs.
+
+    Text candidates use inward Unicode-safe token boundaries; token-period
+    candidates are considered alongside them in sorted order. Keep the complete
+    prefix, cap the suffix at 256 tokens, reserve that full suffix budget within
+    20,000 total tokens, and reject stop-containing targets. Return (None, ids)
+    when no valid span remains. No correctness labels or model judge are used.
+    """
     ids = clean_token_ids(tok, ids, text, truncated=truncated)
     spans = []
     for r in repeated_text_spans(text):

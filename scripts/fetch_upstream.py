@@ -26,6 +26,8 @@ def main():
         path = destination / row["path"]
         if hashlib.sha256(path.read_bytes()).hexdigest() != row["sha256"]:
             raise ValueError("upstream file differs: " + row["path"])
+    # The matched Stable-OPD validator consumes this marker after checking core hashes.
+    (destination / "SOURCE_COMMIT").write_text(commit + "\n")
     print(f"Verified OPSD {commit}: {len(spec['files'])} runtime files")
 
 

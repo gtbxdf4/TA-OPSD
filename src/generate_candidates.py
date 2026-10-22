@@ -69,11 +69,9 @@ def main():
         put(cpath, contract)
     else:
         prev = json.loads(cpath.read_text())
-        assert prev["model"] == contract["model"] and prev.get("adapter") == contract["adapter"], (
-            "contract mismatch",
-            prev.get("model"),
-            contract["model"],
-        )
+        # A shared problem hash does not prove that its tokenized prompt is unchanged.
+        if prev != contract:
+            raise ValueError("candidate generation contract mismatch; use a fresh output root")
     done = 0
     pending = []
     for r in cohort:

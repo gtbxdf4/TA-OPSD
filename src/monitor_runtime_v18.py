@@ -19,6 +19,7 @@ from raw_monitor_v18 import (
 
 
 def row_identity(row):
+    """Return raw problem and problem/solution pair hashes for source-row joins."""
     problem, solution = str(row["problem"]), str(row["solution"])
     return (
         hashlib.sha256(problem.encode()).hexdigest(),
@@ -29,6 +30,8 @@ def row_identity(row):
 
 
 class SourceCollator:
+    """Attach validated source identities while retaining the upstream collator tensors."""
+
     def __init__(self, original, index):
         self.original, self.index = original, index
 
@@ -53,6 +56,13 @@ class SourceCollator:
 
 
 def with_raw_monitor(original, config=None, enabled=True):
+    """Wrap the trainer with complete, detached main-rollout monitoring.
+
+    Validate the source index, DP/GA layout and live stop-token union. Each rank
+    emits one full distribution shard per training microbatch; missing, extra or
+    misaligned data raises instead of silently subsampling. Disabled mode returns
+    original. Measurements preserve RNG and return the upstream loss expression.
+    """
     if not enabled:
         return original
     if config is None:
@@ -68,6 +78,8 @@ def with_raw_monitor(original, config=None, enabled=True):
     index = json.loads(index_path.read_text())
 
     class RawMonitorTrainer(original):
+        """Record source-aligned real-token measurements from existing forward logits."""
+
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
             if (
@@ -118,6 +130,7 @@ def with_raw_monitor(original, config=None, enabled=True):
             self.vllm_engine.generate = observed_generate
 
         def training_step(self, model, inputs, *args, **kwargs):
+            """Require one complete monitored main rollout for this GA microbatch."""
             step = self.state.global_step
             if step != self._raw_step:
                 self._raw_step, self._raw_micro = step, 0

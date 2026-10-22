@@ -26,6 +26,11 @@ EVAL_DATA = {
 
 
 def build_spec(size, method, mode, dp=8):
+    """Build the fixed SFT/GRPO command and required assets without launching it.
+
+    DP4/DP8 preserve 32 effective prompts per update. Smoke uses the same formal
+    scheduler horizon and requests an early stop after two optimizer updates.
+    """
     if size not in MODELS or method not in ("sft", "grpo") or mode not in ("smoke", "formal"):
         raise ValueError("unsupported baseline selection")
     if dp not in (4, 8):

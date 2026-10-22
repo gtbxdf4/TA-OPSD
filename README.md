@@ -332,6 +332,8 @@ pytest
 PyTorch and the pinned OPSD source are needed for the loss-interface tests.
 These checks cover source and CPU behavior; a fresh GPU training-and-evaluation
 replay is a separate validation step.
+See [development and documentation requirements](docs/DEVELOPMENT.md) for the
+full CI checks and the contracts required for scientific-code comments.
 
 ## Citation
 

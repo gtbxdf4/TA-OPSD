@@ -33,7 +33,14 @@ def sha(path):
 
 
 def calibrate(smoke, negatives, model_path, method, output):
-    """Run the actual author loss and local UL forward at common initialization."""
+    """Measure fixed SC/UL coefficients at the shared pre-update initialization.
+
+    Require the complete captured DP4/DP8 GA2 initialization batch, matching
+    runtime stop IDs/JSD clip and a negative-only approved fit bank for UL arms.
+    SC matches the base gradient norm in logit space; UL matches the OPSD(+SC)
+    reference in trainable LoRA space. No optimizer step is taken. Output must
+    be fresh and records bank/initialization identities with the measured norms.
+    """
     if method not in (
         "OPSD_SC",
         "OPSD_UL",

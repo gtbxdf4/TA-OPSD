@@ -11,6 +11,11 @@ from pathlib import Path
 def load_ordered_parquet_dataset(
     paths, *, parquet_file_cls=None, concat_tables=None, dataset_cls=None, dataset_dict_cls=None
 ):
+    """Concatenate parquet shards in supplied order without path-based partition columns.
+
+    Remove per-shard schema metadata before concatenation. Optional constructors
+    permit CPU interface tests without importing the GPU training dependency set.
+    """
     if parquet_file_cls is None:
         import pyarrow as pa
         import pyarrow.parquet as pq

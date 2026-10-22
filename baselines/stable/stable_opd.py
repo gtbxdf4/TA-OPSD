@@ -39,6 +39,8 @@ SPEC_FIELDS = {
 
 @dataclass(frozen=True)
 class Protocol:
+    """Frozen matched-run settings; these differ from the native paper warm-start recipe."""
+
     paper: str = "arXiv:2604.08527v1"
     adaptation: str = (
         "frozen shared initial Qwen+LoRA teacher with privileged ground-truth "
@@ -88,6 +90,8 @@ class Protocol:
 
 @dataclass(frozen=True)
 class RunSpec:
+    """Local inputs and DP layout combined with the immutable matched protocol."""
+
     base_model: str
     init_manifest: str
     data_files: tuple[str, ...]
@@ -128,6 +132,7 @@ class RunSpec:
 
 
 def load_run_spec(raw_json: str) -> RunSpec:
+    """Parse inline JSON and reject unknown fields, unsupported DP and relative paths."""
     try:
         value = json.loads(raw_json)
     except json.JSONDecodeError as exc:
@@ -186,7 +191,13 @@ def stable_opd_objective(
     lambda_gold=1.0,
     beta_ref_kl=1.0,
 ):
-    """Real Stable-OPD tensor objective; teacher and rollout policy are frozen."""
+    """Combine PPO distillation, golden-solution SFT and frozen-reference KL.
+
+    Log-probs and rollout_mask share [responses, positions] at aligned causal
+    states and already include policy temperature. Teacher/old-policy scores are
+    detached; each response needs a scored token. The two supplied stabilizers
+    are scalar losses. Return differentiable objective terms and summary means.
+    """
     advantage = (teacher_logp - old_logp).detach()
     # Importance correction is against the policy that generated the current rollouts.
     ratio = (current_logp - old_logp.detach()).exp()
@@ -220,6 +231,7 @@ def sha256_file(path: str | Path) -> str:
 
 
 def tensor_manifest(state) -> dict:
+    """Hash sorted contiguous tensor bytes, names, shapes and dtypes; attest zero LoRA-B."""
     import torch
 
     rows = []
@@ -246,6 +258,7 @@ def tensor_manifest(state) -> dict:
 
 
 def read_shared_initialization(path: str):
+    """Verify seed42, safetensors bytes and exact zero-B tensor identity before loading."""
     from safetensors.torch import load_file
 
     manifest = json.loads(Path(path).read_text())
@@ -370,6 +383,7 @@ def _freeze_reference_adapter(model):
 
 @contextmanager
 def frozen_initial_adapter(trainer, model):
+    """Select the frozen initial adapter temporarily and restore the previous adapter."""
     unwrapped = trainer.accelerator.unwrap_model(model)
     previous = unwrapped.active_adapter
     unwrapped.set_adapter("stable_reference")
@@ -448,11 +462,14 @@ def _selected_statistics(logits, token_ids, eos_token_id, *, entropy=False, temp
 
 
 def exact_forward_kl(student_logits, reference_logits, mask, temperature, chunk_size=2048):
-    """Exact full-vocabulary KL(student || frozen reference), memory bounded.
+    """Return exact mean KL(student || frozen reference) at valid prefix states.
 
-    The custom backward recomputes vocabulary chunks and returns the analytic
-    gradient.  This keeps Eq. 6 exact without retaining additional full-vocab
-    softmax/log-softmax tensors in the forward graph.
+    Logits share [responses, positions, vocabulary]; mask shares the first two
+    dimensions. Every response must have a scored token. Scale both distributions
+    by positive temperature and use positive vocabulary chunk_size. Reduce by a
+    token mean per response, then a response mean, without a temperature-squared
+    multiplier. The custom backward recomputes chunks, returns the analytic
+    student gradient, and supplies no reference or mask gradient.
     """
     import torch
 
@@ -555,6 +572,7 @@ def paper_repetition_metrics(tokenizer, token_ids, mask):
 
 
 def build_data_collator(source_dir: str, tokenizer, protocol: Protocol):
+    """Build grouped nonthinking rollouts plus one prompt-masked golden sequence per query."""
     if source_dir not in sys.path:
         sys.path.insert(0, source_dir)
     from data_collator import SelfDistillationDataCollator
@@ -623,6 +641,7 @@ def build_data_collator(source_dir: str, tokenizer, protocol: Protocol):
 
 
 def build_trainer_class(source_dir: str, protocol: Protocol):
+    """Build the matched trainer with frozen privileged teacher and unprivileged reference."""
     if source_dir not in sys.path:
         sys.path.insert(0, source_dir)
     from opsd_trainer import OPSDTrainer
@@ -784,6 +803,7 @@ def _load_ordered_dataset(paths):
 
 
 def validate_local_inputs(spec: RunSpec):
+    """Check local input presence, pinned core hashes and compatible initialization metadata."""
     for path in (spec.base_model, spec.init_manifest, spec.source_dir, *spec.data_files):
         if not Path(path).exists():
             raise FileNotFoundError(path)
@@ -810,6 +830,7 @@ def validate_local_inputs(spec: RunSpec):
 
 
 def protocol_receipt(spec: RunSpec, manifest: dict) -> dict:
+    """Describe the exact baseline adaptation, batching and source/data/adapter identities."""
     source_hashes = {
         name: sha256_file(Path(spec.source_dir) / name) for name in EXPECTED_SOURCE_HASHES
     }
@@ -854,6 +875,11 @@ def protocol_receipt(spec: RunSpec, manifest: dict) -> dict:
 
 
 def run_training(spec: RunSpec):
+    """Execute a fresh matched run and attest expected updates and checkpoint artifacts.
+
+    This function requires the full Linux/CUDA training runtime. A DONE receipt
+    attests completion of the selected smoke/formal recipe, not scientific efficacy.
+    """
     import torch
     from peft import LoraConfig, TaskType
     from transformers import AutoTokenizer, TrainerCallback, set_seed

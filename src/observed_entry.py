@@ -26,6 +26,7 @@ original_load_dataset = datasets.load_dataset
 
 
 def local_author_dataset(path, *args, **kwargs):
+    """Load ordered local author parquet shards for the one frozen dataset name."""
     if path == "siyanzhao/Openthoughts_math_30k_opsd":
         files = json.loads(os.environ["PAPER_TRAIN_FILES"])
         import pyarrow as pa
@@ -47,6 +48,8 @@ def emit(kind, value):
 
 
 class Progress(TrainerCallback):
+    """Record optimizer progress and honor the smoke-only early-stop callback."""
+
     def on_step_end(self, args, state, control, **kwargs):
         scheduler = kwargs.get("lr_scheduler")
         emit(
@@ -71,6 +74,8 @@ OriginalTrainer = opsd_trainer.OPSDTrainer
 
 
 class ObservedTrainer(OriginalTrainer):
+    """Record data, batches and engine outputs while delegating training upstream."""
+
     def __init__(self, *args, **kwargs):
         dataset = kwargs["train_dataset"]
         emit(

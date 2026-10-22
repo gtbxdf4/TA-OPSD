@@ -4,13 +4,91 @@ import gzip
 import json
 import sys
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from analysis.collect import evaluation, training_rows
+from diagnostics import grading
 from diagnostics.prepare import continuation_cases
 from scripts.select_semantic_negatives import select
+from src import generate_candidates
+
+
+def test_diagnostic_grading_uses_hash_verified_author_helpers(tmp_path, monkeypatch):
+    grading._author_helpers.cache_clear()
+    try:
+        helpers = grading._author_helpers()
+        source = grading.ROOT / "upstream/opsd/eval/evaluate_math.py"
+        assert helpers["extract_boxed_answer"].__code__.co_filename == str(source)
+        assert helpers["grade_answer"].__code__.co_filename == str(source)
+        assert grading.extract_boxed_answer(r"\boxed{0} then \boxed{\frac{1}{2}}") == r"\frac{1}{2}"
+        assert grading.extract_boxed_answer("unboxed") is None
+        fake_verifier = SimpleNamespace(
+            parse=lambda text, **kwargs: text,
+            verify=lambda truth, prediction, timeout_seconds: truth == prediction,
+        )
+        monkeypatch.setitem(sys.modules, "math_verify", fake_verifier)
+        assert grading.grade_answer("7", "7") is True
+
+        original_spec = grading.ROOT / "UPSTREAM.json"
+        (tmp_path / "UPSTREAM.json").write_bytes(original_spec.read_bytes())
+        changed_source = tmp_path / "upstream/opsd/eval/evaluate_math.py"
+        changed_source.parent.mkdir(parents=True)
+        changed_source.write_text("raise RuntimeError('must never execute')\n")
+        monkeypatch.setattr(grading, "ROOT", tmp_path)
+        grading._author_helpers.cache_clear()
+        with pytest.raises(ValueError, match="grader file differs"):
+            grading.extract_boxed_answer("anything")
+    finally:
+        grading._author_helpers.cache_clear()
+
+
+@pytest.mark.parametrize("changed", ["prompt", "cohort", "tp", "tag"])
+def test_candidate_resume_rejects_changed_contract(tmp_path, monkeypatch, changed):
+    cohort = tmp_path / "cohort.json"
+    row = dict(problem_hash="same-question", split="fit", student_prompt_token_ids=[1])
+    cohort.write_text(json.dumps([row]))
+    output = tmp_path / "candidates"
+    raw = output / "raw"
+    raw.mkdir(parents=True)
+    raw_path = raw / (generate_candidates.digest(row["problem_hash"]) + ".json")
+    raw_path.write_text(
+        json.dumps(dict(row, prompt_token_ids=[1], token_ids=[3], text="old response"))
+    )
+    argv = [
+        "generate_candidates.py",
+        "--out-root",
+        str(output),
+        "--tag",
+        "base",
+        "--model",
+        "same-model",
+        "--cohort",
+        str(cohort),
+    ]
+    monkeypatch.setattr(sys, "argv", argv)
+    # Existing identical inputs can finish without loading a model or generating tokens.
+    assert generate_candidates.main() == 0
+    assert generate_candidates.main() == 0
+    (output / "DONE.json").unlink()
+    contract_bytes = (output / "CONTRACT.json").read_bytes()
+    raw_bytes = raw_path.read_bytes()
+    if changed in ("prompt", "cohort"):
+        row["student_prompt_token_ids" if changed == "prompt" else "problem_hash"] = (
+            [2] if changed == "prompt" else "other-question"
+        )
+        cohort.write_text(json.dumps([row]))
+    elif changed == "tp":
+        argv.extend(["--tp", "8"])
+    else:
+        argv[argv.index("--tag") + 1] = "other-tag"
+    with pytest.raises(ValueError, match="contract mismatch"):
+        generate_candidates.main()
+    assert not (output / "DONE.json").exists()
+    assert (output / "CONTRACT.json").read_bytes() == contract_bytes
+    assert raw_path.read_bytes() == raw_bytes
 
 
 def test_semantic_selection_keeps_original_tokens():
