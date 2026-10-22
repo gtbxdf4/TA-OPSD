@@ -2,6 +2,8 @@
 
 Code for **Learning When to Continue and When to Stop: Termination-Aware OPSD**.
 
+[Manuscript PDF](paper/manuscript.pdf) · [LaTeX source and build instructions](paper/README.md)
+
 Termination-Aware OPSD (TA-OPSD) addresses **Termination Mismatch**, including
 **Premature Termination** and **Repetition-Driven Over-Generation**, with two
 auxiliary objectives:
