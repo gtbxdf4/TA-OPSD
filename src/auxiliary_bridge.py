@@ -10,7 +10,7 @@ from pathlib import Path
 import torch
 
 from independent_losses import local_unlikelihood, stop_kl
-from replay_v2 import detached_suffix_logits, exposure_ids, joint_backward_context
+from replay import detached_suffix_logits, exposure_ids, joint_backward_context
 
 
 def with_auxiliary(original, config):
@@ -53,13 +53,13 @@ def with_auxiliary(original, config):
 
         def _aux_emit(self, kind, values):
             rank = int(os.getenv("RANK", "0"))
-            path = Path(os.environ["V17_EVIDENCE"]) / f"aux-{kind}-rank{rank}.jsonl"
+            path = Path(os.environ["TA_OPSD_EVIDENCE"]) / f"aux-{kind}-rank{rank}.jsonl"
             values = dict(
                 values,
                 global_step=self.state.global_step,
                 rank=rank,
                 time=time.time(),
-                experiment_uuid=os.environ["V17_UUID"],
+                experiment_uuid=os.environ["TA_OPSD_RUN_ID"],
             )
             with path.open("a") as stream:
                 stream.write(json.dumps(values, ensure_ascii=False) + "\n")

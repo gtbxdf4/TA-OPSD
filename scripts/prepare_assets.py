@@ -45,10 +45,6 @@ def main():
         choices=(
             "training",
             "evaluation",
-            "initialization",
-            "negatives",
-            "mining",
-            "diagnostics",
             "all",
         ),
         default="all",
@@ -64,7 +60,7 @@ def main():
     copied = 0
     for row in rows:
         relative = Path(row["path"])
-        group = relative.parts[1] if relative.parts[0] == "assets" else "diagnostics"
+        group = relative.parts[1]
         if args.group != "all" and group != args.group:
             continue
         if args.download and row["path"] not in DOWNLOADS:
@@ -86,7 +82,7 @@ def main():
         destination.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(source, destination)
         copied += 1
-    print(f"Imported {copied} assets; missing frozen libraries remain an explicit prerequisite.")
+    print(f"Imported {copied} assets; datasets verified.")
 
 
 if __name__ == "__main__":

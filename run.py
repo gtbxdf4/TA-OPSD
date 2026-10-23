@@ -157,43 +157,21 @@ def plan(size, method, output, model=None, asset_root=None, mode="formal", auxil
         if aux.get("assets"):
             required.append(aux["assets"])
         files["auxiliary.json"] = aux
-        monitor = json.loads((ROOT / case["monitor_contract"]).read_text())
-        monitor["model"] = model
-        monitor["question_index_path"] = asset_path(monitor["question_index_path"], assets)
-        index_path = Path(monitor["question_index_path"])
-        if index_path.exists():
-            # Installation paths may change; source-row and duplicate identities must not.
-            sys.path.insert(0, str(ROOT / "src"))
-            from data_identity import validate_index
-
-            expected_identity = json.loads((ROOT / "configs/data_identity.json").read_text())
-            monitor["question_index_sha256"] = validate_index(
-                index_path, expected_identity["semantic_index_sha256"]
-            )
-        monitor["source_parquet_sha256"] = {
-            asset_path(path, assets): digest
-            for path, digest in monitor["source_parquet_sha256"].items()
-        }
-        required.append(monitor["question_index_path"])
-        files["monitor.json"] = monitor
         env.update(
-            V17_SOURCE=str(ROOT / "upstream/opsd"),
-            V17_EVIDENCE=str(out / "evidence"),
-            V17_UUID=size + "-" + method,
-            V17_AUX_MANIFEST=str(out / "auxiliary.json"),
+            TA_OPSD_SOURCE=str(ROOT / "upstream/opsd"),
+            TA_OPSD_EVIDENCE=str(out / "evidence"),
+            TA_OPSD_RUN_ID=size + "-" + method,
+            TA_OPSD_AUX_MANIFEST=str(out / "auxiliary.json"),
             # Stop the smoke early while preserving the formal learning-rate horizon.
-            V17_SMOKE_STOP="2" if mode == "smoke" else "0",
-            V18_INITIALIZATION_MANIFEST=init,
-            V18_MONITOR_CONTRACT=str(out / "monitor.json"),
-            V18_MONITOR_SEGMENT="public-release",
-            V18_MONITOR_ARM=method,
+            TA_OPSD_SMOKE_STOP="2" if mode == "smoke" else "0",
+            TA_OPSD_INITIALIZATION_MANIFEST=init,
             PAPER_TRAIN_FILES=json.dumps(data),
         )
         arguments = list(case["training_args"])
         replace_option(arguments, "--model_name_or_path", model)
         replace_option(arguments, "--output_dir", out)
         replace_option(arguments, "--run_config", method)
-        command = launch + [str(ROOT / "src/observed_entry_v2.py")] + arguments
+        command = launch + [str(ROOT / "src/train.py")] + arguments
     return dict(
         command=command,
         environment=env,

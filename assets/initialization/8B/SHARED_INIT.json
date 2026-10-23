@@ -4591,7 +4591,6 @@
     "lora_bias": false,
     "target_parameters": null
   },
-  "generator_sha256": "08993c1ac4f7df808db2973a9492dc57aa43973f29f7a0d8c759108ed5dd9c4c",
   "versions": {
     "torch": "2.8.0",
     "transformers": "4.57.1",

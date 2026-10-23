@@ -41,7 +41,7 @@ def main():
 
     helper_root = Path(__file__).resolve().parents[1] / "src"
     sys.path.insert(0, str(helper_root))
-    from shared_initialization_v18 import install_state, read_shared
+    from shared_initialization import install_state, read_shared
 
     set_seed(42)
     state, manifest = read_shared(os.environ["BASELINE_INIT_MANIFEST"])

@@ -116,7 +116,7 @@ def validate_runtime_initialization(actual, shared):
 def install_runtime():
     """Seed model construction and install a process-local TRL PEFT creation hook.
 
-    V18_INITIALIZATION_MANIFEST supplies the frozen adapter and V17_EVIDENCE the
+    TA_OPSD_INITIALIZATION_MANIFEST supplies the frozen adapter and TA_OPSD_EVIDENCE the
     receipts directory. Call before importing/building the upstream trainer.
     Loading must preserve CPU RNG; installing this hook twice is rejected.
     """
@@ -125,12 +125,12 @@ def install_runtime():
 
     from launch import atomic
 
-    path = os.environ["V18_INITIALIZATION_MANIFEST"]
+    path = os.environ["TA_OPSD_INITIALIZATION_MANIFEST"]
     # This function is invoked before the official trainer/model is imported/built.
     set_seed(42)
     state, manifest = read_shared(path)
     original = sft.get_peft_model
-    if getattr(original, "_v18_shared", False):
+    if getattr(original, "_shared", False):
         raise ValueError("duplicate shared-initialization hook")
 
     def shared_model(*args, **kwargs):
@@ -143,7 +143,7 @@ def install_runtime():
             raise ValueError("adapter loading changed RNG")
         rank = int(os.environ.get("RANK", "0"))
         atomic(
-            Path(os.environ["V17_EVIDENCE"]) / f"INIT_LOAD-rank{rank}-{time.time_ns()}.json",
+            Path(os.environ["TA_OPSD_EVIDENCE"]) / f"INIT_LOAD-rank{rank}-{time.time_ns()}.json",
             {
                 "PASS": True,
                 "rank": rank,
@@ -153,28 +153,24 @@ def install_runtime():
                 "file_sha256": manifest["file_sha256"],
                 "B_all_zero": True,
                 "loading_preserved_rng": True,
-                "resume": os.environ.get("V17_RESUME") or None,
+                "resume": os.environ.get("TA_OPSD_RESUME") or None,
             },
         )
         return model
 
-    shared_model._v18_shared = True
+    shared_model._shared = True
     sft.get_peft_model = shared_model
 
 
 def verify_before_update(model, global_step):
     """Called before the first loss/backward; resume is separately checkpoint-validated."""
-    import pickle
-    import random
 
-    import numpy as np
-    import torch
     from peft import get_peft_model_state_dict
 
     from launch import atomic
 
     rank = int(os.environ.get("RANK", "0"))
-    state, manifest = read_shared(os.environ["V18_INITIALIZATION_MANIFEST"])
+    state, manifest = read_shared(os.environ["TA_OPSD_INITIALIZATION_MANIFEST"])
     actual_state = get_peft_model_state_dict(model)
     actual = tensor_manifest(actual_state)
     expected = runtime_initialization_manifest(state)
@@ -183,7 +179,7 @@ def verify_before_update(model, global_step):
             actual = validate_runtime_initialization(actual_state, state)
         except ValueError:
             atomic(
-                Path(os.environ["V17_EVIDENCE"])
+                Path(os.environ["TA_OPSD_EVIDENCE"])
                 / f"PRE_UPDATE_FAILED-rank{rank}-{time.time_ns()}.json",
                 {
                     "PASS": False,
@@ -194,18 +190,10 @@ def verify_before_update(model, global_step):
                 },
             )
             raise
-    if global_step > 0 and not os.environ.get("V17_RESUME"):
+    if global_step > 0 and not os.environ.get("TA_OPSD_RESUME"):
         raise ValueError("nonzero first update without an explicit same-arm resume")
-    rng = {
-        "python": hashlib.sha256(pickle.dumps(random.getstate())).hexdigest(),
-        "numpy": hashlib.sha256(pickle.dumps(np.random.get_state())).hexdigest(),
-        "torch_cpu": hashlib.sha256(torch.get_rng_state().numpy().tobytes()).hexdigest(),
-        "torch_cuda": hashlib.sha256(
-            torch.cuda.get_rng_state().cpu().numpy().tobytes()
-        ).hexdigest(),
-    }
     atomic(
-        Path(os.environ["V17_EVIDENCE"])
+        Path(os.environ["TA_OPSD_EVIDENCE"])
         / f"PRE_UPDATE-rank{rank}-step{global_step}-{time.time_ns()}.json",
         {
             "PASS": True,
@@ -215,8 +203,7 @@ def verify_before_update(model, global_step):
             "expected_tensor_sha256": manifest["tensor_manifest"]["tensor_sha256"],
             "expected_runtime_tensor_sha256": expected["tensor_sha256"],
             "runtime_conversion": "DeepSpeed frozen mixed_precision=bf16; exact tensor comparison after cast",
-            "rng_sha256": rng,
             "initialization_verified": global_step == 0,
-            "resume": os.environ.get("V17_RESUME") or None,
+            "resume": os.environ.get("TA_OPSD_RESUME") or None,
         },
     )

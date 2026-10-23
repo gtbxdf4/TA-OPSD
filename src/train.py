@@ -8,11 +8,11 @@ import sys
 import time
 
 code = Path(__file__).parent
-from shared_initialization_v18 import install_runtime, verify_before_update
+from shared_initialization import install_runtime, verify_before_update
 
 install_runtime()
-aux = os.environ.get("V17_AUX_MANIFEST")
-sys.path.insert(0, os.environ["V17_SOURCE"])
+aux = os.environ.get("TA_OPSD_AUX_MANIFEST")
+sys.path.insert(0, os.environ["TA_OPSD_SOURCE"])
 import opsd_trainer
 from launch import atomic
 
@@ -33,7 +33,7 @@ class CapturedTrainer(Original):
             stop["engine_generation_config_fields"] = processor.generation_config_fields
             stop["engine_primary_eos"] = processor.input_preprocessor.get_eos_token_id()
         atomic(
-            Path(os.environ["V17_EVIDENCE"]) / f"v2-runtime-rank{rank}.json",
+            Path(os.environ["TA_OPSD_EVIDENCE"]) / f"runtime-rank{rank}.json",
             {
                 "jsd_token_clip": self.jsd_token_clip,
                 "beta": self.beta,
@@ -48,7 +48,7 @@ class CapturedTrainer(Original):
             from peft import get_peft_model_state_dict
             from safetensors.torch import save_file
 
-            path = Path(os.environ["V17_EVIDENCE"]) / "initial-lora.safetensors"
+            path = Path(os.environ["TA_OPSD_EVIDENCE"]) / "initial-lora.safetensors"
             if not path.exists():
                 save_file(
                     {
@@ -60,16 +60,17 @@ class CapturedTrainer(Original):
 
     def compute_loss(self, model, inputs, *args, **kwargs):
         """Attest the first pre-update adapter and capture two step-zero RNG/input packets."""
-        if not getattr(self, "_v18_pre_update_verified", False):
+        if not getattr(self, "_pre_update_verified", False):
             verify_before_update(self.model, self.state.global_step)
-            self._v18_pre_update_verified = True
-        count = getattr(self, "_v17_capture_count", 0)
+            self._pre_update_verified = True
+        count = getattr(self, "_capture_count", 0)
         if self.state.global_step == 0 and count < 2:
             import torch
 
             rank = int(os.getenv("RANK", "0"))
             path = (
-                Path(os.environ["V17_EVIDENCE"]) / f"fixed-step0-inputs-rank{rank}-micro{count}.pt"
+                Path(os.environ["TA_OPSD_EVIDENCE"])
+                / f"fixed-step0-inputs-rank{rank}-micro{count}.pt"
             )
             if not path.exists():
                 values = {
@@ -80,16 +81,13 @@ class CapturedTrainer(Original):
                 temporary = path.with_suffix(".tmp")
                 torch.save(values, temporary)
                 temporary.replace(path)
-            self._v17_capture_count = count + 1
+            self._capture_count = count + 1
         return super().compute_loss(model, inputs, *args, **kwargs)
 
 
 opsd_trainer.OPSDTrainer = CapturedTrainer
-from monitor_runtime_v18 import with_raw_monitor
-
-opsd_trainer.OPSDTrainer = with_raw_monitor(opsd_trainer.OPSDTrainer)
 if aux:
-    from auxiliary_bridge_v2 import with_auxiliary
+    from auxiliary_bridge import with_auxiliary
 
     opsd_trainer.OPSDTrainer = with_auxiliary(
         opsd_trainer.OPSDTrainer, json.loads(Path(aux).read_text())

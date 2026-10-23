@@ -70,7 +70,7 @@ def calibrate(smoke, negatives, model_path, method, output):
     if any(not path.is_file() for path in packets):
         raise ValueError("one complete step-0 batch with RNG packets is required")
     runtime = [
-        json.loads((evidence / f"v2-runtime-rank{rank}.json").read_text()) for rank in range(world)
+        json.loads((evidence / f"runtime-rank{rank}.json").read_text()) for rank in range(world)
     ]
     expected_clip = float(
         case["training_args"][case["training_args"].index("--jsd_token_clip") + 1]
@@ -97,8 +97,8 @@ def calibrate(smoke, negatives, model_path, method, output):
 
     sys.path.insert(0, str(ROOT / "src"))
     from independent_losses import local_unlikelihood, stop_kl
-    from replay_v2 import detached_suffix_logits
-    from shared_initialization_v18 import read_shared, validate_runtime_initialization
+    from replay import detached_suffix_logits
+    from shared_initialization import read_shared, validate_runtime_initialization
 
     values = [torch.load(path, map_location="cpu", weights_only=False) for path in packets]
     # All ranks and both microbatches reconstruct one global initialization batch.
@@ -249,8 +249,6 @@ def calibrate(smoke, negatives, model_path, method, output):
         "global_replays": 16,
         "calibration_mode": "shared initialization, negative-only",
         "reference_loss": "OPSD" if method == "OPSD_UL" else "OPSD+SC",
-        "source_smoke_sha256": sha(smoke / "LAUNCH.json"),
-        "initial_lora_sha256": sha(initial),
         "measurements": {
             "base_logit_l2": math.sqrt(trainer.base_sq),
             "stop_logit_l2": math.sqrt(trainer.stop_sq),

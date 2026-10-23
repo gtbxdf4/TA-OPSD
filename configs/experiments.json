@@ -91,7 +91,6 @@
     "original_model": "models/Qwen3-1.7B",
     "paper_table_step": 75,
     "auxiliary_reduction": "response mean then mean across present responses",
-    "monitor_contract": "configs/monitor-1.7B-OPSD.json",
     "data_files": [
       "assets/training/train-00000-of-00002.parquet",
       "assets/training/train-00001-of-00002.parquet"
@@ -191,7 +190,6 @@
     "original_model": "models/Qwen3-1.7B",
     "paper_table_step": 75,
     "auxiliary_reduction": "response mean then mean across present responses",
-    "monitor_contract": "configs/monitor-1.7B-OPSD_SC.json",
     "data_files": [
       "assets/training/train-00000-of-00002.parquet",
       "assets/training/train-00001-of-00002.parquet"
@@ -295,7 +293,6 @@
     "original_model": "models/Qwen3-1.7B",
     "paper_table_step": 75,
     "auxiliary_reduction": "response mean then mean across present responses",
-    "monitor_contract": "configs/monitor-1.7B-OPSD_UL.json",
     "data_files": [
       "assets/training/train-00000-of-00002.parquet",
       "assets/training/train-00001-of-00002.parquet"
@@ -399,7 +396,6 @@
     "original_model": "models/Qwen3-1.7B",
     "paper_table_step": 75,
     "auxiliary_reduction": "response mean then mean across present responses",
-    "monitor_contract": "configs/monitor-1.7B-TA_OPSD.json",
     "data_files": [
       "assets/training/train-00000-of-00002.parquet",
       "assets/training/train-00001-of-00002.parquet"
@@ -503,7 +499,6 @@
     "original_model": "models/Qwen3-4B",
     "paper_table_step": 50,
     "auxiliary_reduction": "response mean then mean across present responses",
-    "monitor_contract": "configs/monitor-4B-OPSD.json",
     "data_files": [
       "assets/training/train-00000-of-00002.parquet",
       "assets/training/train-00001-of-00002.parquet"
@@ -612,7 +607,6 @@
     "original_model": "models/Qwen3-4B",
     "paper_table_step": 50,
     "auxiliary_reduction": "response mean then mean across present responses",
-    "monitor_contract": "configs/monitor-4B-TA_OPSD.json",
     "data_files": [
       "assets/training/train-00000-of-00002.parquet",
       "assets/training/train-00001-of-00002.parquet"
@@ -716,7 +710,6 @@
     "original_model": "models/Qwen3-8B",
     "paper_table_step": 100,
     "auxiliary_reduction": "response mean then mean across present responses",
-    "monitor_contract": "configs/monitor-8B-OPSD.json",
     "data_files": [
       "assets/training/train-00000-of-00002.parquet",
       "assets/training/train-00001-of-00002.parquet"
@@ -825,7 +818,6 @@
     "original_model": "models/Qwen3-8B",
     "paper_table_step": 100,
     "auxiliary_reduction": "response mean then mean across present responses",
-    "monitor_contract": "configs/monitor-8B-TA_OPSD.json",
     "data_files": [
       "assets/training/train-00000-of-00002.parquet",
       "assets/training/train-00001-of-00002.parquet"
@@ -930,7 +922,6 @@
     "original_model": "models/Qwen3-1.7B",
     "paper_table_step": 75,
     "auxiliary_reduction": "response mean then mean across present responses",
-    "monitor_contract": "configs/monitor-1.7B-TA_OPSD.json",
     "data_files": [
       "assets/training/train-00000-of-00002.parquet",
       "assets/training/train-00001-of-00002.parquet"
@@ -1035,7 +1026,6 @@
     "original_model": "models/Qwen3-1.7B",
     "paper_table_step": 75,
     "auxiliary_reduction": "response mean then mean across present responses",
-    "monitor_contract": "configs/monitor-1.7B-TA_OPSD.json",
     "data_files": [
       "assets/training/train-00000-of-00002.parquet",
       "assets/training/train-00001-of-00002.parquet"

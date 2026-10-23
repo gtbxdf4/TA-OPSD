@@ -1,9 +1,6 @@
-"""Build paper plotting inputs from new training and evaluation outputs."""
+"""Collect accuracy and generation metrics from fresh evaluation outputs."""
 
 import argparse
-import csv
-import gzip
-import hashlib
 import json
 import sys
 from collections import defaultdict
@@ -32,12 +29,11 @@ def write(path, value):
     Path(path).write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n")
 
 
-def evaluation(folder, dataset, teacher=None):
+def evaluation(folder, dataset):
     """Join a complete Avg@12 raw-response grid to exact matching author verdict texts.
 
     Return response-weighted accuracy/length/capping metrics and the joined rows.
-    Optional teacher flags count teacher-solvable short errors over all answers,
-    not just the subset of short errors. Missing/duplicate responses are rejected.
+    Missing or duplicate responses and mismatched scorer texts are rejected.
     """
     author = read(folder / "author_result.json")
     done = read(folder / "DONE.json")
@@ -70,90 +66,8 @@ def evaluation(folder, dataset, teacher=None):
         acc=100 * correct / len(raw),
         length=sum(lengths) / len(raw),
         cap=100 * sum(r["finish_reason"] == "length" for r in raw) / len(raw),
-        raw_sha256=hashlib.sha256(path.read_bytes()).hexdigest(),
     )
-    if teacher is not None:
-        from diagnostics.classification import short_error
-
-        short = [r for r in raw if short_error(r)]
-        eligible = sum(teacher[r["problem_index"]] for r in short)
-        result["short_errors"] = dict(
-            short=len(short),
-            eligible=eligible,
-            total=len(raw),
-            pct=100 * eligible / len(raw),
-            raw_sha256=result["raw_sha256"],
-        )
     return result, raw
-
-
-def training_rows(folder, method):
-    """Aggregate valid-token means from every DP rank and both GA microbatches.
-
-    Require 100 steps with 32 responses each and reject missing/duplicate shards.
-    Metrics use only loss_valid_mask positions; this plotting reduction is distinct
-    from SC/UL response-balanced losses. eos_gap_mean averages the two individual
-    stop-token log-probability gaps, not the gap of aggregate STOP probability.
-    """
-    steps = defaultdict(list)
-    layouts = defaultdict(set)
-    worlds = {}
-    seen = set()
-    for path in sorted((folder / "evidence/raw-monitor").rglob("*.json.gz")):
-        with gzip.open(path, "rt") as stream:
-            packet = json.load(stream)
-        key = (packet["optimizer_step"], packet["rank"], packet["microbatch_index"])
-        if key in seen:
-            raise ValueError("duplicate training-monitor microbatch")
-        seen.add(key)
-        world = packet["world_size"]
-        if world not in (4, 8) or worlds.get(key[0], world) != world:
-            raise ValueError("training data-parallel layout changed")
-        worlds[key[0]] = world
-        layouts[key[0]].add((key[1], key[2]))
-        steps[key[0]].extend(packet["records"])
-    if set(steps) != set(range(1, 101)):
-        raise ValueError("100 completed monitored optimizer updates required")
-    output = []
-    for step, records in sorted(steps.items()):
-        if layouts[step] != {(rank, micro) for rank in range(worlds[step]) for micro in range(2)}:
-            raise ValueError("incomplete distributed training-monitor update")
-        if len(records) != 32:
-            raise ValueError("training update must contain 32 student responses")
-        sums = defaultdict(float)
-        count = 0
-        for record in records:
-            metrics = record["metrics"]
-            for position, valid in enumerate(record["loss_valid_mask"]):
-                # Signal plots use valid-token means; SC/UL loss reductions stay separate.
-                if not valid:
-                    continue
-                count += 1
-                sums["topk_overlap_fraction"] += metrics["topk_overlap_fraction"][position]
-                for token in (151643, 151645):
-                    sums[f"student_eos_logp_{token}"] += metrics["student_eos_logp"][str(token)][
-                        position
-                    ]
-                    sums[f"eos_logp_gap_teacher_minus_student_{token}"] += metrics[
-                        "eos_logp_gap_teacher_minus_student"
-                    ][str(token)][position]
-        if not count:
-            raise ValueError("training update has no valid response positions")
-        means = {key: value / count for key, value in sums.items()}
-        output.append(
-            dict(
-                Method=method,
-                step=step,
-                tokens=count,
-                responses=32,
-                **means,
-                eos_gap_mean=sum(
-                    means[f"eos_logp_gap_teacher_minus_student_{t}"] for t in (151643, 151645)
-                )
-                / 2,
-            )
-        )
-    return output
 
 
 def main():
@@ -165,20 +79,14 @@ def main():
     base = args.manifest.resolve().parent
     out = args.output_dir.resolve()
     out.mkdir(parents=True, exist_ok=False)
-    teacher_rows = read(base / spec["teacher_aime24"])
-    teacher = {r["problem_index"]: bool(r["correct"]) for r in teacher_rows}
-    if len(teacher_rows) != 30 or set(teacher) != set(range(30)):
-        raise ValueError(
-            "one independent full-reference teacher answer per AIME24 question required"
-        )
-    cells, curves, negatives, short = [], defaultdict(dict), {}, defaultdict(dict)
+    cells, curves, negatives = [], defaultdict(dict), {}
     cached = {}
     for entry in spec["evaluations"]:
         folder = (base / entry["path"]).resolve()
         dataset, method = entry["dataset"], entry["method"]
         if dataset not in DATASETS:
             raise ValueError("unknown paper benchmark")
-        metric, raw = evaluation(folder, dataset, teacher if dataset == "aime24" else None)
+        metric, raw = evaluation(folder, dataset)
         cached[str(folder)] = raw
         arm = METHOD_NAMES.get(method, method)
         size, step = entry["size"], str(entry["step"])
@@ -199,8 +107,6 @@ def main():
             arms = ("OPSD", "OPSD+SC", "OPSD+UL", "TA-OPSD") if method == "Base" else (arm,)
             for name in arms:
                 curves[step].setdefault(name, {})[dataset] = metric
-                if dataset == "aime24" and name in ("OPSD", "TA-OPSD"):
-                    short[step][name] = metric["short_errors"]
         if entry.get("negative_table"):
             label = entry["negative_table"]
             negatives.setdefault(label, {"datasets": {}})["datasets"][dataset] = dict(
@@ -209,7 +115,6 @@ def main():
                 accuracy=metric["acc"],
                 mean_length=metric["length"],
                 capping_rate=metric["cap"],
-                sha256=metric["raw_sha256"],
             )
     for value in negatives.values():
         if set(value["datasets"]) != set(DATASETS):
@@ -219,35 +124,11 @@ def main():
             for key in ("accuracy", "mean_length", "capping_rate")
         }
     write(out / "generation_curves_1p7b.json", dict(steps=curves))
-    write(out / "teacher_solvable_short_errors.json", dict(results=short))
     write(out / "table1_raw_audit.json", dict(cells=cells))
     write(
         out / "table3_negative_selection_step75.json",
         dict(comparison_checkpoint=75, comparison=negatives),
     )
-    by_size = defaultdict(list)
-    budgets = {}
-    for entry in spec["training"]:
-        folder = (base / entry["path"]).resolve()
-        rows = training_rows(folder, METHOD_NAMES[entry["method"]])
-        by_size[entry["size"]].extend(rows)
-        replay_tokens = 0
-        for path in (folder / "evidence").glob("aux-replay-rank*.jsonl"):
-            # Count only supervised suffix tokens; detached prefix caches are excluded.
-            for line in path.read_text().splitlines():
-                replay_tokens += sum(
-                    record.get("negative", {}).get("selected_tokens", 0)
-                    for record in json.loads(line)["records"]
-                )
-        budgets[entry["size"] + "/" + METHOD_NAMES.get(entry["method"], entry["method"])] = dict(
-            main_supervised_tokens=sum(row["tokens"] for row in rows),
-            negative_supervised_tokens=replay_tokens,
-        )
-    for size, rows in by_size.items():
-        with (out / f"training_{size}.csv").open("w", newline="") as stream:
-            writer = csv.DictWriter(stream, fieldnames=list(rows[0]))
-            writer.writeheader()
-            writer.writerows(rows)
     examples = defaultdict(list)
     for entry in spec.get("examples", []):
         folder = str((base / entry["path"]).resolve())
@@ -269,8 +150,7 @@ def main():
             )
         )
     write(out / "response_examples.json", dict(cases=examples))
-    write(out / "training_token_budget.json", budgets)
-    print(f"Collected {len(cells)} main-table cells and {len(spec['training'])} training traces")
+    print(f"Collected {len(cells)} main-table cells")
 
 
 if __name__ == "__main__":

@@ -17,5 +17,5 @@ mathematical sources and differences from native paper recipes.
 
 Models and datasets retain their upstream terms. They are external inputs,
 not Git-tracked payloads. Asset hashes establish experiment identity and do
-not grant redistribution permission. Aggregated numerical figure/table inputs
-are included; large training and evaluation inputs are acquired separately.
+not grant redistribution permission. Historical aggregate files are not included in this checkout; training and
+evaluation inputs are acquired separately.

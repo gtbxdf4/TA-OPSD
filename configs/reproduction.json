@@ -1,5 +1,4 @@
 {
-  "teacher_aime24": "../runs/1.7B/teacher-aime24/teacher_results.json",
   "evaluations": [
     {
       "size": "1.7B",
@@ -852,38 +851,6 @@
       "dataset": "amc23",
       "path": "../runs/1.7B/TA_OPSD_semantic_negatives/eval/step75/amc23",
       "negative_table": "TA-OPSD (LLM-assisted selection)"
-    }
-  ],
-  "training": [
-    {
-      "size": "1.7B",
-      "method": "OPSD",
-      "path": "../runs/1.7B/OPSD/train"
-    },
-    {
-      "size": "1.7B",
-      "method": "TA_OPSD",
-      "path": "../runs/1.7B/TA_OPSD/train"
-    },
-    {
-      "size": "4B",
-      "method": "OPSD",
-      "path": "../runs/4B/OPSD/train"
-    },
-    {
-      "size": "4B",
-      "method": "TA_OPSD",
-      "path": "../runs/4B/TA_OPSD/train"
-    },
-    {
-      "size": "8B",
-      "method": "OPSD",
-      "path": "../runs/8B/OPSD/train"
-    },
-    {
-      "size": "8B",
-      "method": "TA_OPSD",
-      "path": "../runs/8B/TA_OPSD/train"
     }
   ],
   "examples": []

@@ -1,8 +1,8 @@
 # TA-OPSD
 
-Code for **Learning When to Continue and When to Stop: Termination-Aware OPSD**. This repository provides the code for reproducing the experiments in the paper.
+Code for **Learning When to Continue and When to Stop: Termination-Aware OPSD**. This repository provides the training and evaluation code for the paper.
 
-[Manuscript PDF](paper/manuscript.pdf) · [LaTeX source and build instructions](paper/README.md)
+[Paper information](paper/README.md)
 
 Termination-Aware OPSD (TA-OPSD) addresses **Termination Mismatch**, including
 **Premature Termination** and **Repetition-Driven Over-Generation**, with two
@@ -16,8 +16,7 @@ loss = OPSD + lambda_SC * SC + lambda_UL * UL
 ```
 
 This repository contains the paper's Qwen3-1.7B/4B/8B recipes, matched baselines,
-component and negative-construction ablations, termination diagnostics, and
-figure/table code. Model weights, training datasets and raw experiment outputs
+component and negative-construction ablations, and evaluation figure/table code. Model weights, training datasets and raw experiment outputs
 are downloaded or generated separately.
 
 ## Experimental results
@@ -253,8 +252,9 @@ by the context remaining after the prompt. Each evaluation retains
 ## Other models, baselines and ablations
 
 Use `--size 4B` or `--size 8B` with that model's revision, initialization,
-exposure exclusions and freshly calibrated coefficients. See
-[docs/CONFIGURATION.md](docs/CONFIGURATION.md) for the complete recipes.
+exposure exclusions and freshly calibrated coefficients. `configs/experiments.json`
+records the model revisions, scientific arguments and auxiliary settings; run
+`run.py` without `--execute` to inspect the resolved recipe.
 
 | Recipe                         | 1.7B GPUs | 4B GPUs | 8B GPUs |
 | ------------------------------ | --------: | ------: | ------: |
@@ -274,38 +274,38 @@ A800 hardware; memory requirements also depend on context length and the runtime
   `--method TA_OPSD_trained_negatives`.
 - **Semantic negatives (Appendix E.2):** review the existing mechanical negatives
   offline and apply the keep/drop decisions with
-  `scripts/select_semantic_negatives.py`. Calibrate the retained library with
-  `--method TA_OPSD_semantic_negatives`. The review protocol is in
-  [docs/REPRODUCE.md](docs/REPRODUCE.md).
+  `scripts/select_semantic_negatives.py`. Review only the existing prefix/suffix:
+  keep a suffix when it repeats the same non-progressing or erroneous reasoning
+  step; drop repeated conditions, legitimate formula reuse and productive
+  transformations. Do not rewrite tokens. Save one JSONL decision per candidate
+  with its original `id`, boolean `keep` and brief `reason`. Record the reviewer
+  model/version and prompt with the run. Calibrate the retained library with
+  `--method TA_OPSD_semantic_negatives`.
 
-## Diagnostics and figures
+## Evaluation analysis
 
-[docs/REPRODUCE.md](docs/REPRODUCE.md) covers the 500-question termination
-diagnosis, fresh same-prefix continuation, independent benchmark teachers,
-and the complete evaluation matrix.
-
-To render the paper's released aggregate statistics on CPU:
+Collect new evaluation outputs and render their accuracy tables, response-length
+curves and capping curves:
 
 ```bash
 python -m pip install -r requirements-analysis.txt
-python analysis/reproduce.py --output-dir figures/paper
-```
-
-To compute the same plots and tables from **your new runs**:
-
-```bash
-python diagnostics/benchmark_teacher.py --model-path models/Qwen3-1.7B \
-  --output-dir runs/1.7B/teacher-aime24
 python analysis/collect.py --manifest configs/reproduction.json \
   --output-dir analysis/fresh-data
 python analysis/reproduce.py --data-dir analysis/fresh-data \
   --output-dir figures/fresh
 ```
 
-`configs/reproduction.json` lists all 111 evaluation cells and six monitored
-training traces needed for the tables and curves. Update its paths to point to your
-training and evaluation outputs before collecting results. See the
-[paper-to-code map](docs/PAPER_ANALYSIS_MAP.md).
+`configs/reproduction.json` lists the evaluation cells needed for the main,
+component and negative-construction comparisons. Update its paths to your run
+outputs before collection. Each benchmark contributes equally to macro averages;
+Avg@12 grades individual sampled responses, and capping uses the recorded length
+finish reason. See [the paper-to-code map](docs/PAPER_ANALYSIS_MAP.md).
+
+This checkout contains training, baseline, ablation and evaluation code. Training
+distribution monitoring, termination diagnosis, historical aggregate data, tests
+and manuscript build files are temporarily omitted. It therefore does not provide
+a self-contained replay of those omitted analyses. Published result tables above
+are retained for reference; plotting requires outputs from new runs.
 
 ## Repository layout
 
@@ -313,29 +313,12 @@ training and evaluation outputs before collecting results. See the
 run.py          training recipe launcher
 src/            SC/UL, replay, initialization, calibration, mining and evaluation
 baselines/      paper baseline adaptations
-configs/        model revisions, recipes and input identities
+configs/        model revisions, recipes and candidate identities
 scripts/        upstream/data preparation and offline semantic selection
-diagnostics/    termination diagnosis and privileged-teacher continuation
-analysis/       raw-result collection and figure/table generation
-tests/          loss, input, recipe and runtime regression checks
-docs/           reproduction details and paper-to-code mappings
+analysis/       fresh evaluation collection and figure/table generation
+docs/           asset preparation and paper-to-code mapping
+paper/README.md paper information
 ```
-
-## Development
-
-```bash
-python -m pip install -r requirements-dev.txt
-python scripts/fetch_upstream.py
-ruff check .
-ruff format --check .
-pytest
-```
-
-PyTorch and the pinned OPSD source are needed for the loss-interface tests.
-These checks cover source and CPU behavior; a fresh GPU training-and-evaluation
-replay is a separate validation step.
-See [development and documentation requirements](docs/DEVELOPMENT.md) for the
-full CI checks and the contracts required for scientific-code comments.
 
 ## Citation
 
@@ -347,7 +330,7 @@ full CI checks and the contracts required for scientific-code comments.
 }
 ```
 
-The paper link and author citation will be added with the public manuscript.
+The author citation can be updated when the public manuscript is available.
 Please also cite OPSD and the baseline papers when using those implementations.
 
 ## License

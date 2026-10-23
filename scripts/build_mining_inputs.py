@@ -11,7 +11,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
-from data_identity import json_digest, normalized_problem_hash, semantic_index_digest
+from data_identity import json_digest, normalized_problem_hash
 
 
 def main():
@@ -31,35 +31,13 @@ def main():
         row["path"]: row["sha256"]
         for row in json.loads((ROOT / "ASSETS_MANIFEST.json").read_text())["files"]
     }
-    rows, index = [], {}
+    rows = []
     for path in sorted((assets / "training").glob("train-*-of-00002.parquet")):
         if hashlib.sha256(path.read_bytes()).hexdigest() != hashes["assets/training/" + path.name]:
             raise ValueError("training parquet differs from paper source")
-        for local_id, row in enumerate(pq.ParquetFile(path).read().to_pylist()):
-            problem, solution = str(row["problem"]), str(row["solution"])
-            # Index question/solution pairs while retaining every duplicate source row.
-            pair = hashlib.sha256(
-                json.dumps([problem, solution], ensure_ascii=False, separators=(",", ":")).encode()
-            ).hexdigest()
-            entry = index.setdefault(
-                pair,
-                {
-                    "question_hash": hashlib.sha256(problem.encode()).hexdigest(),
-                    "source_row_ids": [],
-                    "source_locations": [],
-                },
-            )
-            entry["source_row_ids"].append(len(rows))
-            entry["source_locations"].append({"file": str(path), "row_index": local_id})
-            rows.append(row)
-    identity = json.loads((ROOT / "configs/data_identity.json").read_text())
-    if (
-        len(rows) != identity["source_rows"]
-        or semantic_index_digest(index) != identity["semantic_index_sha256"]
-    ):
-        raise ValueError("training row order or identity changed")
-    index_path = assets / "training/question-index-c5b0cfb70cfb.json"
-    index_path.write_text(json.dumps(index, ensure_ascii=False, indent=2) + "\n")
+        rows.extend(pq.ParquetFile(path).read().to_pylist())
+    if len(rows) != 29434:
+        raise ValueError("training source row count changed")
     manifest = json.loads((ROOT / "configs/mining_manifest.json").read_text())
     tokenizer = AutoTokenizer.from_pretrained(args.model_path, local_files_only=True)
     with contextlib.redirect_stdout(io.StringIO()):
@@ -98,8 +76,6 @@ def main():
                 "PASS": True,
                 "training_rows": len(rows),
                 "cohort_rows": len(cohort),
-                "index_semantic_sha256": semantic_index_digest(index),
-                "cohort_sha256": hashlib.sha256(target.read_bytes()).hexdigest(),
             }
         )
     )

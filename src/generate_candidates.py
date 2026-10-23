@@ -90,7 +90,6 @@ def main():
                 completed=done,
                 total=len(cohort),
                 time=time.time(),
-                contract_sha256=sha(cpath),
             ),
         )
         print("ALL DONE", done)
@@ -164,7 +163,6 @@ def main():
             completed=len(cohort),
             total=len(cohort),
             time=time.time(),
-            contract_sha256=sha(cpath),
         ),
     )
 

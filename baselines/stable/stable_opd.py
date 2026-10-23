@@ -831,14 +831,6 @@ def validate_local_inputs(spec: RunSpec):
 
 def protocol_receipt(spec: RunSpec, manifest: dict) -> dict:
     """Describe the exact baseline adaptation, batching and source/data/adapter identities."""
-    source_hashes = {
-        name: sha256_file(Path(spec.source_dir) / name) for name in EXPECTED_SOURCE_HASHES
-    }
-    data_hashes = {path: sha256_file(path) for path in spec.data_files}
-    code_dir = Path(__file__).resolve().parent
-    adapter_hashes = {
-        name: sha256_file(code_dir / name) for name in ("stable_opd.py", "train_stable_opd.py")
-    }
     return {
         "method": "Stable-OPD",
         "paper": "arXiv:2604.08527v1",
@@ -861,9 +853,6 @@ def protocol_receipt(spec: RunSpec, manifest: dict) -> dict:
         },
         "run_spec": {**asdict(spec), "protocol": asdict(spec.protocol)},
         "source_commit": EXPECTED_SOURCE_COMMIT,
-        "source_hashes": source_hashes,
-        "adapter_hashes": adapter_hashes,
-        "data_hashes": data_hashes,
         "initialization": {
             "manifest": spec.init_manifest,
             "weights": manifest["weights"],

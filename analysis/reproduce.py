@@ -1,8 +1,7 @@
-"""Render paper figures and tables from frozen aggregates or collected fresh results."""
+"""Render evaluation tables and generation curves from collected fresh results."""
 
 import argparse
 import csv
-import hashlib
 import json
 import math
 from collections import defaultdict
@@ -13,8 +12,6 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy.interpolate import CubicSpline
-from scipy.ndimage import gaussian_filter1d
 
 ROOT = Path(__file__).resolve().parent
 DATA = ROOT / "data"
@@ -55,23 +52,11 @@ def close(a, b):
     assert math.isclose(a, b, abs_tol=1e-8, rel_tol=1e-10), (a, b)
 
 
-def curve(ax, x, y, color, label, smooth=False):
-    """Draw observed points and optionally a smoothed visual trend.
-
-    Smoothing uses a Gaussian filter followed by a natural cubic spline. It is
-    display-only: exported table values and raw points are not recomputed from it.
-    """
+def curve(ax, x, y, color, label):
+    """Connect evaluated points without smoothing or additional observations."""
     x, y = np.asarray(x, dtype=float), np.asarray(y, dtype=float)
     assert np.isfinite(y).all()
-    if smooth:
-        ax.plot(x, y, color=color, alpha=0.32, lw=0.8, marker="o", ms=2.3)
-        trend = gaussian_filter1d(y, sigma=2.5, mode="reflect", truncate=4.0)
-        dense = np.linspace(x[0], x[-1], 600)
-        ax.plot(
-            dense, CubicSpline(x, trend, bc_type="natural")(dense), color=color, lw=1.8, label=label
-        )
-    else:
-        ax.plot(x, y, color=color, lw=1.7, marker="o", ms=4, label=label)
+    ax.plot(x, y, color=color, lw=1.7, marker="o", ms=4, label=label)
     ax.spines[["top", "right"]].set_visible(False)
     ax.grid(axis="y", alpha=0.2)
     ax.set_xlabel("Training step")
@@ -81,25 +66,6 @@ def save(fig, out, stem):
     fig.savefig(out / (stem + ".pdf"), bbox_inches="tight")
     fig.savefig(out / (stem + ".png"), dpi=180, bbox_inches="tight")
     plt.close(fig)
-
-
-def training():
-    """Load both methods' frozen 100-step training curves, requiring 32 responses per step."""
-    result = {}
-    for size in ("1.7B", "4B", "8B"):
-        arms = {"OPSD": [], "TA-OPSD": []}
-        with (DATA / f"training_{size}.csv").open() as f:
-            for row in csv.DictReader(f):
-                if row["Method"] in arms:
-                    arms[row["Method"]].append(
-                        {k: float(v) for k, v in row.items() if k != "Method"}
-                    )
-        for rows in arms.values():
-            rows.sort(key=lambda r: r["step"])
-            assert [int(r["step"]) for r in rows] == list(range(1, 101))
-            assert all(int(r["responses"]) == 32 for r in rows)
-        result[size] = arms
-    return result
 
 
 def tables(out, generations):
@@ -170,7 +136,6 @@ def tables(out, generations):
             close(value["datasets"][d]["accuracy"], curve_row["acc"])
             close(value["datasets"][d]["mean_length"], curve_row["length"])
             close(value["datasets"][d]["capping_rate"], curve_row["cap"])
-            assert value["datasets"][d]["sha256"] == curve_row["raw_sha256"]
     sections = []
     for title, rows in (
         ("Table 1: accuracy (%)", table1),
@@ -197,74 +162,23 @@ def tables(out, generations):
     return {"table1_rows": len(table1), "table2_rows": len(table2), "table3_rows": len(table3)}
 
 
-def figures(out, generations, train):
-    rows = train["1.7B"]["OPSD"]
-    steps = [r["step"] for r in rows]
-    student = np.array([r["student_eos_logp_151645"] for r in rows])
-    teacher = student + np.array([r["eos_logp_gap_teacher_minus_student_151645"] for r in rows])
-    fig, ax = plt.subplots(figsize=(4.7, 4.1), constrained_layout=True)
-    curve(ax, steps, student, "#007C9E", "Student", True)
-    curve(ax, steps, teacher, "#CB7B00", "Privileged teacher", True)
-    ax.set_ylabel("Mean log p(<|im_end|>)")
-    ax.legend(frameon=False)
-    save(fig, out, "figure2_eos_teacher_student")
-    short = load("teacher_solvable_short_errors.json")["results"]
-    fig, axes = plt.subplots(1, 3, figsize=(11.5, 3.0), constrained_layout=True)
+def figures(out, generations):
+    fig, axes = plt.subplots(1, 2, figsize=(8, 3), constrained_layout=True)
     for arm in ("OPSD", "TA-OPSD"):
-        short_values = []
-        for s in STEPS:
-            r = short[str(s)][arm]
-            close(r["pct"], 100 * r["eligible"] / r["total"])
-            assert r["raw_sha256"] == generations["steps"][str(s)][arm]["aime24"]["raw_sha256"]
-            short_values.append(r["pct"])
-        curve(axes[0], STEPS, short_values, COLORS[arm], arm)
-        curve(
-            axes[1],
-            STEPS,
-            [macro(generations["steps"][str(s)][arm], "length") for s in STEPS],
-            COLORS[arm],
-            arm,
-        )
-        curve(
-            axes[2],
-            STEPS,
-            [macro(generations["steps"][str(s)][arm], "cap") for s in STEPS],
-            COLORS[arm],
-            arm,
-        )
-    for ax, label in zip(
-        axes,
-        (
-            "Teacher-solvable short errors (%)",
-            "Mean response length (tokens)",
-            "Mean capping rate (%)",
-        ),
-    ):
-        ax.set_ylabel(label)
-        ax.set_xticks(STEPS)
-    axes[0].legend(frameon=False)
-    save(fig, out, "figure3_generation_outcomes")
-    fig, axes = plt.subplots(2, 3, figsize=(11.5, 5.6), constrained_layout=True)
-    for col, size in enumerate(("1.7B", "4B", "8B")):
-        for arm in ("OPSD", "TA-OPSD"):
-            rows = train[size][arm]
-            x = [r["step"] for r in rows]
+        for ax, field in zip(axes, ("length", "cap")):
             curve(
-                axes[0, col],
-                x,
-                [100 * r["topk_overlap_fraction"] for r in rows],
+                ax,
+                STEPS,
+                [macro(generations["steps"][str(s)][arm], field) for s in STEPS],
                 COLORS[arm],
                 arm,
-                True,
             )
-            curve(axes[1, col], x, [r["eos_gap_mean"] for r in rows], COLORS[arm], arm, True)
-        axes[0, col].set_title("Qwen3-" + size)
-        axes[0, col].set_ylim(25, 100)
-        axes[1, col].set_ylim(0, 25)
-    axes[0, 0].set_ylabel("Top-100 overlap (%)")
-    axes[1, 0].set_ylabel("Teacher − student EOS logp (nats)")
-    axes[0, 0].legend(frameon=False)
-    save(fig, out, "figure4_training_signals")
+    axes[0].set_ylabel("Mean response length (tokens)")
+    axes[1].set_ylabel("Mean capping rate (%)")
+    for ax in axes:
+        ax.set_xticks(STEPS)
+    axes[0].legend(frameon=False)
+    save(fig, out, "generation_outcomes")
     fig, ax = plt.subplots(figsize=(5.1, 3.3), constrained_layout=True)
     cap_rows = []
     for arm in ("OPSD", "OPSD+SC", "OPSD+UL", "TA-OPSD"):
@@ -284,7 +198,7 @@ def main():
     global DATA
     p = argparse.ArgumentParser()
     p.add_argument("--output-dir", type=Path, default=ROOT / "output")
-    p.add_argument("--data-dir", type=Path, default=DATA)
+    p.add_argument("--data-dir", type=Path, required=True)
     args = p.parse_args()
     DATA = args.data_dir.resolve()
     out = args.output_dir.resolve()
@@ -295,9 +209,8 @@ def main():
             for d in DATASETS:
                 close(arm[d]["acc"], 100 * arm[d]["correct"] / arm[d]["n"])
                 assert arm[d]["n"] == (480 if d == "amc23" else 360)
-    train = training()
     counts = tables(out, data)
-    figures(out, data, train)
+    figures(out, data)
     examples = load("response_examples.json")
     case_rows = [
         {
@@ -325,25 +238,17 @@ def main():
         "validation": "CPU aggregate consistency and rendering; training/inference are separate",
         **counts,
         "response_examples": len(case_rows),
-        "gaussian_sigma_steps": 2.5,
-        "figure3_endpoint": 100,
+        "generation_endpoint": 100,
         "table3_checkpoint": 75,
-        "figure3_step100_macro": {
+        "generation_step100_macro": {
             a: {k: macro(data["steps"]["100"][a], k) for k in ("acc", "length", "cap")}
             for a in ("OPSD", "TA-OPSD")
-        },
-        "source_sha256": {
-            p.name: hashlib.sha256(p.read_bytes()).hexdigest()
-            for p in DATA.iterdir()
-            if p.is_file()
         },
     }
     (out / "REPRODUCTION_RESULT.json").write_text(
         json.dumps(summary, ensure_ascii=False, indent=2) + "\n"
     )
-    print(
-        json.dumps({k: v for k, v in summary.items() if k != "source_sha256"}, ensure_ascii=False)
-    )
+    print(json.dumps(summary, ensure_ascii=False))
 
 
 if __name__ == "__main__":

@@ -469,7 +469,7 @@ class MatchedRLCSDTrainer(GRPOTrainer):
 def install_shared_initialization(spec: dict[str, Any], output: Path):
     """Hook GRPO PEFT construction to load and attest the common zero-B adapter."""
     sys.path.insert(0, spec["helper_dir"])
-    from shared_initialization_v18 import install_state, read_shared
+    from shared_initialization import install_state, read_shared
 
     state, manifest = read_shared(spec["init_manifest"])
     original = grpo_module.get_peft_model

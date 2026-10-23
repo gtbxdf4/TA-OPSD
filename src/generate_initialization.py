@@ -9,7 +9,7 @@ from pathlib import Path
 
 os.environ["CUDA_VISIBLE_DEVICES"] = ""
 from launch import atomic
-from shared_initialization_v18 import tensor_manifest
+from shared_initialization import tensor_manifest
 
 
 def main():
@@ -24,7 +24,7 @@ def main():
     manifest_path = root / "SHARED_INIT.json"
     expected = json.loads(manifest_path.read_text()) if manifest_path.exists() else None
     if (root / "initial-lora.safetensors").exists() and manifest_path.exists():
-        from shared_initialization_v18 import read_shared
+        from shared_initialization import read_shared
 
         read_shared(manifest_path)
         print(manifest_path)
@@ -84,7 +84,6 @@ def main():
             "tensor_manifest": tensor,
             "model_path": common["model_path"],
             "peft_config": cfg,
-            "generator_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
             "versions": {
                 n: importlib.metadata.version(n) for n in ("torch", "transformers", "trl", "peft")
             },
