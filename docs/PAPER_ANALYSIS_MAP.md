@@ -11,18 +11,23 @@
 | Main comparisons, Table 1 | `run.py`, `baselines/`, `src/evaluate.py`, `analysis/collect.py` |
 | Components, Table 2 and Figure 5 | OPSD/SC/UL/TA-OPSD recipes and `analysis/reproduce.py` |
 | Negative construction, Table 3 | trained-donor or offline semantic selection, fresh calibration and evaluation |
+| Revised §3: relative short errors and FREE/ZERO at the original STOP | `configs/eos_intervention.json`, `diagnostics/eos_intervention.py`, `diagnostics/first_decision_eos.py`, `analysis/collect_eos_intervention.py` |
+| Revised §5.2/§5.3: fixed step-75 length and capping comparison | `generation_step75_comparison.csv` and `generation_step75_macro` from `analysis/reproduce.py` |
 | Generation length/capping | `src/evaluate.py`, `analysis/collect.py`, `analysis/reproduce.py` |
 | Selected response examples | manifest `examples` entries and `analysis/collect.py` |
 
-Training-distribution monitoring, the 500-question termination diagnosis,
-teacher-solvable short-error analysis and historical aggregate files are
-currently omitted. Figures 2 and 4 and the diagnostic part of Figure 3 cannot be
+Training-distribution monitoring, the original privileged-teacher continuation,
+Figure 3(a) teacher-solvable short-error analysis and historical aggregate files
+are currently omitted. Figures 2 and 4 and the diagnostic part of Figure 3 cannot be
 reproduced from this checkout alone. No manuscript build files or test suite are
 included in this version.
 
 Accuracy, length and capping use equal-weight means of AIME24, AIME25 and AMC23.
 Avg@12 averages individual response verdicts. Capping means the recorded
 `finish_reason == "length"`, not a mechanical repetition classification.
+The relative short-error diagnostic is separate from Figure 3(a): it selects
+by comparison with Base and intervenes on the original student.
+
 Curves connect evaluated points. Use fresh aggregates from `analysis/collect.py`;
 no default frozen plotting data are included.
 

@@ -79,13 +79,16 @@ Comparison of negative construction strategies on Qwen3-1.7B:
 
 ### Termination behavior
 
-Qwen3-1.7B generation behavior reported in the paper:
+Qwen3-1.7B generation behavior at the common comparison point in the revised paper:
 
-| Metric                                  |           OPSD |      TA-OPSD |
-| --------------------------------------- | -------------: | -----------: |
-| Teacher-solvable short errors on AIME24 | 42/360 (11.7%) | 6/360 (1.7%) |
-| Mean response length                    |          5,539 |        5,249 |
-| Mean capping rate                       |           8.89 |         4.31 |
+| Metric | OPSD | TA-OPSD |
+|---|---:|---:|
+| Teacher-solvable short errors on AIME24 | 46/360 (12.78%) | 11/360 (3.06%) |
+| Mean response length (tokens) | 5,218.87 | 5,197.91 |
+| Mean capping rate (%) | 7.55 | 4.77 |
+
+At the same comparison point, capping rates for OPSD, OPSD+SC, OPSD+UL and TA-OPSD
+are 7.55%, 6.46%, 2.92% and 4.77%, respectively.
 
 ### Teacher–student alignment
 
@@ -282,6 +285,58 @@ A800 hardware; memory requirements also depend on context length and the runtime
   model/version and prompt with the run. Calibrate the retained library with
   `--method TA_OPSD_semantic_negatives`.
 
+## Reproduce the original-stop EOS intervention (§3)
+
+This diagnostic uses Qwen3-1.7B without thinking. From the fixed 500-question
+cohort, first select questions on which Base is correct and stops naturally,
+while OPSD is incorrect and shorter. OPSD+SC and TA-OPSD answer these questions
+from scratch. For the continuation experiment, only cases with an observed final
+OPSD STOP are eligible; remove that single token and preserve the prompt and all
+preceding response tokens. The original run found 291 eligible Base answers,
+42 relative short errors, and all 42 had an observed final OPSD STOP. OPSD+SC
+and TA-OPSD each answered 32 of those questions correctly.
+
+Run from the repository root after fetching the pinned upstream code and
+preparing the model and training parquet shards. Supply local step-100
+adapters for the diagnostic OPSD, OPSD+SC and TA-OPSD arms. Adapters and original
+generations are not bundled; newly trained adapters and new generations need
+not reproduce the historical counts exactly. Use a fresh output directory
+and an allocated CUDA GPU (one visible GPU per generation command).
+
+```bash
+RUN_DIR=runs/eos-intervention
+MODEL=models/Qwen3-1.7B
+OPSD_ADAPTER=/path/to/opsd/checkpoint-100
+SC_ADAPTER=/path/to/opsd-sc/checkpoint-100
+TA_ADAPTER=/path/to/ta-opsd/checkpoint-100
+
+python -m diagnostics.eos_intervention prepare --model-path "$MODEL" \
+  --output-dir "$RUN_DIR"
+python -m diagnostics.eos_intervention generate --run-dir "$RUN_DIR" --arm base
+python -m diagnostics.eos_intervention generate --run-dir "$RUN_DIR" --arm opsd \
+  --adapter "$OPSD_ADAPTER"
+python -m diagnostics.eos_intervention generate --run-dir "$RUN_DIR" --arm sc \
+  --adapter "$SC_ADAPTER"
+python -m diagnostics.eos_intervention generate --run-dir "$RUN_DIR" --arm ta-opsd \
+  --adapter "$TA_ADAPTER"
+python -m diagnostics.eos_intervention generate --run-dir "$RUN_DIR" --arm paired \
+  --adapter "$OPSD_ADAPTER"
+python -m analysis.collect_eos_intervention --run-dir "$RUN_DIR"
+```
+
+FREE uses the native distribution. ZERO masks only the two STOP token logits
+before native top-p on the first new token, then restores normal decoding.
+Both branches use the same unprivileged OPSD adapter, four matched seeds per
+question, and the same remaining context budget (at most 4,096 new tokens).
+No reference solution is put in the prompt. The upstream scorer grades the
+combined original answer prefix and continuation.
+
+The original result was **2/168 correct for FREE and 33/168 for ZERO**, with
+13 questions improving, 29 tied and none declining. This is recoverability
+on the selected questions, not an overall premature-termination rate. The
+collector reports the new run's counts in `summary.json`; keep generated
+records under the ignored `runs/` directory.
+
 ## Evaluation analysis
 
 Collect new evaluation outputs and render their accuracy tables, response-length
@@ -299,11 +354,14 @@ python analysis/reproduce.py --data-dir analysis/fresh-data \
 component and negative-construction comparisons. Update its paths to your run
 outputs before collection. Each benchmark contributes equally to macro averages;
 Avg@12 grades individual sampled responses, and capping uses the recorded length
-finish reason. See [the paper-to-code map](docs/PAPER_ANALYSIS_MAP.md).
+finish reason. The renderer also writes `generation_step75_comparison.csv`
+and puts its four-arm summary in `REPRODUCTION_RESULT.json`; full curves are
+unchanged. See [the paper-to-code map](docs/PAPER_ANALYSIS_MAP.md).
 
 This checkout contains training, baseline, ablation and evaluation code. Training
-distribution monitoring, termination diagnosis, historical aggregate data, tests
-and manuscript build files are temporarily omitted. It therefore does not provide
+distribution monitoring, the original privileged-teacher continuation,
+Figure 3(a) short-error analysis, historical aggregate data, tests and manuscript
+build files are temporarily omitted. It therefore does not provide
 a self-contained replay of those omitted analyses. Published result tables above
 are retained for reference; plotting requires outputs from new runs.
 
@@ -315,6 +373,7 @@ src/            SC/UL, replay, initialization, calibration, mining and evaluatio
 baselines/      paper baseline adaptations
 configs/        model revisions, recipes and candidate identities
 scripts/        upstream/data preparation and offline semantic selection
+diagnostics/    relative short errors and the original-stop FREE/ZERO experiment
 analysis/       fresh evaluation collection and figure/table generation
 docs/           asset preparation and paper-to-code mapping
 paper/README.md paper information

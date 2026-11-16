@@ -233,12 +233,31 @@ def main():
     ]
     if case_rows:
         csv_export(out / "response_examples.csv", case_rows)
+    comparison_arms = ("OPSD", "OPSD+SC", "OPSD+UL", "TA-OPSD")
+    step75 = {
+        arm: {key: macro(data["steps"]["75"][arm], key) for key in ("acc", "length", "cap")}
+        for arm in comparison_arms
+    }
+    csv_export(
+        out / "generation_step75_comparison.csv",
+        [
+            {
+                "checkpoint": 75,
+                "Method": arm,
+                "mean_accuracy_pct": row["acc"],
+                "mean_length_tokens": row["length"],
+                "mean_capping_pct": row["cap"],
+            }
+            for arm, row in step75.items()
+        ],
+    )
     summary = {
         "PASS": True,
         "validation": "CPU aggregate consistency and rendering; training/inference are separate",
         **counts,
         "response_examples": len(case_rows),
         "generation_endpoint": 100,
+        "generation_step75_macro": step75,
         "table3_checkpoint": 75,
         "generation_step100_macro": {
             a: {k: macro(data["steps"]["100"][a], k) for k in ("acc", "length", "cap")}
